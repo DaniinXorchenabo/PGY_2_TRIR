@@ -1,0 +1,63 @@
+<!--Дьячков Даниил 6 вариант лаба 3 -->
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Документ без названия</title>
+<link href="css/stiles.css" rel="stylesheet" type="text/css">
+	
+	<script src="scripts/main.js"></script>
+</head>
+
+<body>
+	<h1>Перевод значений в элементарные Тригонометрические функции
+	</h1>
+	<p>Тригонометри́ческие фу́нкции — элементарные функции, которые исторически возникли при рассмотрении прямоугольных треугольников и выражали зависимости длин сторон этих треугольников от острых углов при гипотенузе (или, что равнозначно, зависимость хорд и высот от центрального угла дуги в круге). Эти функции нашли широкое применение в самых разных областях науки. По мере развития математики определение тригонометрических функций было расширено, в современном понимании их аргументом может быть произвольное вещественное или комплексное число. Раздел математики, изучающий свойства тригонометрических функций, называется тригонометрией. К тригонометрическим функциям традиционно причисляют: прямые тригонометрические функции: синус; косинус; производные тригонометрические функции: тангенс; котангенс;
+	</p>
+	
+	<div class="input_box">
+		<div class="input">
+			<h3>Значение</h3>
+		<input placeholder="Невозможно вычислить" type="text" value="0" id="simple_x" oninput="correcting_number('simple_x')"
+		onchange="corrected_number('simple_x'); change_x()">
+		</div>
+		<div class="input">
+			<h3>Синус</h3>
+		<input placeholder="Невозможно вычислить" type="text" value="0" id="sin_x" oninput="correcting_number('sin_x')"
+		onchange="corrected_number('sin_x'); change_sin()">
+		</div>
+		<div class="input">
+			<h3>Косинус</h3>
+		<input placeholder="Невозможно вычислить" type="text" value="0" id="cos_x" oninput="correcting_number('cos_x')"
+		onchange="corrected_number('cos_x'); change_cos()">
+		</div>
+		<div class="input">
+			<h3>Тангенс</h3>
+		<input placeholder="Невозможно вычислить" type="text" value="0" id="tg_x" oninput="correcting_number('tg_x')"
+		onchange="corrected_number('tg_x'); change_tg()">
+		</div>
+		<div class="input">
+			<h3>Котангенс</h3>
+		<input placeholder="Невозможно вычислить" type="text" value="0" id="ctg_x" oninput="correcting_number('ctg_x')" onchange="corrected_number('ctg_x'); change_ctg()">
+		</div>
+	</div>
+	
+	<table id="result_table">
+   		<caption>Таблица переведённых значений</caption>
+		<thead>
+		<tr>
+    		<th>Значение</th>
+    		<th>sin</th>
+    		<th>cos</th>
+    		<th>tg</th>
+			<th>ctg</th>
+   		</tr>
+		</thead>
+		
+		
+	</table>
+		
+	
+</body>
+</html>

@@ -1,0 +1,98 @@
+@charset "utf-8";
+
+body{
+	background: #111;
+    color: #f4f4f4;
+}
+
+h1{
+	text-align: center;
+	font-size: xx-large;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+p {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	text-align: justify;
+	font-size: large;
+	
+}
+
+caption{
+	text-align: center;
+	margin-bottom: 30px;
+	margin-top: 10px;
+	font-size: x-large;
+	
+}
+
+table {
+	width: 80%;
+	text-align: center;
+	border-bottom: 2px solid #3B3B3B;
+	border-radius: 6px;
+	border-collapse: separate;
+	border-spacing: 0px;
+	margin-left: 10%;
+	margin-right: 10%;
+	-webkit-box-shadow: 0px 0px;
+	box-shadow: 0px 0px;
+}
+
+table thead tr{
+	color: #69FF79;
+	font-weight: bold;
+	background: #1F1F1F;
+
+}
+
+table thead tr th{
+	padding-left: 18px;
+	padding-right: 5px;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	margin-left: 10px;
+}
+
+table tr{
+	border-right: 1px solid #3B3B3B;
+	background: #252525
+}
+
+table tr td{
+	padding-left: 5px;
+	padding-right: 50px;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+
+table tr:hover {
+	background: #1B331C;
+	transition-duration: 0.6s;
+}
+
+.input_box{
+	text-align: center;
+	padding-left: 20px;
+	padding-right: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: 40px;
+}
+
+.input{
+	padding-left: 15px;
+	padding-right: 0px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	margin-right: 0px;
+}
