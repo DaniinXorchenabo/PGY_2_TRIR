@@ -1,0 +1,35 @@
+@charset "utf-8";
+/* CSS Document */
+
+.background {
+	background-color: #4B4249;
+}
+
+.blockquote{
+	background-color: #FFFFFF;
+	padding-left: 50px;
+	padding-top: 20px;
+	margin-left: 30px;
+	margin-right: 30px;
+	margin-bottom: 0px;
+	padding-bottom: 10px;
+}
+
+#cite{
+	margin-left: 50px;
+}
+
+#title{
+	text-align: center;
+}
+
+h3 {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+p{
+	text-indent: 30px;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+	font-weight: 400;
+}
