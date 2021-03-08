@@ -1,0 +1,45 @@
+main .test_nav ul{
+	list-style: none;
+	background-color: #D32DC8;	
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: baseline ;
+	align-content:flex-start;
+
+}
+
+main .test_nav {
+	width: 70px;
+	height: 150px;
+	background-color: #646B18;
+	min-width: 10%;
+	max-width: 30%;
+}
+
+/*
+main .test_nav li{
+	background-color: #0DBB00;
+	border-radius: 5px;
+	position: absolute;
+	width: 5%;
+	height: 5%;
+}
+*/
+
+main .test_nav li {
+	background-color: #0DBB00;
+	border-radius: 5px;
+	width: 30%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	overflow: hidden; /* clearfix */
+	min-width: 40px;
+	text-align: center;
+}
+
+main .test_nav li:before {
+  content: "";
+  padding-top: 100%;
+  float: left;
+}
