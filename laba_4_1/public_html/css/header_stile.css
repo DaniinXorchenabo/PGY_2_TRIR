@@ -58,31 +58,3 @@ header span{
 	color: #4D4D4D;
 	text-decoration: line-through;
 }
-.logo{
-	min-height: 60px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-}
-.logo_name{
-	text-align: center;
-	font-size: x-large;
-	vertical-align: top;
-	border-width: medium;
-	border-color: #B1AD42;
-}
-.post_logo_name{
-	font-weight: 100;
-	font-size: x-small;
-	color: #6B6B6B;
-	max-width: 60%;
-	text-align: right;
-	margin-left: 40%;
-}
-.prelogo_name{
-	text-align: left;
-	font-weight: 100;
-	font-size: x-small;
-	color: #373737;
-	max-width: 70%;
-	margin-top: -10px;
-}
