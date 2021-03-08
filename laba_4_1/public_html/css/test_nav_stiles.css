@@ -38,18 +38,29 @@ main .test_nav li{
 */
 
 main .test_nav li {
-	background-color: #0DBB00;
+	background-color: #DFD7A6;
 	border-radius: 5px;
 	width: 30%;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin-top: 2px;
+	margin-bottom: 1px;
 	overflow: hidden; /* clearfix */
 	min-width: 40px;
 	text-align: center;
+	border: 4px double #A9AB8C;
 }
 
 main .test_nav li:before {
   content: "";
   padding-top: 100%;
   float: left;
+}
+
+main .test_nav .positive{
+	background-color: #0DBB00;
+	border: 4px double #0A9000;
+}
+
+main .test_nav .negative{
+	background-color: #D80000;
+	border: 4px double #A30000;
 }
