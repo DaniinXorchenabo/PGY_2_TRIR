@@ -1,20 +1,30 @@
 main .test_nav ul{
 	list-style: none;
-	background-color: #D32DC8;	
+	background-color: #D32DC8;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	align-items: baseline ;
+    padding-inline-start: 0px;
+/*
+	align-items: flex-start ;
 	align-content:flex-start;
+*/
 
 }
 
 main .test_nav {
+	/*
 	width: 70px;
 	height: 150px;
+*/
 	background-color: #646B18;
-	min-width: 10%;
-	max-width: 30%;
+	text-align: left;
+	min-width: 45px;
+	flex-grow: 1;
+	display: inherit;/*
+	min-width: 40px;
+	max-width: 15%;
+*/
 }
 
 /*

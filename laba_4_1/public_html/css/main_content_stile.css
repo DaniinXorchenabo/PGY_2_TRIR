@@ -25,7 +25,7 @@ main #content {
 	background-color: #31E0DD;
 	min-width: 70%;
 	max-width: 90%;
-	flex-grow: 10;
+	flex-grow: 20;
 }
 
 main #content h1{
