@@ -64,3 +64,8 @@ main .test_nav .negative{
 	background-color: #D80000;
 	border: 4px double #A30000;
 }
+
+main .test_nav .no_answer{
+	background-color: #FFF859;
+	border: 4px double #D4CE4C;
+}
