@@ -54,12 +54,30 @@ main .radiobutton{
 	font-size: x-large;
 	margin-bottom: 10px;
 }
+
 main .submit_box{
+	margin-left: 0px;
+	text-align: center;
+}
+main .submit_box input{
+	background-color: #99DD00;
+	border: 2px double #8FD000;
+	border-radius: 8px;
+	text-align: center;
+	font-size: large;
+	padding-right: 15px;
+	padding-bottom: 10px;
+	padding-left: 15px;
+	padding-top: 10px;
+	margin-top: 25px;
+}
+
+main .reset_form{
 	margin-left: 0px;
 	margin-top: 50px;
 	text-align: center;
 }
-main .submit_box input{
+main .reset_form input{
 	background-color: #99DD00;
 	border: 2px double #8FD000;
 	border-radius: 8px;
