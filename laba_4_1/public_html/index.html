@@ -13,6 +13,7 @@
         <link href="css/header_stile.css" rel="stylesheet" type="text/css"/>
         <link href="css/logo_stile.css" rel="stylesheet" type="text/css"/>
         <link href="css/test_nav_stiles.css" rel="stylesheet" type="text/css"/>
+        <link href="css/timer_stiles.css" rel="stylesheet" type="text/css"/>
         
         <script src="scripts/script.js" type="text/javascript"></script>
     </head>
@@ -36,12 +37,30 @@
         </header>
         <main>
             <div id="content">
-                <h1>Тест</h1>
+                <h1 class="question_title">Вопрос 2 из 11</h1>
+				<h2 class="question_text">Каковы цитологические основы полового размножения организмов?</h2>
+				<div class="answers_field">
+					<div class="radiobutton">
+					<input type="radio" name="browser" value="ie"> Internet Explorer
+					</div>
+					<div class="radiobutton">
+   					<input type="radio" name="browser" value="opera"> Opera
+					</div>
+					<div class="radiobutton">
+   					<input type="radio" name="browser" value="firefox"> Firefox
+					</div>
+				</div>
+				<div class="submit_box">
+					<input type="submit">
+				</div>
+				<div class="timer_box">
+					<p><span class="timer">1:10:00</span></p>
+				</div>
             </div>
             <nav class="test_nav">
                 <ul>
                 <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
+                <li class="no_answer"><a href="#">2</a></li>
                 <li class="positive"><a href="#">3</a></li>
                 <li class="negative"><a href="#">4</a></li>
                 </ul>
