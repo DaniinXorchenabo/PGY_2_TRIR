@@ -2,13 +2,13 @@
 var start_timer = true;
 var timer = [  // массив идет от меньшего разряда времени к большему
     [10, 60], // 10 секунд (максимальное число в разряде секунд - 60)
-    [01, 60], // 1 минута (максимальное число в разряде  минут - 60)
-    [1, 24] // 1 час (максимальное число в разряде  часов - 24)
+    [0, 60], // 1 минута (максимальное число в разряде  минут - 60)
+    [0, 24] // 1 час (максимальное число в разряде  часов - 24)
 ];
 
 function timer_renderer(){
     end_timer = timer.every(function(el) { return el[0] === 0; });
-    if (true || (start_timer && !end_timer)){
+    if (start_timer && !end_timer){
         var my_timers = document.querySelectorAll(".timer");
         var index, length;
         var [first_el, first_module] = timer[0];
