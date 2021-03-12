@@ -29,10 +29,30 @@ class BaseQuestion{
         onclick="BaseQuestion.button_click(${this.number_question})">
         ${this.number_question}</button></li>`;
     }
+    get get_child_html(){
+        // Должен быть переопределён в дочернем классе
+        // Возвращает поле ввода ответа
+        return "";
+    }
     
     get get_form_html(){
         // Возвращает html-код формы (с поставленными значени=ями, если таковые имеются)
-        return "";
+        return `<h1 class="question_title">Вопрос ${this.number_question} из ${this.question_count}</h1>
+		<h2 class="question_text">${this.text_question}</h2>
+		<form id="question_form">
+                <div class="answers_field">
+                    ${this.get_child_html}
+		</div>
+		<div class="reset_form">
+                    <input type="reset" value="Сбросить ответ">
+		</div>
+		<div class="timer_box">
+                    <p><span class="timer">     </span></p>
+		</div>
+		<div class="submit_box">
+                    <input type="submit" value="Завершить тестирование">
+		</div>
+                </form>`;
     }
     
     save_data(){
