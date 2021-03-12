@@ -31,3 +31,7 @@ function timer_renderer(){
 }
 
 setInterval(timer_renderer, 10);
+
+function test_form(){
+//    alert(document.getElementById("question_form").elements.change_ans.value);
+}

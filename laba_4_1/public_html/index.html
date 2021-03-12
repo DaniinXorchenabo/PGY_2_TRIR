@@ -45,25 +45,29 @@
 		<form id="question_form">
                 <div class="answers_field">
                     <div class="radiobutton">
-			<input type="radio" name="browser" value="ie"> Internet Explorer
+			<input type="radio" name="change_ans" value="ie" id="ans_ie">
+                        <label for="ans_ie">Internet Explorer</label>
                     </div>
                     <div class="radiobutton">
-   			<input type="radio" name="browser" value="opera"> Opera
+   			<input type="radio" name="change_ans" value="opera" id="ans_Opera">
+                        <label for="ans_Opera">Opera</label>
                     </div>
                     <div class="radiobutton">
-   			<input type="radio" name="browser" value="firefox"> Firefox
+   			<input type="radio" name="change_ans" value="firefox" id="ans_Firefox">
+                        <label for="ans_Firefox">Firefox</label>
                     </div>
 		</div>
 		<div class="reset_form">
-					<input type="reset" value="Сбросить ответ">
-				</div>
+                    <button onclick="test_form()">dfg</button>
+                    <input type="reset" value="Сбросить ответ">
+		</div>
 		<div class="timer_box">
-                                    <p>Чтобы таймер работал, надо установить переменную start_timer = true в файле scripts/script.js</p>
-					<p><span class="timer">1:10:00</span></p>
-				</div>
+                    <p>Чтобы таймер работал, надо установить переменную start_timer = true в файле scripts/script.js</p>
+                    <p><span class="timer">1:10:00</span></p>
+		</div>
 		<div class="submit_box">
-					<input type="submit" value="Завершить тестирование">
-				</div>
+                    <input type="submit" value="Завершить тестирование">
+		</div>
                 </form>
             </div>
             <nav class="test_nav">
