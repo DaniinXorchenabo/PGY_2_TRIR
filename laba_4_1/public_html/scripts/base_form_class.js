@@ -54,17 +54,8 @@ class BaseQuestion{
 		</div>
                 </form>`;
     }
-    
-    save_data(){
-        /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
-    }
-    
-    display_form(){
-        /* Этот метод должна вызввать кнопка при нажатии*/
-        BaseQuestion.now_form_display.save_data();
-        this.form_element.innerHTML = this.get_form_html;
-        BaseQuestion.now_form_display = this;
-    }
+
+  
     
     static get_navigation_buttons(){
         // Возвращает код кнопок навигации
@@ -76,9 +67,21 @@ class BaseQuestion{
         // form_number - номер вопроса
         all_forms[form_number].display_form();
     }
+    display_form(){
+        /* Этот метод должна вызввать кнопка при нажатии*/
+        BaseQuestion.now_form_display.save_data();
+        this.form_element.innerHTML = this.get_form_html;
+        BaseQuestion.now_form_display = this;
+    }
+    save_data(){
+        /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
+    }
 }
 
 class CheckBoxQuestion extends BaseQuestion {
     
+    save_data(){
+        
+    }
 
 }
