@@ -8,6 +8,7 @@ class BaseQuestion{
     options_answer;
     changed_answers;
     form_element;
+    status_question = null;
     
     
     constructor(n_q, text, options){
@@ -21,9 +22,12 @@ class BaseQuestion{
         
     }
     
+    
     get get_navigation_button(){
-        // возвращает код кнопки, при нажатии на которую будет появляться эта форма
-        return ""
+        return `<li><button ${this.status_question?
+        'class="' + 'no_answer' + this.status_question: ''} 
+        onclick="BaseQuestion.button_click(${this.number_question})">
+        ${this.number_question}</button></li>`;
     }
     
     get get_form_html(){
@@ -44,7 +48,7 @@ class BaseQuestion{
     
     static get_navigation_buttons(){
         // Возвращает код кнопок навигации
-        return "";
+        return BaseQuestion.navigation_buttons.reduce(function(a, b){return a + '\n' +  b;});
     }
     
     static button_click(form_number){

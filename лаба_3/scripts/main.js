@@ -129,21 +129,8 @@ function change_table(val_data){
 			}, "");
 		data += "</tr>\n";
 		document.getElementById("result_table").innerHTML = data + old_table;
+	} else {
+		alert("Такие данные уже есть в таблице");
 	}
 	console.log(val_data[0], result, val_data[0] in result)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
