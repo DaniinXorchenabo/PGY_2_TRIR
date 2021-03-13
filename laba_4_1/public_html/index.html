@@ -42,16 +42,16 @@
             <div id="content">
 				<p class="prefix_title">Тестирование на тему:</p>
 				<h1 class="question_title">Организм как биологическая система</h1>
-				<h2 class="question_text">Настройки теста:</h2>
+				<h2 class="test_tools_text">Настройки теста:</h2>
 				<form>
-					<div>
-						<label>Введите количество вопросов в тесте</label>
-                                                <input type="number" min="1" onchange="set_seekbar()"
-                                                       max="11" step="1" list="datalist_for_count_qu"
-                                                       id="count_question">
+					<div class="count_questions_box">
+						<label class="count_qu_lable">Введите количество вопросов в тесте:</label>
+                        <input type="number" min="1" onchange="set_seekbar()"
+                        max="11" step="1" list="datalist_for_count_qu"
+                        id="count_question" name="count_question" class="count_qu_input">
 					<input type="range" list="tickmarks" id="count_seekbar_qu"
-                                        class="input_range" min="1" max="11" step="1"
-                                        pattern="^[0-9]+$" onchange="set_count_question()">
+                    class="input_range" min="1" max="11" step="1"
+                    pattern="^[0-9]+$" onchange="set_count_question()">
 					<datalist id="tickmarks">
 					  <option value="1" label="0%">
 					  <option value="2">
@@ -65,7 +65,7 @@
 					  <option value="10">
 					  <option value="11" label="100%">
 					</datalist>
-                                        <datalist id="datalist_for_count_qu">
+                     <datalist id="datalist_for_count_qu">
 					  <option value="1">
 					  <option value="2">
 					  <option value="3">
