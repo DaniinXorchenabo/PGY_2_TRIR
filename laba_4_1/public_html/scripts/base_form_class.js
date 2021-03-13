@@ -41,7 +41,7 @@ class BaseQuestion{
                     ${this.get_child_html()}
 		</div>
 		<div class="reset_form">
-                    <input type="reset" value="Сбросить ответ">
+                    <input type="reset" value="Сбросить ответ" onclick="BaseQuestion.reset_button_call(${this.number_question})">
 		</div>
 		<div class="timer_box">
                     <p><span class="timer">     </span></p>
@@ -50,6 +50,9 @@ class BaseQuestion{
                     <input type="submit" value="Завершить тестирование">
 		</div>
                 </form>`;
+    }
+    set_form_html(){
+        document.getElementById("content").innerHTML = this.get_form_html;
     }
     
     static create_nav_buttons(){
@@ -76,7 +79,7 @@ class BaseQuestion{
     display_form(){
         /* Этот метод должна вызввать кнопка при нажатии*/
         BaseQuestion.now_form_display.save_data();
-        document.getElementById("content").innerHTML = this.get_form_html;
+        this.set_form_html();
         BaseQuestion.now_form_display = this;
         this.status_question = 'active_button';
         BaseQuestion.set_vavigation_buttons();
@@ -96,6 +99,15 @@ class BaseQuestion{
         // Возвращает поле ввода ответа
         return "";
     }
+    
+    static reset_button_call(form_number){
+        BaseQuestion.all_forms[form_number - 1].reset_button_control();
+    }
+    reset_button_control(){
+        this.changed_answers = [];
+        this.set_form_html()
+    }
+    
 };
 
 class CheckBoxQuestion extends BaseQuestion {
