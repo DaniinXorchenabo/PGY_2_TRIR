@@ -129,7 +129,6 @@ main .count_questions_box{
 	padding-left: 7%;
 	padding-right: 7%;
 	width: 86%;
-	border: 1px double #3F3F3F;
 }
 main .count_qu_input{
 	padding-top: 5px;
@@ -142,5 +141,11 @@ main .count_qu_input{
 	background-color: #E7E7E7;
 }
 main .count_qu_lable{
-	font-size: large;	
+	font-size: x-large;
+}
+main .set_timer{
+	border: 0px none rgba(255,255,255,0.00);
+	background-color: rgba(255,255,255,0.00);
+	font-size: 50px;
+
 }

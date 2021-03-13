@@ -47,8 +47,9 @@
 					<div class="count_questions_box">
 						<label class="count_qu_lable">Введите количество вопросов в тесте:</label>
                         <input type="number" min="1" onchange="set_seekbar()"
-                        max="11" step="1" list="datalist_for_count_qu"
-                        id="count_question" name="count_question" class="count_qu_input">
+                        max="11" step="1" 
+
+                        id="count_question" name="count_question" class="count_qu_input" required>
 					<input type="range" list="tickmarks" id="count_seekbar_qu"
                     class="input_range" min="1" max="11" step="1"
                     pattern="^[0-9]+$" onchange="set_count_question()">
@@ -65,19 +66,14 @@
 					  <option value="10">
 					  <option value="11" label="100%">
 					</datalist>
-                     <datalist id="datalist_for_count_qu">
-					  <option value="1">
-					  <option value="2">
-					  <option value="3">
-					  <option value="4">
-					  <option value="5">
-					  <option value="6">
-					  <option value="7">
-					  <option value="8">
-					  <option value="9">
-					  <option value="10">
-					  <option value="11">
-					</datalist>
+					</div>
+					<div class="count_questions_box">
+					<p class="count_qu_lable">Введите время тестирования:</p>
+						<input type="time" class="set_timer" name="input_time_test" min="00:10" max="07:00" step="60" required>
+						
+					</div>
+					<div class="reset_form">
+                    <input type="reset" value="Сбросить настройки теста">
 					</div>
 					<div class="submit_box">
                     <input type="submit" value="Начать тестирование">
