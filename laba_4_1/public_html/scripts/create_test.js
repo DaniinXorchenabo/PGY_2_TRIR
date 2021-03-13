@@ -15,6 +15,7 @@ function create_question_classes(count_questions, test_time){
         ["Плохо", "Хорошо", "Отлично", "Не отношусь", "Не знаю"], ["Отлично"]);
     }
 //    console.log(BaseQuestion.get_navigation_buttons());
+    timer_value_parser();
     BaseQuestion.all_forms[0].status_question = "active_button";
     BaseQuestion.now_form_display = BaseQuestion.all_forms[0];
     document.getElementById("content").innerHTML = BaseQuestion.all_forms[0].get_form_html;

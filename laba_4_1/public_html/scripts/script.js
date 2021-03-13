@@ -38,3 +38,11 @@ function get_timer_str(){
                     el[0] % 10 === el[0]? "0" + String(el[0]): String(el[0]));
         }, false);
 }
+
+function timer_value_parser(){
+    var [h, m, s] = document.getElementById("input_time_test").value.split(":");
+    timer[0][0] = s || 0;
+    timer[1][0] = m;
+    timer[2][0] = h;
+}
+timer_value_parser();
