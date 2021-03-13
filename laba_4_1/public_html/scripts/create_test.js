@@ -1,5 +1,14 @@
 function create_question_classes(count_questions, test_time){
     BaseQuestion.question_count = count_questions;
+    var keys = [];
+    var got_form_types = ["radio"]
+    for(var k in data_test){
+        if (got_form_types.indexOf(data_test[k]['type']) !== -1 ){
+            keys.push(k);
+        }
+    }
+    console.log(data_test);
+    console.log(keys);
     for (var index = 0; index < count_questions; ++index) {
         console.log(index);
         const qu = new CheckBoxQuestion(index + 1, "Как вы относитесь к вопросу № " + (index + 1) + "?",

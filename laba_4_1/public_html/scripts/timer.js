@@ -21,7 +21,7 @@ function timer_renderer(){
     }
     
     if (!old_end_timer && end_timer){
-        alert('Время вышло!');
+//        alert('Время вышло!');
         BaseQuestion.finish_test();
     }
 }
