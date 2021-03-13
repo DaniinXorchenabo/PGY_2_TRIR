@@ -49,7 +49,7 @@ class BaseQuestion{
                     <p><span class="timer">${get_timer_str()}</span></p>
 		</div>
 		<div class="submit_box">
-                    <input type="submit" value="Завершить тестирование">
+                    <input type="submit" value="Завершить тестирование" onclick="BaseQuestion.finish_test();">
 		</div>
                 </form>`;
     }
@@ -112,6 +112,8 @@ class BaseQuestion{
     
     static finish_test(){
         // Вызывается при завершении теста
+        end_timer = true;
+        BaseQuestion.now_form_display.save_data();
         var page = BaseQuestion.generate_finish_content();
         document.getElementById("content").innerHTML = page;
     }

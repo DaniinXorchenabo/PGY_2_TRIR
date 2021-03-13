@@ -24,7 +24,7 @@ function create_question_classes(count_questions, test_time){
         var correct_ans = [];
         for(var k in qu_data['answers']){
             answers.push(k);
-            if (qu_data[k] > 0) correct_ans.push(k);
+            if (qu_data['answers'][k] > 0) correct_ans.push(k);
         }
         answers.sort(() => Math.random() - 0.5);
         console.log(answers);
