@@ -7,16 +7,18 @@ class BaseQuestion{
     text_question;  // Текст вопроса формы
     options_answer;  // Варианты ответов на вопросы (всегда список)
     changed_answers = []; // Выбранные варианты ответов на вопросы (всегда список)
+    correct_answer; // Правильные ответы (всегда массив)
 //    content_element; // Элемент контента (который меняется, динамически формируется и т.д.)
 //    form_element_; // элемент самой формы непосредственно
     status_question = null; // Определяет цвет кнопки навигации по форме
     
     
-    constructor(n_q, text, options){
+    constructor(n_q, text, options, correct_ans){
         // Базовый конструктор класса
         this.number_question = n_q;
         this.text_question = text;
         this.options_answer = options;
+        this.correct_answer = correct_ans;
 //        this.content_element = document.getElementById("content");
 //        this.form_element_ = document.getElementById("question_form");
         this.changed_answers = [];
