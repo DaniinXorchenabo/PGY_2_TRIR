@@ -61,8 +61,8 @@ main .test_nav button{
 }
 
 main .test_nav .active_button{
-	background-color: #0DBB00;
-	border: 4px double #0A9000;
+	background-color: #F6FFA1;
+	border: 4px double #D6E39C;
 }
 
 main .test_nav .positive{

@@ -6,9 +6,9 @@ class BaseQuestion{
     number_question; // Номер вопроса формы
     text_question;  // Текст вопроса формы
     options_answer;  // Варианты ответов на вопросы (всегда список)
-    changed_answers; // Выбранные варианты ответов на вопросы (всегда список)
-    content_element; // Элемент контента (который меняется, динамически формируется и т.д.)
-    form_element_; // элемент самой формы непосредственно
+    changed_answers = []; // Выбранные варианты ответов на вопросы (всегда список)
+//    content_element; // Элемент контента (который меняется, динамически формируется и т.д.)
+//    form_element_; // элемент самой формы непосредственно
     status_question = null; // Определяет цвет кнопки навигации по форме
     
     
@@ -17,24 +17,24 @@ class BaseQuestion{
         this.number_question = n_q;
         this.text_question = text;
         this.options_answer = options;
-        this.content_element = document.getElementById("content");
-        this.form_element_ = document.getElementById("question_form");
+//        this.content_element = document.getElementById("content");
+//        this.form_element_ = document.getElementById("question_form");
         this.changed_answers = [];
         BaseQuestion.navigation_buttons.push(this.get_navigation_button);
         BaseQuestion.all_forms.push(this);
-        
+        console.log(this.changed_answers);
     }
     
     
     get get_navigation_button(){
         return `<li><button ${this.status_question?
-        'class="' + 'no_answer' + this.status_question: ''} 
+        ('class="' + this.status_question + '"'): 'no_answer'} 
         onclick="BaseQuestion.button_click(${this.number_question})">
         ${this.number_question}</button></li>`;
     }
     get get_form_html(){
         // Возвращает html-код формы (с поставленными значени=ями, если таковые имеются)
-        return `<h1 class="question_title">Вопрос ${this.number_question} из ${this.question_count}</h1>
+        return `<h1 class="question_title">Вопрос ${this.number_question} из ${BaseQuestion.question_count}</h1>
 		<h2 class="question_text">${this.text_question}</h2>
 		<form id="question_form">
                 <div class="answers_field">
@@ -70,12 +70,13 @@ class BaseQuestion{
     static button_click(form_number){
         // Непосредственно вызывается при нажатии кнопки,
         // form_number - номер вопроса
-        all_forms[form_number].display_form();
+        console.log("Переход на вопрос", form_number);
+        BaseQuestion.all_forms[form_number - 1].display_form();
     }
     display_form(){
         /* Этот метод должна вызввать кнопка при нажатии*/
         BaseQuestion.now_form_display.save_data();
-        this.form_element.innerHTML = this.get_form_html;
+        document.getElementById("content").innerHTML = this.get_form_html;
         BaseQuestion.now_form_display = this;
         this.status_question = 'active_button';
         BaseQuestion.set_vavigation_buttons();
@@ -84,7 +85,6 @@ class BaseQuestion{
     save_data(){
         // Должно быть переопределено в дочернем классе
         /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
-        change_color_nav_buttons()
         
     }
     change_color_nav_buttons(){
@@ -103,7 +103,9 @@ class CheckBoxQuestion extends BaseQuestion {
     save_data(){
         /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
         super.save_data();
-        this.changed_answers = [this.form_element_.elements.change_ans.value];
+        var data = document.getElementById("question_form").elements.change_ans.value;
+        this.changed_answers = data? [data] : [];
+        this.change_color_nav_buttons();
     }
     
     change_color_nav_buttons(){
@@ -128,9 +130,13 @@ class CheckBoxQuestion extends BaseQuestion {
     }
     get_all_radiobuttons_html(){
         // Возвращает код все radiobutton-ов
+//        console.log(super.changed_answers);
+//        this.changed_answers = super.changed_answers;
+        console.log(this.changed_answers);
+        var arr = this.changed_answers;
         return this.options_answer.reduce(function(a, b){
             return a + "\n" + CheckBoxQuestion.get_radiobutton_html(b,
-            !(this.changed_answers.indexOf(b) !== -1));
+            (arr.indexOf(b) !== -1));
         }, "");
     }
 };
