@@ -39,10 +39,9 @@ function get_timer_str(){
         }, false);
 }
 
-function timer_value_parser(){
-    var [h, m, s] = document.getElementById("input_time_test").value.split(":");
+function timer_value_parser(timer_data){
+    var [h, m, s] = (timer_data || document.getElementById("input_time_test").value).split(":");
     timer[0][0] = s || 0;
     timer[1][0] = m;
     timer[2][0] = h;
 }
-timer_value_parser();

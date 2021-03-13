@@ -159,7 +159,7 @@ class BaseQuestion{
 
 };
 
-class CheckBoxQuestion extends BaseQuestion {
+class RadiobuttonQuestion extends BaseQuestion {
     
     save_data(){
         /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
@@ -196,7 +196,7 @@ class CheckBoxQuestion extends BaseQuestion {
         console.log(this.changed_answers);
         var arr = this.changed_answers;
         return this.options_answer.reduce(function(a, b){
-            return a + "\n" + CheckBoxQuestion.get_radiobutton_html(b,
+            return a + "\n" + RadiobuttonQuestion.get_radiobutton_html(b,
             (arr.indexOf(b) !== -1));
         }, "");
     }
@@ -222,3 +222,5 @@ class CheckBoxQuestion extends BaseQuestion {
         return (this.changed_answers.length > 0 && this.correct_answer.length > 0 && this.correct_answer.indexOf(this.changed_answers[0]) !== -1? "1":"0");
     }
 };
+
+class CheckBoxQuestion extends BaseQuestion {};

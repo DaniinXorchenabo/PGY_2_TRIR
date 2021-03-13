@@ -1,5 +1,12 @@
 function create_question_classes(count_questions, test_time){
+    
+    type_to_class = {
+        'radio': RadiobuttonQuestion,
+        'checkbox': CheckBoxQuestion
+    };
+    
     BaseQuestion.question_count = count_questions;
+    
     var keys = [];
     var got_form_types = ["radio"];
     for(var k in data_test){
@@ -7,15 +14,24 @@ function create_question_classes(count_questions, test_time){
             keys.push(k);
         }
     }
-    console.log(data_test);
+
+    keys.sort(() => Math.random() - 0.5);
     console.log(keys);
     for (var index = 0; index < count_questions; ++index) {
-        console.log(index);
-        const qu = new CheckBoxQuestion(index + 1, "Как вы относитесь к вопросу № " + (index + 1) + "?",
-        ["Плохо", "Хорошо", "Отлично", "Не отношусь", "Не знаю"], ["Отлично"]);
+        var qu_data = data_test[keys[index]];
+        var my_class = type_to_class[qu_data['type']];
+        var answers = [];
+        var correct_ans = [];
+        for(var k in qu_data['answers']){
+            answers.push(k);
+            if (qu_data[k] > 0) correct_ans.push(k);
+        }
+        answers.sort(() => Math.random() - 0.5);
+        console.log(answers);
+        const qu = new my_class(index + 1, qu_data["question"], answers, correct_ans);
     }
-//    console.log(BaseQuestion.get_navigation_buttons());
-    timer_value_parser();
+
+    timer_value_parser(test_time);
     BaseQuestion.all_forms[0].status_question = "active_button";
     BaseQuestion.now_form_display = BaseQuestion.all_forms[0];
     document.getElementById("content").innerHTML = BaseQuestion.all_forms[0].get_form_html;
