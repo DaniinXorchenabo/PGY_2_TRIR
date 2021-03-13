@@ -46,7 +46,7 @@ class BaseQuestion{
                     <input type="reset" value="Сбросить ответ" onclick="BaseQuestion.reset_button_call(${this.number_question})">
 		</div>
 		<div class="timer_box">
-                    <p><span class="timer">     </span></p>
+                    <p><span class="timer">${get_timer_str()}</span></p>
 		</div>
 		<div class="submit_box">
                     <input type="submit" value="Завершить тестирование">

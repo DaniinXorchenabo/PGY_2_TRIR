@@ -32,3 +32,9 @@ function set_count_question(){
     document.getElementById("count_question").value = document.getElementById("count_seekbar_qu").value;
 }
 
+function get_timer_str(){
+    return timer.reduceRight(function(res, el) {
+            return (res? res + ":": "") + (
+                    el[0] % 10 === el[0]? "0" + String(el[0]): String(el[0]));
+        }, false);
+}

@@ -11,10 +11,7 @@ function timer_renderer(){
                 [old_el, old_module] = [now_el, now_module];
             } else break;
         }
-        var timer_str = timer.reduceRight(function(res, el) {
-            return (res? res + ":": "") + (
-                    el[0] % 10 === el[0]? "0" + String(el[0]): String(el[0]));
-        }, false);
+        var timer_str = get_timer_str();
         document.querySelectorAll(".timer").forEach(function(el) {
             el.innerHTML = timer_str;
         });
