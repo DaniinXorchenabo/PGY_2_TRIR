@@ -11,6 +11,8 @@ function create_question_classes(count_questions, test_time){
     document.getElementById("content").innerHTML = BaseQuestion.all_forms[0].get_form_html;
     BaseQuestion.create_nav_buttons();
     document.getElementById("test_nav").innerHTML = BaseQuestion.get_navigation_buttons();
+    start_timer = true;
+    end_timer = false;
     
 }
 

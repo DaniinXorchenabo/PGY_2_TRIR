@@ -110,6 +110,53 @@ class BaseQuestion{
         this.set_form_html()
     }
     
+    static finish_test(){
+        // Вызывается при завершении теста
+        var page = BaseQuestion.generate_finish_content();
+        document.getElementById("content").innerHTML = page;
+    }
+    static generate_finish_content(){
+        // Генерирует страницу окончания теста
+        return `<h1>Результаты теста:</h1> ${BaseQuestion.generate_result_table()}`;
+    }
+    static generate_result_table(){
+        // Генерирует таблицу результатов
+        var tabel = `<table><tr>
+                    <th>Номер вопроса</th>
+                    <th>Ваш ответ:</th>
+                    <th>Правильный ответ:</th>
+                    <th>Количество баллов:</th>
+                    </tr>`;
+        tabel = tabel + BaseQuestion.all_forms.reduce(function(a, b){
+            return a + "/n" + b.get_result_table_string();
+        }, "");
+        tabel = tabel + `</table>`;
+        return tabel;
+     
+    }
+    get_result_table_string(){
+        // Генерирует строку таблицы результатов
+        return `<tr><td>${this.number_question}</td>
+                    <td>${this.get_user_answer_html()}</td>
+                    <td>${this.get_correct_answer_html()}</td>
+                    <td>${this.get_sum_marks()}</td></tr>`;
+    }
+    get_user_answer_html(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает ответ пользователя для таблицы результатов
+        return "";
+    }
+    get_correct_answer_html(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает правильный ответ для таблицы результатов
+        return "";
+    }
+    get_sum_marks(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает сумму, которую получил пользователь баллов за ответ
+        return "0";
+    }
+
 };
 
 class CheckBoxQuestion extends BaseQuestion {
@@ -152,5 +199,26 @@ class CheckBoxQuestion extends BaseQuestion {
             return a + "\n" + CheckBoxQuestion.get_radiobutton_html(b,
             (arr.indexOf(b) !== -1));
         }, "");
+    }
+    
+    get_user_answer_html(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает ответ пользователя для таблицы результатов
+        return (this.changed_answers.length > 0? this.changed_answers[0]: "Нет ответа");
+    }
+    get_correct_answer_html(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает правильный ответ для таблицы результатов
+        if (this.correct_answer.length > 1){
+            return this.correct_answer.reduce(function(a, b){ return a + "\n" + b}, "Любой из следующих:");
+        } else if (this.correct_answer.length > 0){
+            return this.correct_answer[0];
+        }
+        return "Нет ответа";
+    }
+    get_sum_marks(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает сумму, которую получил пользователь баллов за ответ
+        return (this.changed_answers.length > 0 && this.correct_answer.length > 0 && this.correct_answer.indexOf(this.changed_answers[0]) !== -1? "1":"0");
     }
 };
