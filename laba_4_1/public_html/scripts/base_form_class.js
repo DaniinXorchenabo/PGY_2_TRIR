@@ -101,22 +101,25 @@ class BaseQuestion{
 class CheckBoxQuestion extends BaseQuestion {
     
     save_data(){
+        /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
         super.save_data();
         this.changed_answers = [this.form_element_.elements.change_ans.value];
-        
     }
     
     change_color_nav_buttons(){
+        // Изменение цвета кнопки при переключении на следующий вопрос
         super.change_color_nav_buttons();
         this.status_question = this.changed_answers.length > 0? "positive": "negative";
     }
     
     get_child_html(){
+        // Возвращает поле ввода ответа
         super.get_child_html();
         return this.get_all_radiobuttons_html();
     }
     
-    get_radiobutton_html(value, checked){
+    static get_radiobutton_html(value, checked){
+        // Возвращает одну кнопку radiobutton
         return `<div class="radiobutton">
    	<input type="radio" name="change_ans"
                 value="${value}" id="ans_${value}" ${checked? "checked": ""}>
@@ -124,10 +127,10 @@ class CheckBoxQuestion extends BaseQuestion {
         </div>`;
     }
     get_all_radiobuttons_html(){
+        // Возвращает код все radiobutton-ов
         return this.options_answer.reduce(function(a, b){
-            return a + "\n" + this.get_radiobutton_html(b,
+            return a + "\n" + CheckBoxQuestion.get_radiobutton_html(b,
             !(this.changed_answers.indexOf(b) !== -1));
         }, "");
     }
-    
 };

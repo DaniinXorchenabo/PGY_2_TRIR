@@ -32,6 +32,12 @@ function timer_renderer(){
 
 setInterval(timer_renderer, 10);
 
-function test_form(){
-//    alert(document.getElementById("question_form").elements.change_ans.value);
+
+function set_seekbar(){
+    // Устанавливает значение для ползунка количества вопросов
+    document.getElementById("count_seekbar_qu").value = document.getElementById("count_question").value;
+}
+
+function set_count_question(){
+    document.getElementById("count_question").value = document.getElementById("count_seekbar_qu").value;
 }

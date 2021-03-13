@@ -12,6 +12,7 @@ main{
 	align-content: center;
 	align-items: flex-start;
 	justify-content: center;/*	width: 70%;*/
+	overflow-x: hidden;
 }
 main #content {
 	/*
@@ -87,4 +88,30 @@ main .reset_form input{
 	padding-right: 15px;
 	padding-bottom: 10px;
 	padding-left: 15px;
+}
+
+main .prefix_title{
+	margin-left: 20px;
+	font-size: large;
+}
+main .input_range{
+	width: 98%;
+	margin-left: 1%;
+}
+main datalist{
+	display: flex;
+	flex-wrap: nowrap;
+	align-content: center;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background-color: #FFAE00;
+	text-align: center;
+}
+main datalist option{
+	text-align: center;
+	background-color: #8AFF38;
+	width: 5%;
+	overflow-x: hidden;
+	font-size: small;
 }
