@@ -225,4 +225,73 @@ class RadiobuttonQuestion extends BaseQuestion {
     }
 };
 
-class CheckBoxQuestion extends BaseQuestion {};
+class CheckBoxQuestion extends BaseQuestion {
+    
+    save_data(){
+        /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
+        super.save_data();
+        var data = Array.from(document.querySelectorAll('input.checkbox:checked')).map(cb => cb.value);
+        console.log(data);
+        this.changed_answers = data;
+        this.change_color_nav_buttons();
+    }
+    
+    change_color_nav_buttons(){
+        // Изменение цвета кнопки при переключении на следующий вопрос
+        super.change_color_nav_buttons();
+        this.status_question = this.changed_answers.length > 0? "positive": "negative";
+    }
+    
+    get_child_html(){
+        // Возвращает поле ввода ответа
+        super.get_child_html();
+        return this.get_all_checkboxes_html();
+    }
+    
+    static get_checkbox_html(value, checked){
+        // Возвращает одну кнопку radiobutton
+        return `<div>
+   	<input type="checkbox" name="change_ans" class="checkbox"
+                value="${value}" id="ans_${value}" ${checked? "checked": ""}>
+        <label for="ans_${value}">${value}</label>
+        </div>`;
+    }
+    get_all_checkboxes_html(){
+        // Возвращает код все radiobutton-ов
+//        console.log(super.changed_answers);
+//        this.changed_answers = super.changed_answers;
+        console.log(this.changed_answers);
+        var arr = this.changed_answers;
+        return this.options_answer.reduce(function(a, b){
+            return a + "\n" + CheckBoxQuestion.get_checkbox_html(b,
+            (arr.indexOf(b) !== -1));
+        }, "");
+    }
+    
+    get_user_answer_html(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает ответ пользователя для таблицы результатов
+        return (this.changed_answers.length > 0? this.changed_answers.reduce(function(a, b){ return a + "\n" + b;}): "Нет ответа");
+    }
+    get_correct_answer_html(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает правильный ответ для таблицы результатов
+        if (this.correct_answer.length > 1){
+            return this.correct_answer.reduce(function(a, b){ return a + "\n" + b;}, "Верные ответы");
+        } else if (this.correct_answer.length > 0){
+            return this.correct_answer[0];
+        }
+        return "Нет ответа";
+    }
+    get_sum_marks(){
+        // Должна быть переопределена в дочернем классе
+        // Возвращает сумму, которую получил пользователь баллов за ответ
+        let a = new Set(this.changed_answers);
+        let b = new Set(this.correct_answer);
+        
+        let difference1 = [...a].filter(x => !b.has(x));
+        let difference2 = [...b].filter(x => !a.has(x));
+        console.log(difference1, difference2);
+        return (difference1.length === 0 && difference2.length === 0 ?"1":"0");
+    }
+};

@@ -8,7 +8,7 @@ function create_question_classes(count_questions, test_time){
     BaseQuestion.question_count = count_questions;
     
     var keys = [];
-    var got_form_types = ["radio"];
+    var got_form_types = ["radio", "checkbox"];
     for(var k in data_test){
         if (got_form_types.indexOf(data_test[k]['type']) !== -1 ){
             keys.push(k);

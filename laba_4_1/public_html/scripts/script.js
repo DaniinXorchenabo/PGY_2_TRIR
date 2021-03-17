@@ -9,7 +9,7 @@ var timer = [
     [0, 365]
 ];
 var keys = [];
-var got_form_types = ["radio"];
+var got_form_types = ["radio", "checkbox"];
 for(var k in data_test){
     if (got_form_types.indexOf(data_test[k]['type']) !== -1 ){
         keys.push(k);
