@@ -13,9 +13,9 @@ header ul {
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-	align-content: center;
 	align-items: center;
 	justify-content: space-around;
+	align-content: flex-start;
 	width: 90%;
 /*
 	display: flex;

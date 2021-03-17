@@ -10,7 +10,7 @@ main{
 	display: flex;
 	flex-wrap: nowrap;
 	align-content: center;
-	align-items: flex-start;
+	align-items: stretch;
 	justify-content: center;/*	width: 70%;*/
 	overflow-x: hidden;
 }
@@ -22,6 +22,7 @@ main #content {
 /*	width: 70%;*/
 	
 /*	height: 100px;*/
+	overflow-x: scroll;
 	background-color: #31E0DD;
 	min-width: 70%;
 	max-width: 90%;
@@ -60,6 +61,9 @@ main .radiobutton_box{
 	align-items: center;
 	justify-content: flex-start;
 	width: 100%;
+}
+main .radiobutton{
+	margin-right: 20px;
 }
 
 main .submit_box{

@@ -123,22 +123,23 @@ class BaseQuestion{
     }
     static generate_result_table(){
         // Генерирует таблицу результатов
-        var tabel = `<table><tr>
+        var tabel = `<table><thead><tr>
                     <th>Номер вопроса</th>
                     <th>Ваш ответ:</th>
                     <th>Правильный ответ:</th>
                     <th>Количество баллов:</th>
-                    </tr>`;
+                    </tr></thead><tbody>`;
         tabel = tabel + BaseQuestion.all_forms.reduce(function(a, b){
-            return a + "/n" + b.get_result_table_string();
+            return a + `\n` + b.get_result_table_string();
         }, "");
-        tabel = tabel + `</table>`;
+        tabel = tabel + `</tbody></table>`;
         return tabel;
      
     }
     get_result_table_string(){
         // Генерирует строку таблицы результатов
-        return `<tr><td>${this.number_question}</td>
+        return `<tr class="${this.get_sum_marks() > 0? "positive": "nerative"}">
+                    <td>${this.number_question}</td>
                     <td>${this.get_user_answer_html()}</td>
                     <td>${this.get_correct_answer_html()}</td>
                     <td>${this.get_sum_marks()}</td></tr>`;
@@ -186,7 +187,7 @@ class RadiobuttonQuestion extends BaseQuestion {
     static get_radiobutton_html(value, checked){
         // Возвращает одну кнопку radiobutton
         return `<div class="radiobutton_box">
-   	<input type="radio" name="change_ans"
+   	<input type="radio" name="change_ans" class="radiobutton" 
                 value="${value}" id="ans_${value}" ${checked? "checked": ""}>
         <label for="ans_${value}">${value}</label>
         </div>`;
@@ -212,7 +213,9 @@ class RadiobuttonQuestion extends BaseQuestion {
         // Должна быть переопределена в дочернем классе
         // Возвращает правильный ответ для таблицы результатов
         if (this.correct_answer.length > 1){
-            return this.correct_answer.reduce(function(a, b){ return a + "\n" + b}, "Любой из следующих:");
+            return this.correct_answer.reduce(function(a, b){ return a + "\n" + `<div class="table_radiobutton_box">
+   	<input type="radio" class="radiobutton" checked disabled>
+        <label>${b}</label></div>`;}, "Любой из следующих:");
         } else if (this.correct_answer.length > 0){
             return this.correct_answer[0];
         }
@@ -271,13 +274,19 @@ class CheckBoxQuestion extends BaseQuestion {
     get_user_answer_html(){
         // Должна быть переопределена в дочернем классе
         // Возвращает ответ пользователя для таблицы результатов
-        return (this.changed_answers.length > 0? this.changed_answers.reduce(function(a, b){ return a + "\n" + b;}): "Нет ответа");
+        return (this.changed_answers.length > 0? this.changed_answers.reduce(
+                function(a, b){
+                    return a + "\n" + `<div class="table_checkbox_box">
+   	<input type="checkbox" class="checkbox" checked disabled>
+        <label>${b}</label></div>`;}, ""): "Нет ответа");
     }
     get_correct_answer_html(){
         // Должна быть переопределена в дочернем классе
         // Возвращает правильный ответ для таблицы результатов
         if (this.correct_answer.length > 1){
-            return this.correct_answer.reduce(function(a, b){ return a + "\n" + b;}, "Верные ответы");
+            return this.correct_answer.reduce(function(a, b){ return a + "\n" + `<div class="table_checkbox_box">
+   	<input type="checkbox" class="checkbox" checked disabled>
+        <label>${b}</label></div>`;}, "Верные ответы:");
         } else if (this.correct_answer.length > 0){
             return this.correct_answer[0];
         }

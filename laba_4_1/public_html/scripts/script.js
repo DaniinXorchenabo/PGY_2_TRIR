@@ -45,3 +45,10 @@ function timer_value_parser(timer_data){
     timer[1][0] = m;
     timer[2][0] = h;
 }
+
+window.onbeforeunload = function() {
+    console.log("Попытка перезагрузки");
+    alert('----');
+    return false;
+//  return "Есть несохранённые изменения. Всё равно уходим?";
+};
