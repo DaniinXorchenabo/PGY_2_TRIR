@@ -185,7 +185,7 @@ class RadiobuttonQuestion extends BaseQuestion {
     
     static get_radiobutton_html(value, checked){
         // Возвращает одну кнопку radiobutton
-        return `<div class="radiobutton">
+        return `<div class="radiobutton_box">
    	<input type="radio" name="change_ans"
                 value="${value}" id="ans_${value}" ${checked? "checked": ""}>
         <label for="ans_${value}">${value}</label>
@@ -250,7 +250,7 @@ class CheckBoxQuestion extends BaseQuestion {
     
     static get_checkbox_html(value, checked){
         // Возвращает одну кнопку radiobutton
-        return `<div>
+        return `<div class="checkbox_box">
    	<input type="checkbox" name="change_ans" class="checkbox"
                 value="${value}" id="ans_${value}" ${checked? "checked": ""}>
         <label for="ans_${value}">${value}</label>

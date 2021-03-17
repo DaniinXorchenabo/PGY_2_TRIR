@@ -51,9 +51,15 @@ main .answers_field{
 	justify-content: flex-start;
 }
 
-main .radiobutton{
+main .radiobutton_box{
 	font-size: x-large;
 	margin-bottom: 10px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-content: center;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
 }
 
 main .submit_box{
@@ -148,4 +154,19 @@ main .set_timer{
 	background-color: rgba(255,255,255,0.00);
 	font-size: 50px;
 
+}
+
+main .checkbox_box{
+	font-size: x-large;
+	margin-bottom: 10px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-content: center;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+}
+
+main .checkbox{
+	margin-right: 20px;
 }
