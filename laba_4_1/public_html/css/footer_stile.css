@@ -1,11 +1,11 @@
 footer{
-	background-color: #FF15E8;
+	background-color: #EB9821;
 	margin-left: -30px;
 	margin-right: -30px;
-	margin-top: 0px;
 	margin-bottom: -30px;
 	padding-left: 10%;
 	padding-right: 10%;
 	padding-top: 16px;
 	padding-bottom: 40px;
+	border-top: 2px solid #C57F1A;
 }

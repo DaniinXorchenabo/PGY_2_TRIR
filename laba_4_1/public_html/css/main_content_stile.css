@@ -1,6 +1,6 @@
 main{
 	min-height: 300px;
-	background-color: #FF1418;
+	background-color: #ECC751;
 	margin-top: -16px;
 	padding-top: 7%;
 	margin-left: -50px;
@@ -13,6 +13,7 @@ main{
 	align-items: stretch;
 	justify-content: center;/*	width: 70%;*/
 	overflow-x: hidden;
+	padding-bottom: 50px;
 }
 main #content {
 	/*
@@ -23,11 +24,16 @@ main #content {
 	
 /*	height: 100px;*/
 	overflow-x: scroll;
-	background-color: #31E0DD;
+	background-color: #EB9821;
 	min-width: 70%;
 	max-width: 90%;
 	flex-grow: 20;
 	padding-bottom: 30px;
+	border-radius: 60px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 20px;
+	border: 0.5px solid #C57F1A;
 }
 
 main h5{
@@ -37,7 +43,7 @@ main h5{
 }
 
 main .question_title{
-	color: #474887;
+	color: #2D2825;
 	text-align: center;
 }
 main .question_text{
@@ -77,8 +83,8 @@ main .submit_box{
 	text-align: center;
 }
 main .submit_box input{
-	background-color: #99DD00;
-	border: 2px double #8FD000;
+	background-color: #BAEC51;
+	border: 2px double #5CB715;
 	border-radius: 8px;
 	text-align: center;
 	font-size: large;
@@ -95,8 +101,8 @@ main .reset_form{
 	text-align: center;
 }
 main .reset_form input{
-	background-color: #99DD00;
-	border: 2px double #8FD000;
+	background-color: #EC8951;
+	border: 2px double #B74515;
 	border-radius: 8px;
 	text-align: center;
 	font-size: large;
@@ -121,12 +127,10 @@ main datalist{
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	background-color: #FFAE00;
 	text-align: center;
 }
 main datalist option{
 	text-align: center;
-	background-color: #8AFF38;
 	width: 5%;
 	overflow-x: hidden;
 	font-size: small;
@@ -141,7 +145,7 @@ main .test_tools_text{
 }
 
 main .count_questions_box{
-	background-color: #B2B4FF;
+/*	background-color: #B2B4FF;*/
 	padding-left: 7%;
 	padding-right: 7%;
 	width: 86%;
@@ -154,7 +158,7 @@ main .count_qu_input{
 	margin-left: 10px;
 	min-width: 100px;
 	border-radius: 8px;
-	background-color: #E7E7E7;
+/*	background-color: #E7E7E7;*/
 }
 main .count_qu_lable{
 	font-size: x-large;
@@ -179,4 +183,9 @@ main .checkbox_box{
 
 main .checkbox{
 	margin-right: 20px;
+}
+
+::-webkit-scrollbar { /* chrome based */
+    width: 0px;  /* ширина scrollbar'a */
+    background: transparent;  /* опционально */
 }

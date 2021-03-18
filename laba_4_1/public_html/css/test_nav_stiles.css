@@ -1,6 +1,6 @@
 main .test_nav ul{
 	list-style: none;
-	background-color: #D32DC8;
+/*	background-color: #D32DC8;*/
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -17,7 +17,7 @@ main .test_nav {
 	width: 70px;
 	height: 150px;
 */
-	background-color: #646B18;
+/*	background-color: #646B18;*/
 	text-align: left;
 	min-width: 45px;
 	flex-grow: 1;
@@ -55,24 +55,24 @@ main .test_nav li:before {
 main .test_nav button{
 	width: 100%;
 	height: 100%;
-	background-color: #DFD7A6;
+	background-color: #F5D4A5;
 	border-radius: 5px;
-	border: 4px double #A9AB8C;
+	border: 4px double #F1C483;
 }
 
 main .test_nav .active_button{
-	background-color: #F6FFA1;
-	border: 4px double #D6E39C;
+	background-color: #FF9906;
+	border: 4px double #7B4900;
 }
 
 main .test_nav .positive{
-	background-color: #0DBB00;
-	border: 4px double #0A9000;
+	background-color: #BAEC51;
+	border: 4px double #5CB715;
 }
 
 main .test_nav .negative{
-	background-color: #D80000;
-	border: 4px double #A30000;
+	background-color: #E7513C;
+	border: 4px double #E7341C;
 }
 
 main .test_nav .no_answer{

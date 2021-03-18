@@ -8,14 +8,14 @@ table {
 	margin-right: 10%;
 	-webkit-box-shadow: 0px 0px;
 	box-shadow: 0px 0px;
-	border: 2px solid rgba(122,122,122,1.00);
+	border: 2px solid #2F2810;
 	max-width: 100%;
 	overflow-x: scroll;
 }
 
 table thead tr{
 	font-weight: bold;
-	background: #D5D5D5;
+	background: #C67C13;
 	
 }
 
@@ -25,40 +25,38 @@ table thead tr th{
 	padding-top: 10px;
 	padding-bottom: 15px;
 	margin-left: 10%;
-	border-right: 1px solid rgba(138,138,138,1.00);
-	border-bottom: 3px solid rgba(106,106,106,1.00);
+	border-right: 1px solid #795523;
+	border-bottom: 3px solid #AF7C34;
 	margin-right: 10px;
 }
 
 table tbody tr{
-	background-color: #C9C9C9;
-	border: 6px solid rgba(132,132,132,1.00);
+	background-color: #795523;
+	border: 6px solid #AF7C34;
 }
 
 
 table tbody tr:hover {
-	background-color: #FFFFFF;
 	transition-duration: 0.6s;
-	border: 6px solid rgba(183,21,23,1.00);
 }
 
 .nerative{
-	background-color: #FFB5B5;
+	background-color: #EC7666;
 }
 
 
 .nerative:hover {
-	background-color: #E44447;
+	background-color: #E7341C;
 	transition-duration: 0.6s;
 }
 
 .positive{
-	background-color: #D2FFCD;
+	background-color: #BAEC51;
 }
 
 
 .positive:hover {
-	background-color: #8DFF71;
+	background-color: #5CB715;
 	transition-duration: 0.6s;
 }
 
@@ -67,7 +65,7 @@ table tr td{
 	padding-right: 5px;
 	padding-top: 5px;
 	padding-bottom: 10px;
-	border-right: 1px solid rgba(158,158,158,1.00);
+	border-right: 1px solid #AF7C34;
 }
 
 .table_checkbox_box{
