@@ -403,8 +403,9 @@ class SelectFieldQuestion extends BaseQuestion {
     save_data(){
         /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
         super.save_data();
-        var data = document.getElementById("question_form").elements.change_ans.value;
-        this.changed_answers = data? [data] : [];
+        var data = [...document.getElementById("select_field").options].filter(op => op.selected).map(op => op.value);
+        console.log(data);
+        this.changed_answers = data;
         this.change_color_nav_buttons();
     }
     
@@ -417,32 +418,43 @@ class SelectFieldQuestion extends BaseQuestion {
     get_child_html(){
         // Возвращает поле ввода ответа
         super.get_child_html();
-        return this.get_all_radiobuttons_html();
+        return this.get_all_select_options_html();
     }
     
-    static get_radiobutton_html(value, checked){
+    static get_select_options_field_html(value, checked){
         // Возвращает одну кнопку radiobutton
-        return `<div class="radiobutton_box">
-   	<input type="radio" name="change_ans" class="radiobutton" 
-                value="${value}" id="ans_${value}" ${checked? "checked": ""}>
-        <label for="ans_${value}">${value}</label>
-        </div>`;
+        return `<option ${checked? 'selected="selected"': ""} value="${value}">${value}</option>`;
     }
-    get_all_radiobuttons_html(){
+    get_all_select_options_html(){
         // Возвращает код все radiobutton-ов
 //        console.log(super.changed_answers);
 //        this.changed_answers = super.changed_answers;
         console.log(this.changed_answers);
         var arr = this.changed_answers;
-        return this.options_answer.reduce(function(a, b){
-            return a + "\n" + RadiobuttonQuestion.get_radiobutton_html(b,
-            (arr.indexOf(b) !== -1));
-        }, "");
+        return `<div class="select_field_box">
+        <label>Выберете ответ(ы) из списка</label>
+        ${this.changed_answers.length > 1?
+        '<label>Чтобы выбрать несколько ответов \n\
+            если это, конечно, возможно),\n\
+            зажмите клавишу Ctrl и выберите несколько ответов)\n\
+        </label>':""}
+        <select ${this.correct_answer.length > 1? "multiple": ""}
+        name="change_ans" id="select_field">${this.options_answer.reduce(function(a, b){
+            return a + "\n" + SelectFieldQuestion.get_select_options_field_html(b,
+            (arr.indexOf(b) !== -1)); }, "")}
+        </select></div>`;
     }
     
     get_user_answer_html(){
         // Должна быть переопределена в дочернем классе
         // Возвращает ответ пользователя для таблицы результатов
+        if (this.changed_answers.length > 1){
+            return this.changed_answers.reduce(function(a, b){
+                return a + "\n" + `<div class="table_checkbox_box">
+   	<input type="checkbox" class="checkbox" checked disabled>
+        <label>${b}</label></div>`;}, "Ваши ответы:");
+        }
+                
         return (this.changed_answers.length > 0?
                 this.changed_answers[0]: "Нет ответа");
     }
@@ -450,10 +462,10 @@ class SelectFieldQuestion extends BaseQuestion {
         // Должна быть переопределена в дочернем классе
         // Возвращает правильный ответ для таблицы результатов
         if (this.correct_answer.length > 1){
-            return this.correct_answer.reduce(function(a, b){ 
-                return a + "\n" + `<div class="table_radiobutton_box">
-                <input type="radio" class="radiobutton" checked disabled>
-                <label>${b}</label></div>`;}, "Любой из следующих:");
+            return this.correct_answer.reduce(function(a, b){
+                return a + "\n" + `<div class="table_checkbox_box">
+   	<input type="checkbox" class="checkbox" checked disabled>
+        <label>${b}</label></div>`;}, "Верные ответы:");;
         } else if (this.correct_answer.length > 0){
             return this.correct_answer[0];
         }
@@ -462,9 +474,12 @@ class SelectFieldQuestion extends BaseQuestion {
     get_sum_marks(){
         // Должна быть переопределена в дочернем классе
         // Возвращает сумму, которую получил пользователь баллов за ответ
-        return (this.changed_answers.length > 0 &&
-                this.correct_answer.length > 0 &&
-                this.correct_answer.indexOf(this.changed_answers[0]) !== -1?
-        "1":"0");
+        let a = new Set(this.changed_answers);
+        let b = new Set(this.correct_answer);
+        
+        let difference1 = [...a].filter(x => !b.has(x));
+        let difference2 = [...b].filter(x => !a.has(x));
+        console.log(difference1, difference2);
+        return (difference1.length === 0 && difference2.length === 0 ?"1":"0");
     }
 };

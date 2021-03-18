@@ -1,7 +1,7 @@
 function timer_renderer(){
     var old_end_timer = end_timer;
-    end_timer = timer.every((el) => el[0] === 0) || end_timer;
-    console.log(end_timer, JSON.parse(JSON.stringify(timer))) ;
+    end_timer = timer.every((el) => Number.parseInt(el[0]) === 0) || end_timer;
+//    console.log(end_timer, JSON.parse(JSON.stringify(timer))) ;
     if (start_timer && !end_timer){
         var [old_el, old_module] = timer[0];
         timer[0][0] = (old_el - 1 + old_module) % old_module;
