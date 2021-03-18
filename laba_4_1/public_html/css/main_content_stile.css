@@ -30,6 +30,12 @@ main #content {
 	padding-bottom: 30px;
 }
 
+main h5{
+	text-align: justify;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
 main .question_title{
 	color: #474887;
 	text-align: center;
