@@ -3,13 +3,14 @@ var start_timer = false;
 var end_timer = false;
 var timer = [ 
 //    [10 ,100],// массив идет от меньшего разряда времени к большему
-    [20, 60], // 10 секунд (максимальное число в разряде секунд - 60)
-    [00, 60], // 1 минута (максимальное число в разряде  минут - 60)
-    [0, 24], // 1 час (максимальное число в разряде  часов - 24),
-    [0, 365]
+    [20, 60, "Секунда"], // 10 секунд (максимальное число в разряде секунд - 60)
+    [0, 60, "Минута"], // 1 минута (максимальное число в разряде  минут - 60)
+    [0, 24, "Час"], // 1 час (максимальное число в разряде  часов - 24),
+    [0, 365, "День"]
 ];
+var save_start_timer = JSON.parse(JSON.stringify(timer));
 var keys = [];
-var got_form_types = ["radio", "checkbox", "text"];
+var got_form_types = ["radio", "checkbox", "text", "select"];
 for(var k in data_test){
     if (got_form_types.indexOf(data_test[k]['type']) !== -1 ){
         keys.push(k);
@@ -41,14 +42,13 @@ function get_timer_str(){
 
 function timer_value_parser(timer_data){
     var [h, m, s] = (timer_data || document.getElementById("input_time_test").value).split(":");
-    timer[0][0] = s || 0;
-    timer[1][0] = m;
-    timer[2][0] = h;
+    timer[0][0] = Number.parseInt(s) || 0;
+    timer[1][0] = Number.parseInt(m);
+    timer[2][0] = Number.parseInt(h);
 }
 
 window.onbeforeunload = function() {
     console.log("Попытка перезагрузки");
-    alert('----');
     return false;
 //  return "Есть несохранённые изменения. Всё равно уходим?";
 };

@@ -3,13 +3,14 @@ function create_question_classes(count_questions, test_time){
     type_to_class = {
         'radio': RadiobuttonQuestion,
         'checkbox': CheckBoxQuestion,
-        "text": TextFieldQuestion
+        "text": TextFieldQuestion,
+        "select": SelectFieldQuestion
     };
     
     BaseQuestion.question_count = count_questions;
     
     var keys = [];
-    var got_form_types = ["radio", "checkbox", "text"];
+    var got_form_types = ["radio", "checkbox", "text", "select"];
     for(var k in data_test){
         if (got_form_types.indexOf(data_test[k]['type']) !== -1 ){
             keys.push(k);
@@ -38,6 +39,7 @@ function create_question_classes(count_questions, test_time){
     document.getElementById("content").innerHTML = BaseQuestion.all_forms[0].get_form_html;
     BaseQuestion.create_nav_buttons();
     document.getElementById("test_nav").innerHTML = BaseQuestion.get_navigation_buttons();
+    save_start_timer = JSON.parse(JSON.stringify(timer));
     start_timer = true;
     end_timer = false;
     
