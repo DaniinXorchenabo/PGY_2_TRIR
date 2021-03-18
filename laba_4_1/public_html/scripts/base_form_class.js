@@ -36,20 +36,23 @@ class BaseQuestion{
     }
     get get_form_html(){
         // Возвращает html-код формы (с поставленными значени=ями, если таковые имеются)
-        return `<h1 class="question_title">Вопрос ${this.number_question} из ${BaseQuestion.question_count}</h1>
+        return `<h1 class="question_title">
+                Вопрос ${this.number_question} из ${BaseQuestion.question_count}</h1>
 		<h2 class="question_text">${this.text_question}</h2>
 		<form id="question_form">
                 <div class="answers_field">
                     ${this.get_child_html()}
 		</div>
 		<div class="reset_form">
-                    <input type="reset" value="Сбросить ответ" onclick="BaseQuestion.reset_button_call(${this.number_question})">
+                    <input type="reset" value="Сбросить ответ" 
+                    onclick="BaseQuestion.reset_button_call(${this.number_question})">
 		</div>
 		<div class="timer_box">
                     <p><span class="timer">${get_timer_str()}</span></p>
 		</div>
 		<div class="submit_box">
-                    <input type="submit" value="Завершить тестирование" onclick="BaseQuestion.finish_test();">
+                    <input type="submit" value="Завершить тестирование" 
+                    onclick="BaseQuestion.finish_test();">
 		</div>
                 </form>`;
     }
@@ -65,7 +68,8 @@ class BaseQuestion{
     }
     static get_navigation_buttons(){
         // Возвращает код кнопок навигации
-        return '<ul>' + BaseQuestion.navigation_buttons.reduce(function(a, b){return a + '\n' +  b;}) + '</ul>';
+        return '<ul>' + BaseQuestion.navigation_buttons.reduce(
+                function(a, b){return a + '\n' +  b;}) + '</ul>';
     }
     static set_vavigation_buttons(){
         // Устанавливает кнопки навигации в html-страницу
@@ -107,7 +111,7 @@ class BaseQuestion{
     }
     reset_button_control(){
         this.changed_answers = [];
-        this.set_form_html()
+        this.set_form_html();
     }
     
     static finish_test(){
@@ -119,7 +123,10 @@ class BaseQuestion{
     }
     static generate_finish_content(){
         // Генерирует страницу окончания теста
-        return `<h1>Результаты теста:</h1> ${BaseQuestion.generate_result_table()}`;
+        return `<h1>Результаты теста:</h1>
+        <h2>Ваш балл за тест: ${BaseQuestion.calculate_all_marks()}</h2>
+        <h2>Это даже больше, чем -1, вы большой молодец!!!</h2>
+        ${BaseQuestion.generate_result_table()}`;
     }
     static generate_result_table(){
         // Генерирует таблицу результатов
@@ -158,6 +165,11 @@ class BaseQuestion{
         // Должна быть переопределена в дочернем классе
         // Возвращает сумму, которую получил пользователь баллов за ответ
         return "0";
+    }
+    
+    static calculate_all_marks(){
+        return BaseQuestion.all_forms.reduce(function(a, b){
+            return Number.parseInt(a) + Number.parseInt(b.get_sum_marks());}, 0);
     }
 
 };
@@ -207,15 +219,17 @@ class RadiobuttonQuestion extends BaseQuestion {
     get_user_answer_html(){
         // Должна быть переопределена в дочернем классе
         // Возвращает ответ пользователя для таблицы результатов
-        return (this.changed_answers.length > 0? this.changed_answers[0]: "Нет ответа");
+        return (this.changed_answers.length > 0?
+                this.changed_answers[0]: "Нет ответа");
     }
     get_correct_answer_html(){
         // Должна быть переопределена в дочернем классе
         // Возвращает правильный ответ для таблицы результатов
         if (this.correct_answer.length > 1){
-            return this.correct_answer.reduce(function(a, b){ return a + "\n" + `<div class="table_radiobutton_box">
-   	<input type="radio" class="radiobutton" checked disabled>
-        <label>${b}</label></div>`;}, "Любой из следующих:");
+            return this.correct_answer.reduce(function(a, b){ 
+                return a + "\n" + `<div class="table_radiobutton_box">
+                <input type="radio" class="radiobutton" checked disabled>
+                <label>${b}</label></div>`;}, "Любой из следующих:");
         } else if (this.correct_answer.length > 0){
             return this.correct_answer[0];
         }
@@ -224,7 +238,10 @@ class RadiobuttonQuestion extends BaseQuestion {
     get_sum_marks(){
         // Должна быть переопределена в дочернем классе
         // Возвращает сумму, которую получил пользователь баллов за ответ
-        return (this.changed_answers.length > 0 && this.correct_answer.length > 0 && this.correct_answer.indexOf(this.changed_answers[0]) !== -1? "1":"0");
+        return (this.changed_answers.length > 0 &&
+                this.correct_answer.length > 0 &&
+                this.correct_answer.indexOf(this.changed_answers[0]) !== -1?
+        "1":"0");
     }
 };
 
@@ -233,7 +250,9 @@ class CheckBoxQuestion extends BaseQuestion {
     save_data(){
         /*Сохранение данных формы перед ее закрытием (сменой на другую форму)*/
         super.save_data();
-        var data = Array.from(document.querySelectorAll('input.checkbox:checked')).map(cb => cb.value);
+        var data = Array.from(
+                document.querySelectorAll('input.checkbox:checked')
+                ).map(cb => cb.value);
         console.log(data);
         this.changed_answers = data;
         this.change_color_nav_buttons();
@@ -242,7 +261,8 @@ class CheckBoxQuestion extends BaseQuestion {
     change_color_nav_buttons(){
         // Изменение цвета кнопки при переключении на следующий вопрос
         super.change_color_nav_buttons();
-        this.status_question = this.changed_answers.length > 0? "positive": "negative";
+        this.status_question = this.changed_answers.length > 0?
+                                "positive": "negative";
     }
     
     get_child_html(){
@@ -284,7 +304,8 @@ class CheckBoxQuestion extends BaseQuestion {
         // Должна быть переопределена в дочернем классе
         // Возвращает правильный ответ для таблицы результатов
         if (this.correct_answer.length > 1){
-            return this.correct_answer.reduce(function(a, b){ return a + "\n" + `<div class="table_checkbox_box">
+            return this.correct_answer.reduce(function(a, b){
+                return a + "\n" + `<div class="table_checkbox_box">
    	<input type="checkbox" class="checkbox" checked disabled>
         <label>${b}</label></div>`;}, "Верные ответы:");
         } else if (this.correct_answer.length > 0){
@@ -319,7 +340,8 @@ class TextFieldQuestion extends BaseQuestion {
     change_color_nav_buttons(){
         // Изменение цвета кнопки при переключении на следующий вопрос
         super.change_color_nav_buttons();
-        this.status_question = this.changed_answers.length > 0? "positive": "negative";
+        this.status_question = this.changed_answers.length > 0?
+        "positive": "negative";
     }
     
     get_child_html(){
@@ -341,7 +363,8 @@ class TextFieldQuestion extends BaseQuestion {
 //        console.log(super.changed_answers);
 //        this.changed_answers = super.changed_answers;
         return TextFieldQuestion.get_text_field_html(
-                (this.changed_answers.length > 0? this.changed_answers[0]: ""), false);
+                (this.changed_answers.length > 0?
+                this.changed_answers[0]: ""), false);
         
     }
     
@@ -355,7 +378,8 @@ class TextFieldQuestion extends BaseQuestion {
         // Должна быть переопределена в дочернем классе
         // Возвращает правильный ответ для таблицы результатов
         if (this.correct_answer.length > 1){
-            return this.correct_answer.reduce(function(a, b){ return a + "\n" + `<div class="table_checkbox_box">
+            return this.correct_answer.reduce(function(a, b){
+                return a + "\n" + `<div class="table_checkbox_box">
    	<input type="checkbox" class="checkbox" checked disabled>
         <label>${b}</label></div>`;}, "Верные ответы:");
         } else if (this.correct_answer.length > 0){
@@ -366,7 +390,9 @@ class TextFieldQuestion extends BaseQuestion {
     get_sum_marks(){
         // Должна быть переопределена в дочернем классе
         // Возвращает сумму, которую получил пользователь баллов за ответ
-        return (this.changed_answers.length > 0 && ( this.correct_answer.length === 0 || 
-                this.correct_answer.indexOf(this.changed_answers[0]) !== -1)?"1":"0");
+        return (this.changed_answers.length > 0 && ( 
+                this.correct_answer.length === 0 || 
+                this.correct_answer.indexOf(this.changed_answers[0]) !== -1)?
+        "1": "0");
     }
 };
