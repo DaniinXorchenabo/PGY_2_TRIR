@@ -175,6 +175,7 @@ class BaseQuestion{
 
 };
 
+
 class RadiobuttonQuestion extends BaseQuestion {
     
     save_data(){
@@ -245,6 +246,7 @@ class RadiobuttonQuestion extends BaseQuestion {
         "1":"0");
     }
 };
+
 
 class CheckBoxQuestion extends BaseQuestion {
     
@@ -326,6 +328,7 @@ class CheckBoxQuestion extends BaseQuestion {
         return (difference1.length === 0 && difference2.length === 0 ?"1":"0");
     }
 };
+
 
 class TextFieldQuestion extends BaseQuestion {
     

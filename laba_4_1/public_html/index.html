@@ -9,7 +9,7 @@
         
         <link href="css/footer_stile.css" rel="stylesheet" type="text/css"/>
         <link href="css/main_content_stile.css" rel="stylesheet" type="text/css"/>
-        <link href="css/stile.css" rel="stylesheet" type="text/css"/>
+        <!--<link href="css/stile.css" rel="stylesheet" type="text/css"/>-->
         <link href="css/header_stile.css" rel="stylesheet" type="text/css"/>
         <link href="css/logo_stile.css" rel="stylesheet" type="text/css"/>
         <link href="css/test_nav_stiles.css" rel="stylesheet" type="text/css"/>
@@ -18,8 +18,7 @@
         
         <script src="data/questions.js" type="text/javascript"></script>
         <script defer src="scripts/script.js" type="text/javascript"></script>
-        <script defer src="scripts/running_func.js" type="text/javascript"></script>
-        
+        <!--<script defer src="scripts/running_func.js" type="text/javascript"></script>-->
         <script defer src="scripts/base_form_class.js" type="text/javascript"></script>
         <script defer src="scripts/create_test.js" type="text/javascript"></script>
         <script defer src="scripts/timer.js" type="text/javascript"></script>
@@ -28,40 +27,40 @@
 	<header>
             <nav>
             <ul>
-            	<li>
-                    <div class="logo">
-			<div class="prelogo_name">Платформа для проведения онлайн-тестов - </div>
-			<div class="logo_name">ЛабаТрир</div>
-			<div class="post_logo_name">Ваша безопастность - не наши проблемы</div>
-                    </div>
-                </li>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Услуги</a></li>
-                <li><a href="#">Цены</a></li>
-                <li><a href="#"></a></li>
+            <li> <div class="logo">
+		<div class="prelogo_name">Платформа для проведения онлайн-тестов - </div>
+		<div class="logo_name">ЛабаТрир</div>
+		<div class="post_logo_name">Ваша безопастность - не наши проблемы</div>
+            </div></li>
+            <li><a href="#">      </a></li>
+            <li><a href="#">      </a></li>
+            <li><a href="#">      </a></li>
+            <li><a href="#">      </a></li>
             </ul>
             </nav>
         </header>
         <main>
             <div id="content">
-				<p class="prefix_title">Тестирование на тему:</p>
-				<h1 class="question_title">Организм как биологическая система</h1>
-                                <h5>Органи́зм (позднелат. organismus от позднелат. organizo — «устраиваю», «сообщаю стройный вид», от др.-греч. ὄργανον — «орудие») — живое тело, обладающее совокупностью свойств, отличающих его от неживой материи, в том числе обменом веществ, самоподдерживанием своего строения и организации, способностью воспроизводить их при размножении, сохраняя наследственные признаки[1]. Термин организм введён Аристотелем. Он выявил, что любое живое существо характеризуется четкой и строгой организацией, в отличие от неживого[источник не указан 489 дней]. Может рассматриваться как отдельная особь, элемент, при этом входя в биологический вид и популяцию, являясь структурной единицей популяционно-видового уровня жизни[1]. В обобщённом смысле, как «типовая особь» биологической группы, которой присущи её основные свойства, организм — один из главных предметов изучения в биологии[1]. Для удобства рассмотрения все организмы распределяются по разным группам и категориям, что составляет биологическую систему их классификации. Самое общее их деление — на ядерные и безъядерные. По числу составляющих организм клеток их делят на внесистематические категории одноклеточных и многоклеточных. Особое место между ними занимают колонии одноклеточных.
-                                </h5>
-				<h2 class="test_tools_text">Настройки теста:</h2>
-				<form id="start_test_tools">
-					<div class="count_questions_box">
-						<label class="count_qu_lable">Введите количество вопросов в тесте:</label>
-                        <input type="number" min="1" onchange="set_seekbar()"
+		<p class="prefix_title">Тестирование на тему:</p>
+		<h1 class="question_title">Организм как биологическая система</h1>
+                <h5>Органи́зм (позднелат. organismus от позднелат. organizo — «устраиваю», «сообщаю стройный вид», от др.-греч. ὄργανον — «орудие») — живое тело, обладающее совокупностью свойств, отличающих его от неживой материи, в том числе обменом веществ, самоподдерживанием своего строения и организации, способностью воспроизводить их при размножении, сохраняя наследственные признаки[1]. Термин организм введён Аристотелем. Он выявил, что любое живое существо характеризуется четкой и строгой организацией, в отличие от неживого[источник не указан 489 дней]. Может рассматриваться как отдельная особь, элемент, при этом входя в биологический вид и популяцию, являясь структурной единицей популяционно-видового уровня жизни[1]. В обобщённом смысле, как «типовая особь» биологической группы, которой присущи её основные свойства, организм — один из главных предметов изучения в биологии[1]. Для удобства рассмотрения все организмы распределяются по разным группам и категориям, что составляет биологическую систему их классификации. Самое общее их деление — на ядерные и безъядерные. По числу составляющих организм клеток их делят на внесистематические категории одноклеточных и многоклеточных. Особое место между ними занимают колонии одноклеточных.
+                </h5>
+		<h2 class="test_tools_text">Настройки теста:</h2>
+		<form id="start_test_tools">
+		<div class="count_questions_box">
+                    <label class="count_qu_lable">Введите количество вопросов в тесте:
+                    </label>
+                    <input type="number" min="1" onchange="set_seekbar()"
                         max="11" step="1" 
-                        id="count_question" name="count_question" class="count_qu_input" required>
-					<input type="range" list="tickmarks" id="count_seekbar_qu"
-                    class="input_range" min="1" max="11" step="1"
-                    pattern="^[0-9]+$" onchange="set_count_question()">
-					<datalist id="tickmarks">
-					  <option value="1" label="0%">
-					  <option value="2">
-					  <option value="3">
+                        id="count_question" name="count_question" 
+                        class="count_qu_input" required>
+                    <input type="range" list="tickmarks" id="count_seekbar_qu"
+                        class="input_range" min="1" max="11" step="1"
+                        pattern="^[0-9]+$" onchange="set_count_question()">
+                    <datalist id="tickmarks">
+			<option value="1" label="0%">
+			<option value="2">
+			<option value="3">
 					  <option value="4">
 					  <option value="5">
 					  <option value="6" label="50%">
@@ -87,44 +86,9 @@
 				
 				</form>
                 
-                
-<!--                <h1 class="question_title">Вопрос 2 из 11</h1>
-		<h2 class="question_text">Каковы цитологические основы полового размножения организмов?</h2>
-		<form id="question_form">
-                <div class="answers_field">
-                    <div class="radiobutton">
-			<input type="radio" name="change_ans" value="ie" id="ans_ie">
-                        <label for="ans_ie">Internet Explorer</label>
-                    </div>
-                    <div class="radiobutton">
-   			<input type="radio" name="change_ans" value="opera" id="ans_Opera">
-                        <label for="ans_Opera">Opera</label>
-                    </div>
-                    <div class="radiobutton">
-   			<input type="radio" name="change_ans" value="firefox" id="ans_Firefox">
-                        <label for="ans_Firefox">Firefox</label>
-                    </div>
-		</div>
-		<div class="reset_form">
-                    <button onclick="test_form()">dfg</button>
-                    <input type="reset" value="Сбросить ответ">
-		</div>
-		<div class="timer_box">
-                    <p>Чтобы таймер работал, надо установить переменную start_timer = true в файле scripts/script.js</p>
-                    <p><span class="timer">1:10:00</span></p>
-		</div>
-		<div class="submit_box">
-                    <input type="submit" value="Завершить тестирование">
-		</div>
-                </form>-->
+            
             </div>
             <nav class="test_nav" id="test_nav">
-<!--                <ul>
-                <li><button onclick="BaseQuestion.button_click(1)">1</button></li>
-                <li><button class="no_answer" onclick="BaseQuestion.button_click(2)">2</button></li>
-                <li><button  class="positive" onclick="BaseQuestion.button_click(3)">3</button></li>
-                <li><button class="negative" onclick="BaseQuestion.button_click(4)">4</button></li>
-                </ul>-->
             </nav>
 	</main>
 	<footer>
