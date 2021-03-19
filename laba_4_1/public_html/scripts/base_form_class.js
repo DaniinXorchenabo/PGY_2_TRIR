@@ -120,6 +120,7 @@ class BaseQuestion{
         BaseQuestion.now_form_display.save_data();
         var page = BaseQuestion.generate_finish_content();
         document.getElementById("content").innerHTML = page;
+        document.getElementById("test_nav").innerHTML = "";
     }
     static generate_finish_content(){
         // Генерирует страницу окончания теста
@@ -131,7 +132,7 @@ class BaseQuestion{
     static generate_result_table(){
         // Генерирует таблицу результатов
         var tabel = `<table><thead><tr>
-                    <th>Номер вопроса</th>
+                    <th>Вопрос:</th>
                     <th>Ваш ответ:</th>
                     <th>Правильный ответ:</th>
                     <th>Количество баллов:</th>
@@ -146,7 +147,7 @@ class BaseQuestion{
     get_result_table_string(){
         // Генерирует строку таблицы результатов
         return `<tr class="${this.get_sum_marks() > 0? "positive": "nerative"}">
-                    <td>${this.number_question}</td>
+                    <td>${this.number_question + ". " + this.text_question}</td>
                     <td>${this.get_user_answer_html()}</td>
                     <td>${this.get_correct_answer_html()}</td>
                     <td>${this.get_sum_marks()}</td></tr>`;
