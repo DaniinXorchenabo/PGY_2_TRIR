@@ -1,3 +1,9 @@
 /.git/**/*
 /**/[Originals]/**/*
 *.pdf
+/**/.idea/**/*
+/**/.bowerrc
+/**/bower.json
+/**/Gruntfile.js
+/**/gulpfile.js
+/**/nbproject/**/*
