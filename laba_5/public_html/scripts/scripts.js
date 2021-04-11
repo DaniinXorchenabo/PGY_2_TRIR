@@ -76,18 +76,17 @@ class BaseFigure {
     #center_y;
     destroy = false;
     counter= 0;
+    #max_left = Infinity;
+    #max_right = -Infinity;
+    #max_up = -Infinity;
+    #max_down = Infinity;
 
     static x_limit_center = 40;
     static y_limit_center = 40;
     static all_figures = {};
 
-    get center_x() {
-        return this.now_x + this.#center_x;
-    }
-
-    get center_y() {
-        return this.now_y + this.#center_y;
-    }
+    get center_x() { return this.now_x + (this.#center_x - this.start_x); }
+    get center_y() { return this.now_y + (this.#center_y - this.start_y); }
 
     create_figure(my_id, points = [new Point(0, 0), new Point(10, 10)], color = 'red', stroke = "blue") {
         let result = `<polygon id="_${my_id}" fill="${color}" stroke="${stroke}" stroke-width="1"
@@ -102,9 +101,24 @@ class BaseFigure {
         [this.#center_x, this.#center_y] = points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
         this.#center_x /= points.length;
         this.#center_y /= points.length;
-        return result
+        [this.#max_left, this.#max_right, this.#max_up, this.#max_down] = points.reduce(
+            (arg, p) => ([arg[0] > p.x? p.x:arg[0], arg[1] < p.x? p.x: arg[1],
+                arg[2] < p.y? p.y: arg[2], arg[3] > p.y? p.y: arg[3]]),
+            [this.#max_left, this.#max_right, this.#max_up, this.#max_down]);
+        // this.#max_left = this.#max_left - this.#center_x;
+        // this.#max_right = this.#max_right - this.#center_x;
+        // this.#max_up = this.#max_up - this.#center_y;
+        // this.#max_down = this.#max_down - this.#center_y;
+
+        return result;
 
     }
+    get max_left(){ return this.center_x + this.#max_left;}
+    get max_right(){ return this.center_x +  this.#max_right ;}
+    get max_up(){ return this.center_y + this.#max_up - this.#center_y ;}
+    get max_down(){ return this.center_y + this.#max_down + this.#center_y ;}
+
+
 
     constructor(points, my_id) {
         BaseFigure.all_figures[my_id] = this;
@@ -116,6 +130,7 @@ class BaseFigure {
         let main = document.getElementById(main_svg_id);
         main.innerHTML += this.create_figure(my_id, points);
         this.my_obj = document.getElementById(my_id);
+        console.log(this.max_left, this.max_right, this.max_up, this.max_down)
         // $("#" + main_svg_id).append(this.create_figure(my_id, points));
         // console.log(main.innerHTML);
 
@@ -133,7 +148,11 @@ class BaseFigure {
             },
             {
                 queue: false, duration: 1000, step: me.animate_figure,
-                always: () => console.log(me.center_x, me.center_y, "---", windows_w / 2, windows_h / 2, "#", me.#center_x, me.#center_y)
+                always: () => {
+                    let [center_x, center_y] = me.points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
+                    center_x /= me.points.length;
+                    center_y /= me.points.length;
+                    console.log(me.center_x, me.center_y, "---", windows_w / 2, windows_h / 2, "#", center_x, center_y)}
             });
         console.log("Прервали анимацию!");
     }
@@ -193,21 +212,28 @@ class BaseFigure {
         // });
 
         if (obj.prop === "x") {
+            let d_x = now - me.now_x;
             me.now_x = now;
-            if (now <= 0 || now >= windows_w) {
+            if (me.max_left <= 0  && d_x < 0) {
+                $("#" + me.my_id).stop(true);
+            } else if (me.max_right >= windows_w && d_x > 0){
+                $("#" + me.my_id).stop(true);
+            }
+
+        }
+        if (obj.prop === "y") {
+            let d_y = now - me.now_y;
+            me.now_y = now;
+            if (me.max_up <= 0  && d_y < 0) {
+                $("#" + me.my_id).stop(true);
+            } else if (me.max_down >= windows_h && d_y > 0){
                 $("#" + me.my_id).stop(true);
             }
         }
-        if (obj.prop === "y") {
-            me.now_y = now;
-            if (now <= 0 || now >= windows_h) {
-                $("#" + me.my_id).stop(true)
-            }
-        }
 
 
-        if (Math.abs(windows_h / 2 - me.center_y) <= 1) {
-            if (Math.abs(windows_w / 2 - me.center_x) <= 1) {
+        if (Math.abs(windows_h / 2 - me.center_y - me.start_x) <= 5) {
+            if (Math.abs(windows_w / 2 - me.center_x - me.start_y) <= 5) {
                 console.log('Destroy');
                 $("#" + me.my_id).stop().hide();
                 this.destroy = true;
@@ -225,7 +251,7 @@ class BaseFigure {
         console.log("runn", this.counter, new_x, this.now_x , speed_x);
         if (this.destroy){ return false; }
         if (Math.abs(new_x - this.now_x) > 5 && speed_x > 0) {
-            let next_x = this.now_x;
+            let next_x = this.now_x < new_x? -1000: this.now_x;
             obj.animate(
                 {x: new_x},
                 {
@@ -238,7 +264,7 @@ class BaseFigure {
             );
         }
         if (Math.abs(new_y - this.now_y) > 5 && speed_y > 0) {
-            let next_y = this.now_y;
+            let next_y = this.now_y < new_y? -1000: this.now_y;
             obj.animate(
                 {y: new_y},
                 {
@@ -255,7 +281,7 @@ class BaseFigure {
 
 let a1 = new BaseFigure([new Point(30, 30), new Point(40, 60), new Point(50, 10)], "id1")
 let b = new BaseFigure([new Point(30, 10), new Point(50, 10), new Point(90, 70)], "id2")
-a1.animate(2000, 2000, 30, 220);
+a1.animate(2000, 2000, 120, 200);
 // $('#' + a1.my_id).animate({transform : "translate(295px,115px)"}, {step: a1.animate_figure});
 // $('#' + a1.my_id).animate({transform : translate(295,115)}, {step: a1.animate_figure});
 // $('#' + a1.my_id).animate({y: "10px"}, {
