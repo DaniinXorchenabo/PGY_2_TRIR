@@ -68,6 +68,7 @@ class MoveAnimate {
 class BaseFigure {
     points = [];
     my_obj;
+    $my_obj;
     now_x = 0;
     now_y = 0;
     start_x;
@@ -90,31 +91,34 @@ class BaseFigure {
     get center_x() { return this.now_x + (this.#center_x ); } /// - this.start_x
     get center_y() { return this.now_y + (this.#center_y ); } // - this.start_y
 
-    create_figure(my_id, points = [new Point(0, 0), new Point(10, 10)], color = 'red', stroke = "blue") {
+    create_figure(my_id,
+                  points = [new Point(0, 0), new Point(10, 10)],
+                  color = 'red',
+                  stroke = "blue") {
+
         let result = `<polygon id="_${my_id}" fill="${color}" stroke="${stroke}" stroke-width="1"
                         points="${points.reduce(((old, p) => old + " " + p.str), "")}" />
                       <polyline stroke="black" stroke-width="1px" fill="none" id="marker_${my_id}" 
-                      points="0,0 6,0, -6,0, 0,0 0,6 0,-6"/>`;
-        // let result = `<circle id="_${my_id}"  cx="${points[0].x}" cy="${points[0].y}" r="40" stroke="green" stroke-width="4" fill="yellow" />`;
+                        points="0,0 6,0, -6,0, 0,0 0,6 0,-6"/>`;
         result = `<defs>${result}</defs>
                     <use id="${my_id}" xlink:href="#_${my_id}" x="${points[0].x}" y="${points[0].y}" />
                     <use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
                     <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />`;
+
         this.now_x = points[0].x;
         this.now_y = points[0].y;
         this.start_x = points[0].x;
         this.start_y = points[0].y;
-        [this.#center_x, this.#center_y] = points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
+        [this.#center_x, this.#center_y] = points.reduce(
+            (sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
         this.#center_x /= points.length;
         this.#center_y /= points.length;
-        [this.#max_right, this.#max_left, this.#max_up, this.#max_down] = points.reduce(
+
+
+        [this.#max_left, this.#max_right, this.#max_up, this.#max_down] = points.reduce(
             (arg, p) => ([arg[0] > p.x? p.x:arg[0], arg[1] < p.x? p.x: arg[1],
                 arg[2] < p.y? p.y: arg[2], arg[3] > p.y? p.y: arg[3]]),
             [this.#max_left, this.#max_right, this.#max_up, this.#max_down]);
-        // this.#max_left = this.#max_left - this.#center_x;
-        // this.#max_right = this.#max_right - this.#center_x;
-        // this.#max_up = this.#max_up - this.#center_y;
-        // this.#max_down = this.#max_down - this.#center_y;
 
         return result;
 
@@ -135,12 +139,12 @@ class BaseFigure {
 
         let main = document.getElementById(main_svg_id);
         main.innerHTML += this.create_figure(my_id, points);
+
         this.my_obj = document.getElementById(my_id);
         this.center_marker = document.getElementById("center_" + my_id); //$("#center_" + my_id);
         this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
-        console.log(this.max_left, this.max_right, this.max_up, this.max_down)
-        // $("#" + main_svg_id).append(this.create_figure(my_id, points));
-        // console.log(main.innerHTML);
+        this.$my_obj = $("#" + this.my_id);
+        console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
 
     }
 
@@ -223,9 +227,9 @@ class BaseFigure {
             let d_x = now - me.now_x;
             me.now_x = now;
             if (me.max_left <= 0  && d_x < 0) {
-                $("#" + me.my_id).stop(true);
+                me.$my_obj.stop(true);
             } else if (me.max_right >= windows_w && d_x > 0){
-                $("#" + me.my_id).stop(true);
+                me.$my_obj.stop(true);
             }
 
         }
@@ -233,39 +237,34 @@ class BaseFigure {
             let d_y = now - me.now_y;
             me.now_y = now;
             if (me.max_up <= 0  && d_y < 0) {
-                $("#" + me.my_id).stop(true);
+                me.$my_obj.stop(true);
             } else if (me.max_down >= windows_h && d_y > 0){
-                $("#" + me.my_id).stop(true);
+                me.$my_obj.stop(true);
             }
         }
-        document.getElementById("center_" + me.my_id).style.x = me.center_x;
-        document.getElementById("center_" + me.my_id).style.y = me.center_y;
-        document.getElementById("left_up_" + me.my_id).style.x = me.max_right;
-        document.getElementById("left_up_" + me.my_id).style.y = me.max_down;
 
-        // me.center_marker.css("x", me.center_x);
-        // me.center_marker.css("y", me.center_y);
-        // me.up_left_marker.css("x", me.now_x);
-        // me.up_left_marker.css("y", me.now_y);
+        me.center_marker.style.x = me.center_x;
+        me.center_marker.style.y = me.center_y;
+        me.up_left_marker.style.x = me.max_right;
+        me.up_left_marker.style.y = me.max_down;
 
 
         if (Math.abs(windows_h / 2 - me.center_y) <= 1) {
             if (Math.abs(windows_w / 2 - me.center_x) <= 1) {
                 console.log('Destroy');
-                $("#" + me.my_id).stop().hide();
-                this.destroy = true;
+                me.$my_obj.stop().hide();
+                me.destroy = true;
                 // delete me;
             }
         }
-        // console.log(me)
         $output.html(obj.prop + ': ' + now + obj.unit);
-        // console.log(obj.elem);
 
     }
 
     animate(new_x, new_y, speed_x, speed_y, css_param = {}, options = {}, obj=$('#' + this.my_id)) {
+        this.$my_obj = obj;
         this.counter++;
-        console.log("runn", this.counter, new_x, this.now_x , speed_x);
+        console.log("runn", this.counter, new_x, this.now_x , speed_x, obj);
         if (this.destroy){ return false; }
         if (Math.abs(new_x - this.now_x) > 5 && speed_x > 0) {
             let next_x = this.now_x < new_x? -1000: this.now_x;
@@ -274,7 +273,7 @@ class BaseFigure {
                 {
                     queue: false,
                     duration: Math.abs(new_x - this.now_x) / speed_x * 1000,
-                    always: (() => (this.animate(next_x, this.now_y, speed_x, 0, css_param, options), console.log("x--00"))),
+                    always: (() => (this.animate(next_x, this.now_y, speed_x, 0, css_param, options))),
                     step: this.animate_figure,
                     easing: this.my_id + "_x",
                 }
@@ -287,7 +286,7 @@ class BaseFigure {
                 {
                     queue: false,
                     duration: Math.abs(new_y - this.now_y) / speed_y * 1000,
-                    always: (() => (this.animate(this.now_x, next_y, 0, speed_y, css_param, options), console.log("y--00"))),
+                    always: (() => (this.animate(this.now_x, next_y, 0, speed_y, css_param, options))),
                     step: this.animate_figure,
                     easing: this.my_id + "_y",
                 }
@@ -299,21 +298,4 @@ class BaseFigure {
 let a1 = new BaseFigure([new Point(30, 30), new Point(40, 60), new Point(50, 10)], "id1")
 let b = new BaseFigure([new Point(30, 10), new Point(50, 10), new Point(90, 70)], "id2")
 a1.animate(2000, 2000, 120, 200);
-// $('#' + a1.my_id).animate({transform : "translate(295px,115px)"}, {step: a1.animate_figure});
-// $('#' + a1.my_id).animate({transform : translate(295,115)}, {step: a1.animate_figure});
-// $('#' + a1.my_id).animate({y: "10px"}, {
-//     step: a1.animate_figure,
-//     queue: false,
-//     easing: a1.my_id + "_y",
-//     duration: 5000,
-// });
-// // $('#' + a1.my_id).animate({}, {step: a1.animate_figure});
-//
-//
-// $('#' + a1.my_id).animate({x: "1000px"}, {
-//     step: a1.animate_figure,
-//     queue: false,
-//     easing: a1.my_id + "_x",
-//     duration: 5000,
-//     always: () => console.log(a1.center_x, a1.center_y, "---", windows_w / 2, windows_h / 2)
-// })
+
