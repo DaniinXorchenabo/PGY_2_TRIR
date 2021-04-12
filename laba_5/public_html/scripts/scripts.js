@@ -249,8 +249,8 @@ class BaseFigure {
         // me.up_left_marker.css("y", me.now_y);
 
 
-        if (Math.abs(windows_h / 2 - me.center_y - me.start_x) <= 5) {
-            if (Math.abs(windows_w / 2 - me.center_x - me.start_y) <= 5) {
+        if (Math.abs(windows_h / 2 - me.center_y) <= 1) {
+            if (Math.abs(windows_w / 2 - me.center_x) <= 1) {
                 console.log('Destroy');
                 $("#" + me.my_id).stop().hide();
                 this.destroy = true;
