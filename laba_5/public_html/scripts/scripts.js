@@ -84,16 +84,22 @@ class BaseFigure {
     static x_limit_center = 40;
     static y_limit_center = 40;
     static all_figures = {};
+    center_marker;
+    up_left_marker;
 
-    get center_x() { return this.now_x + (this.#center_x - this.start_x); }
-    get center_y() { return this.now_y + (this.#center_y - this.start_y); }
+    get center_x() { return this.now_x + (this.#center_x ); } /// - this.start_x
+    get center_y() { return this.now_y + (this.#center_y ); } // - this.start_y
 
     create_figure(my_id, points = [new Point(0, 0), new Point(10, 10)], color = 'red', stroke = "blue") {
         let result = `<polygon id="_${my_id}" fill="${color}" stroke="${stroke}" stroke-width="1"
-                        points="${points.reduce(((old, p) => old + " " + p.str), "")}" />`;
+                        points="${points.reduce(((old, p) => old + " " + p.str), "")}" />
+                      <polyline stroke="black" stroke-width="1px" fill="none" id="marker_${my_id}" 
+                      points="0,0 6,0, -6,0, 0,0 0,6 0,-6"/>`;
         // let result = `<circle id="_${my_id}"  cx="${points[0].x}" cy="${points[0].y}" r="40" stroke="green" stroke-width="4" fill="yellow" />`;
         result = `<defs>${result}</defs>
-                    <use id="${my_id}" xlink:href="#_${my_id}" x="${points[0].x}" y="${points[0].y}" />`;
+                    <use id="${my_id}" xlink:href="#_${my_id}" x="${points[0].x}" y="${points[0].y}" />
+                    <use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
+                    <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />`;
         this.now_x = points[0].x;
         this.now_y = points[0].y;
         this.start_x = points[0].x;
@@ -101,7 +107,7 @@ class BaseFigure {
         [this.#center_x, this.#center_y] = points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
         this.#center_x /= points.length;
         this.#center_y /= points.length;
-        [this.#max_left, this.#max_right, this.#max_up, this.#max_down] = points.reduce(
+        [this.#max_right, this.#max_left, this.#max_up, this.#max_down] = points.reduce(
             (arg, p) => ([arg[0] > p.x? p.x:arg[0], arg[1] < p.x? p.x: arg[1],
                 arg[2] < p.y? p.y: arg[2], arg[3] > p.y? p.y: arg[3]]),
             [this.#max_left, this.#max_right, this.#max_up, this.#max_down]);
@@ -113,10 +119,10 @@ class BaseFigure {
         return result;
 
     }
-    get max_left(){ return this.center_x + this.#max_left;}
-    get max_right(){ return this.center_x +  this.#max_right ;}
-    get max_up(){ return this.center_y + this.#max_up - this.#center_y ;}
-    get max_down(){ return this.center_y + this.#max_down + this.#center_y ;}
+    get max_left(){ return this.center_x + (this.#center_x - this.#max_left);}
+    get max_right(){ return this.center_x +  (this.#center_x - this.#max_right);}
+    get max_up(){ return this.center_y + (this.#center_y - this.#max_up);}
+    get max_down(){ return this.center_y + (this.#center_y - this.#max_down);}
 
 
 
@@ -130,6 +136,8 @@ class BaseFigure {
         let main = document.getElementById(main_svg_id);
         main.innerHTML += this.create_figure(my_id, points);
         this.my_obj = document.getElementById(my_id);
+        this.center_marker = document.getElementById("center_" + my_id); //$("#center_" + my_id);
+        this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
         console.log(this.max_left, this.max_right, this.max_up, this.max_down)
         // $("#" + main_svg_id).append(this.create_figure(my_id, points));
         // console.log(main.innerHTML);
@@ -230,6 +238,15 @@ class BaseFigure {
                 $("#" + me.my_id).stop(true);
             }
         }
+        document.getElementById("center_" + me.my_id).style.x = me.center_x;
+        document.getElementById("center_" + me.my_id).style.y = me.center_y;
+        document.getElementById("left_up_" + me.my_id).style.x = me.max_right;
+        document.getElementById("left_up_" + me.my_id).style.y = me.max_down;
+
+        // me.center_marker.css("x", me.center_x);
+        // me.center_marker.css("y", me.center_y);
+        // me.up_left_marker.css("x", me.now_x);
+        // me.up_left_marker.css("y", me.now_y);
 
 
         if (Math.abs(windows_h / 2 - me.center_y - me.start_x) <= 5) {
