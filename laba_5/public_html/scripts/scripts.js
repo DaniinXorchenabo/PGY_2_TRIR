@@ -39,13 +39,51 @@ class Point {
     get str() {
         return `${this.x},${this.y}`;
     }
+    get_vector(point){
+        return [point.x - this.x, point.y - this.y];
+    }
+    set_coordinate(x, y){
+        this.x = x;
+        this.y = y;
+    }
+    intersection_lines(to_point, other_p1, other_p2){
+        // x_1 = this; x_2 = to_point; x1 = other_p1; x2 = other_p2
+        // x_1 = this.x
+        // y_1 = this.y
+        // x_2 = to_point.x
+        // y_2 = to_point.y
+        // x1 = other_p1.x
+        // y1 = other_p1.y
+        // x2 = other_p2.x
+        // y2 = other_p2.y
+        if (Math.abs(to_point.y - this.y + to_point.x - this.x) < 1){ return false; }
+        if (Math.abs(other_p1.y - other_p2.y + other_p1.x - other_p2.x) < 1){ return false; }
+        let pr1 = (other_p1.x - this.x) * (to_point.y - this.y) - (other_p1.y - this.y) * (to_point.x - this.x);
+        let pr2 = (other_p2.x - this.x) * (to_point.y - this.y) - (other_p2.y - this.y) * (to_point.x - this.x);
+        let pr3 = (this.x - other_p1.x) * (other_p2.y - other_p1.y) - (this.y - other_p1.y) * (other_p2.x - other_p1.x);
+        let pr4 = (to_point.x - other_p1.x) * (other_p2.y - other_p1.y) - (to_point.y - other_p1.y) * (other_p2.x - other_p1.x);
+        return pr1 * pr2 <= 0 && pr3 * pr4 <= 0;
+    }
 }
 
 class MoveAnimate {
-    speed_x = 1000;
-    speed_y = 1000;
-    start_point = new Point(0, 0);
-    end_point = new Point(100, 100);
+    speed = 1000;
+    from = -1000;
+    to = 1000;
+    css_param = {};
+    options = {};
+
+    constructor(start_point, end_point, speed, css_param={}, options={}) {
+        this.from = start_point;
+        this.to = end_point;
+        this.speed = speed;
+        this.css_param = css_param;
+        this.options = options;
+    }
+
+    change_start_and_end() {
+        [this.to, this.from] = [this.from, this.to];
+    }
 
     get x_s() {
         return this.start_point.x;
@@ -66,7 +104,8 @@ class MoveAnimate {
 }
 
 class BaseFigure {
-    points = [];
+    #points = [];
+    dynamic_points = [];
     my_obj;
     $my_obj;
     now_x = 0;
@@ -81,10 +120,13 @@ class BaseFigure {
     #max_right = -Infinity;
     #max_up = -Infinity;
     #max_down = Infinity;
+    x_animate = undefined;
+    y_animate = undefined;
 
     static x_limit_center = 40;
     static y_limit_center = 40;
     static all_figures = {};
+    static all_figures_list = [];
     center_marker;
     up_left_marker;
 
@@ -128,13 +170,23 @@ class BaseFigure {
     get max_up(){ return this.center_y + (this.#center_y - this.#max_up);}
     get max_down(){ return this.center_y + (this.#center_y - this.#max_down);}
 
+    get points(){
+        let iter = this.dynamic_points.entries();
+        for (let p of this.#points){
+            iter.next().value[1].set_coordinate(p.x + this.now_x, p.y + this.now_y);
+        }
+        return this.dynamic_points;
+    }
+
 
 
     constructor(points, my_id) {
         BaseFigure.all_figures[my_id] = this;
+        BaseFigure.all_figures_list.push(this);
         jQuery.easing[my_id + "_x"] = this.speed_change_values_x;
         jQuery.easing[my_id + "_y"] = this.speed_change_values_y;
-        this.points = points;
+        this.#points = points;
+        this.dynamic_points = points.map(p => new Point(p.x, p.y));
         this.my_id = my_id;
 
         let main = document.getElementById(main_svg_id);
@@ -145,7 +197,6 @@ class BaseFigure {
         this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
         this.$my_obj = $("#" + this.my_id);
         console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
-
     }
 
     is_point_into_figure(point) {
@@ -161,9 +212,9 @@ class BaseFigure {
             {
                 queue: false, duration: 1000, step: me.animate_figure,
                 always: () => {
-                    let [center_x, center_y] = me.points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
-                    center_x /= me.points.length;
-                    center_y /= me.points.length;
+                    let [center_x, center_y] = me.#points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
+                    center_x /= me.#points.length;
+                    center_y /= me.#points.length;
                     console.log(me.center_x, me.center_y, "---", windows_w / 2, windows_h / 2, "#", center_x, center_y)}
             });
         console.log("Прервали анимацию!");
@@ -178,7 +229,6 @@ class BaseFigure {
         }
         return p;
     }
-
 
     speed_change_values_y = (p, an, an1, an2, an3, me = this) => {
         // Контролируем скорость анимации
@@ -210,6 +260,43 @@ class BaseFigure {
     }
 
 
+    collision_controller(){
+        let may_be_collision = BaseFigure.all_figures_list.filter((f, i, arr, me=this) => (
+            (me.my_id !== f.my_id) && true
+            // (me.max_right >= f.max_left && me.max_left <= f.max_right) &&
+            // (me.max_up <= f.max_down && me.max_down >= f.max_up)
+        ));
+
+        if (may_be_collision.length === 0) { return false; }
+        // console.log(this.my_id, "||", may_be_collision.map(p => p.my_id));
+        return may_be_collision.some((f, ind, arr, me=this) => {
+            let first_point_f;
+            let me_points = this.points;
+            // console.log(this.#points.map(p => p.str));
+            let f_points;
+            let me_first_point = me_points[me_points.length - 1];
+
+            for (let me_second_point of me_points) {
+                f_points = f.points;
+                first_point_f = f_points[f_points.length - 1];
+                for (let second_point_f of f_points) {
+                    if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
+                        console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f)
+                        return true;
+                    }
+
+                    first_point_f = second_point_f;
+                }
+                // console.log("------", me_first_point, me_second_point);
+                // console.log(me_first_point, me_second_point);
+                me_first_point = me_second_point;
+
+            }
+            return false;
+        });
+    }
+
+
     animate_figure = (now, obj, _, me = this) => {
         /* Проверяем столкновения */
         // let collision_figures = BaseFigure.all_figures.filter(function(other_f){
@@ -222,6 +309,7 @@ class BaseFigure {
         //     // }
         //     // if (obj.elem.)
         // });
+
 
         if (obj.prop === "x") {
             let d_x = now - me.now_x;
@@ -257,36 +345,66 @@ class BaseFigure {
                 // delete me;
             }
         }
+
+        if (me.collision_controller()){
+            console.log("Столкновение");
+            me.$my_obj.stop();
+        }
         $output.html(obj.prop + ': ' + now + obj.unit);
 
     }
 
-    animate(new_x, new_y, speed_x, speed_y, css_param = {}, options = {}, obj=$('#' + this.my_id)) {
+    animate(from_x=-1000, to_x = 2000,
+            from_y = -1000, to_y = 1000,
+            speed_x = 200, speed_y=200,
+            css_param = {}, options = {}, obj=$('#' + this.my_id)) {
+
+        if (!this.x_animate){
+            this.x_animate = new MoveAnimate(from_x, to_x, speed_x, css_param, options);
+        } else {
+            this.x_animate.change_start_and_end();
+        }
+
+        if (!this.y_animate){
+            this.y_animate = new MoveAnimate(from_y, to_y, speed_y, css_param, options);
+        } else {
+            this.y_animate.change_start_and_end();
+        }
+
         this.$my_obj = obj;
         this.counter++;
-        console.log("runn", this.counter, new_x, this.now_x , speed_x, obj);
+
         if (this.destroy){ return false; }
-        if (Math.abs(new_x - this.now_x) > 5 && speed_x > 0) {
-            let next_x = this.now_x < new_x? -1000: this.now_x;
+
+        if (to_x - from_x !== 0 && speed_x > 0) {
             obj.animate(
-                {x: new_x},
+                {x: this.x_animate.to},
                 {
                     queue: false,
-                    duration: Math.abs(new_x - this.now_x) / speed_x * 1000,
-                    always: (() => (this.animate(next_x, this.now_y, speed_x, 0, css_param, options))),
+                    duration: Math.abs(this.x_animate.to - this.now_x) / speed_x * 1000,
+                    always: (() => (this.animate(
+                        this.x_animate.from, this.x_animate.to,
+                        0,0,
+                        this.x_animate.speed, 0,
+                        this.x_animate.css_param, this.x_animate.options
+                    ))),
                     step: this.animate_figure,
                     easing: this.my_id + "_x",
                 }
             );
         }
-        if (Math.abs(new_y - this.now_y) > 5 && speed_y > 0) {
-            let next_y = this.now_y < new_y? -1000: this.now_y;
+        if (to_y - from_y !== 0 && speed_y > 0) {
             obj.animate(
-                {y: new_y},
+                {y: this.y_animate.to},
                 {
                     queue: false,
-                    duration: Math.abs(new_y - this.now_y) / speed_y * 1000,
-                    always: (() => (this.animate(this.now_x, next_y, 0, speed_y, css_param, options))),
+                    duration: Math.abs(this.y_animate.to  - this.now_y) / speed_y * 1000,
+                    always: (() => (this.animate(
+                        0 ,0,
+                        this.y_animate.from, this.y_animate.to,
+                        0, this.y_animate.speed,
+                        this.y_animate.css_param, this.y_animate.options
+                    ))),
                     step: this.animate_figure,
                     easing: this.my_id + "_y",
                 }
@@ -296,6 +414,13 @@ class BaseFigure {
 }
 
 let a1 = new BaseFigure([new Point(30, 30), new Point(40, 60), new Point(50, 10)], "id1")
-let b = new BaseFigure([new Point(30, 10), new Point(50, 10), new Point(90, 70)], "id2")
-a1.animate(2000, 2000, 120, 200);
-
+// let b = new BaseFigure([new Point(30, 10), new Point(50, 10), new Point(90, 70)], "id2")
+let a3 = new BaseFigure([new Point(230, 30), new Point(240, 60), new Point(250, 10)], "id3")
+a1.animate(-100, 2000, -100,1000, 120, 0);
+a3.animate(-100, 2000, -100,1000, 120, 0);
+//
+// let p1 = new Point(10, 0);
+// let p2 = new Point(10, 10);
+// let p3 = new Point(0, 5);
+// let p4 = new Point(20, 5);
+// console.log(p1.intersection_lines(p2, p3, p4));
