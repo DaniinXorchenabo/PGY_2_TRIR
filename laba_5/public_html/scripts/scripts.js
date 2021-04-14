@@ -122,6 +122,7 @@ class BaseFigure {
     #max_down = Infinity;
     x_animate = undefined;
     y_animate = undefined;
+    change_move_animate = false;
 
     static x_limit_center = 40;
     static y_limit_center = 40;
@@ -129,6 +130,8 @@ class BaseFigure {
     static all_figures_list = [];
     center_marker;
     up_left_marker;
+
+    #collision = 0;
 
     get center_x() { return this.now_x + (this.#center_x ); } /// - this.start_x
     get center_y() { return this.now_y + (this.#center_y ); } // - this.start_y
@@ -178,7 +181,30 @@ class BaseFigure {
         return this.dynamic_points;
     }
 
+    get change_animate(){
+        if (this.#collision === 1 || this.#collision === 2){
+            this.#collision += 2;
+            return true;
+        } else if (this.#collision !== 0) {
+            this.#collision++;
+            if (this.#collision > 5) {
+                this.#collision = 0;
+            }
+        }
+        return false;
+    }
 
+    set flag_collision(flag){
+        if (flag){
+            this.#collision += 1;
+        } else {
+            if (this.#collision !== 0) {
+                this.#collision += 1;
+            } else {
+                this.#collision = 3;
+            }
+        }
+    }
 
     constructor(points, my_id) {
         BaseFigure.all_figures[my_id] = this;
@@ -261,15 +287,18 @@ class BaseFigure {
 
 
     collision_controller(){
+        if (this.change_animate) { return true; }
         let may_be_collision = BaseFigure.all_figures_list.filter((f, i, arr, me=this) => (
-            (me.my_id !== f.my_id) && true
-            // (me.max_right >= f.max_left && me.max_left <= f.max_right) &&
-            // (me.max_up <= f.max_down && me.max_down >= f.max_up)
+            (me.my_id !== f.my_id) &&
+                //( a.y < b.y1 || a.y1 > b.y || a.x1 < b.x || a.x > b.x1 );
+            (me.max_down <= f.max_up && me.max_up >= f.max_down &&
+            me.max_right <= f.max_left && me.max_left >= f.max_right)
         ));
 
         if (may_be_collision.length === 0) { return false; }
-        // console.log(this.my_id, "||", may_be_collision.map(p => p.my_id));
+        console.log(this.my_id, "||", may_be_collision.map(p => p.my_id));
         return may_be_collision.some((f, ind, arr, me=this) => {
+
             let first_point_f;
             let me_points = this.points;
             // console.log(this.#points.map(p => p.str));
@@ -281,7 +310,9 @@ class BaseFigure {
                 first_point_f = f_points[f_points.length - 1];
                 for (let second_point_f of f_points) {
                     if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
-                        console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f)
+                        // console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f);
+                        f.flag_collision = true;
+                        // me.flag_collision = true;
                         return true;
                     }
 
@@ -346,8 +377,10 @@ class BaseFigure {
             }
         }
 
+
         if (me.collision_controller()){
-            console.log("Столкновение");
+            me.flag_collision = false;
+            // console.log("Столкновение", me.my_id, me.#collision);
             me.$my_obj.stop();
         }
         $output.html(obj.prop + ': ' + now + obj.unit);
