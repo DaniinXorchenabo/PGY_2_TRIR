@@ -47,15 +47,6 @@ class Point {
         this.y = y;
     }
     intersection_lines(to_point, other_p1, other_p2){
-        // x_1 = this; x_2 = to_point; x1 = other_p1; x2 = other_p2
-        // x_1 = this.x
-        // y_1 = this.y
-        // x_2 = to_point.x
-        // y_2 = to_point.y
-        // x1 = other_p1.x
-        // y1 = other_p1.y
-        // x2 = other_p2.x
-        // y2 = other_p2.y
         if (Math.abs(to_point.y - this.y + to_point.x - this.x) < 1){ return false; }
         if (Math.abs(other_p1.y - other_p2.y + other_p1.x - other_p2.x) < 1){ return false; }
         let pr1 = (other_p1.x - this.x) * (to_point.y - this.y) - (other_p1.y - this.y) * (to_point.x - this.x);
@@ -63,6 +54,22 @@ class Point {
         let pr3 = (this.x - other_p1.x) * (other_p2.y - other_p1.y) - (this.y - other_p1.y) * (other_p2.x - other_p1.x);
         let pr4 = (to_point.x - other_p1.x) * (other_p2.y - other_p1.y) - (to_point.y - other_p1.y) * (other_p2.x - other_p1.x);
         return pr1 * pr2 <= 0 && pr3 * pr4 <= 0;
+    }
+    intersection_point(to_point, other_p1, other_p2){
+        // check to https://habr.com/ru/post/267037/
+        let ab_x = to_point.x - this.x;
+        let ab_y = to_point.y - this.y;
+        let ac_x = other_p1.x - this.x;
+        let ac_y = other_p1.y - this.y;
+        let ad_x = other_p2.x - this.x;
+        let ad_y = other_p2.y - this.y;
+
+        let ab_ac = (ab_x * ac_y) - (ab_y * ac_x);
+        let ab_ad = (ab_x * ad_y) - (ab_y * ad_x);
+        let k = ab_ac/ab_ad;
+        let px = other_p1.x + (other_p2.x - other_p1.x) * Math.abs(ab_ac)/Math.abs(ab_ad - ab_ac);
+        let py = other_p1.y + (other_p2.y - other_p1.y) * Math.abs(ab_ac)/Math.abs(ab_ad - ab_ac);
+        return [Math.abs(px), Math.abs(py)];
     }
 }
 
@@ -72,13 +79,15 @@ class MoveAnimate {
     to = 1000;
     css_param = {};
     options = {};
+    mass = 1
 
-    constructor(start_point, end_point, speed, css_param={}, options={}) {
+    constructor(start_point, end_point, speed, mass=1, css_param={}, options={}) {
         this.from = start_point;
         this.to = end_point;
         this.speed = speed;
         this.css_param = css_param;
         this.options = options;
+        this.mass = mass;
     }
 
     change_start_and_end() {
@@ -103,6 +112,57 @@ class MoveAnimate {
 
 }
 
+class Collision{
+    static collision_objects = []
+    obj_1;
+    obj_2;
+
+
+
+    constructor(obj_1, obj_2, collision_point = [0, 0]) {
+        this.obj_1 = obj_1;
+        this.obj_2 = obj_2;
+        this.element_collision_id = "";
+        this.collision_point = collision_point;
+        this.element_collision_id = `collision_${obj_1.my_id}_${Math.round(collision_point[0])}_${Math.round(collision_point[1])}_${Collision.collision_objects.length}`;
+
+        let col_point = `<use id="${this.element_collision_id}"
+                            xlink:href="#marker_${obj_1.my_id}" x="${collision_point[0]}" y="${collision_point[1]}" />`
+
+        let main = document.getElementById(main_svg_id);
+        main.innerHTML += col_point;
+        $(`#${this.element_collision_id}`).animate({"opacity": 0}, {
+            queue: false,
+            duration: 1000,
+            always: (() => {Collision.delete_collision(obj_1, obj_2); })
+        })
+        Collision.collision_objects.push([obj_1.my_id, obj_2.my_id, this]);
+        obj_1.$my_obj.stop();
+        obj_2.$my_obj.stop();
+    }
+
+    static no_collision(obj){
+        // true - если столкновений нет
+        let testing_id = obj.my_id;
+        return Collision.collision_objects.filter(i => i[0] === testing_id || i[1] === testing_id).length === 0;
+    }
+
+    static delete_collision(obj_1, obj_2){
+        Collision.collision_objects.reduce((arr, p, ind) => {
+            console.log("=---Collis", arr, p, ind, obj_1.my_id, obj_2.my_id);
+            if ((p[0] === obj_1.my_id || p[0] === obj_2.my_id) &&
+                (p[1] === obj_1.my_id || p[1] === obj_2.my_id)){
+                console.log("-----УУУУДАЛЕНИЕ");
+                $(`#${p[2].element_collision_id}`).remove();
+                arr.push(ind)
+            }
+            return arr;
+        }, []).reverse().map((ind) => Collision.collision_objects.splice(ind, 1))
+        console.log("удалил еолизию")
+    }
+
+}
+
 class BaseFigure {
     #points = [];
     dynamic_points = [];
@@ -122,14 +182,13 @@ class BaseFigure {
     #max_down = Infinity;
     x_animate = undefined;
     y_animate = undefined;
-    change_move_animate = false;
 
     static x_limit_center = 40;
     static y_limit_center = 40;
     static all_figures = {};
     static all_figures_list = [];
-    center_marker;
-    up_left_marker;
+    // center_marker;
+    // up_left_marker;
 
     #collision = 0;
 
@@ -219,8 +278,8 @@ class BaseFigure {
         main.innerHTML += this.create_figure(my_id, points);
 
         this.my_obj = document.getElementById(my_id);
-        this.center_marker = document.getElementById("center_" + my_id); //$("#center_" + my_id);
-        this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
+        // this.center_marker = document.getElementById("center_" + my_id); //$("#center_" + my_id);
+        // this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
         this.$my_obj = $("#" + this.my_id);
         console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
     }
@@ -287,16 +346,17 @@ class BaseFigure {
 
 
     collision_controller(){
-        if (this.change_animate) { return true; }
+        // console.log("--");
+        // if (this.change_animate) { return true; }
         let may_be_collision = BaseFigure.all_figures_list.filter((f, i, arr, me=this) => (
-            (me.my_id !== f.my_id) &&
+            (me.my_id !== f.my_id) && true
                 //( a.y < b.y1 || a.y1 > b.y || a.x1 < b.x || a.x > b.x1 );
-            (me.max_down <= f.max_up && me.max_up >= f.max_down &&
-            me.max_right <= f.max_left && me.max_left >= f.max_right)
+            // (me.max_down <= f.max_up && me.max_up >= f.max_down &&
+            // me.max_right <= f.max_left && me.max_left >= f.max_right)
         ));
 
         if (may_be_collision.length === 0) { return false; }
-        console.log(this.my_id, "||", may_be_collision.map(p => p.my_id));
+        // console.log(this.my_id, "||", may_be_collision.map(p => p.my_id));
         return may_be_collision.some((f, ind, arr, me=this) => {
 
             let first_point_f;
@@ -311,7 +371,10 @@ class BaseFigure {
                 for (let second_point_f of f_points) {
                     if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
                         // console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f);
-                        f.flag_collision = true;
+                        let [x_collision, y_collision] = me_first_point.intersection_point(me_second_point, first_point_f, second_point_f);
+                        console.log("обнаружена колизия", x_collision, y_collision);
+
+                        let d = new Collision(me, f, [x_collision, y_collision]);
                         // me.flag_collision = true;
                         return true;
                     }
@@ -362,10 +425,10 @@ class BaseFigure {
             }
         }
 
-        me.center_marker.style.x = me.center_x;
-        me.center_marker.style.y = me.center_y;
-        me.up_left_marker.style.x = me.max_right;
-        me.up_left_marker.style.y = me.max_down;
+        // me.center_marker.style.x = me.center_x;
+        // me.center_marker.style.y = me.center_y;
+        // me.up_left_marker.style.x = me.max_right;
+        // me.up_left_marker.style.y = me.max_down;
 
 
         if (Math.abs(windows_h / 2 - me.center_y) <= 1) {
@@ -379,9 +442,10 @@ class BaseFigure {
 
 
         if (me.collision_controller()){
-            me.flag_collision = false;
-            // console.log("Столкновение", me.my_id, me.#collision);
-            me.$my_obj.stop();
+            if (Collision.no_collision(this)){
+                me.$my_obj.stop();
+            }
+
         }
         $output.html(obj.prop + ': ' + now + obj.unit);
 
@@ -389,17 +453,17 @@ class BaseFigure {
 
     animate(from_x=-1000, to_x = 2000,
             from_y = -1000, to_y = 1000,
-            speed_x = 200, speed_y=200,
+            speed_x = 200, speed_y=200, mass=1,
             css_param = {}, options = {}, obj=$('#' + this.my_id)) {
 
         if (!this.x_animate){
-            this.x_animate = new MoveAnimate(from_x, to_x, speed_x, css_param, options);
+            this.x_animate = new MoveAnimate(from_x, to_x, speed_x, mass, css_param, options);
         } else {
             this.x_animate.change_start_and_end();
         }
 
         if (!this.y_animate){
-            this.y_animate = new MoveAnimate(from_y, to_y, speed_y, css_param, options);
+            this.y_animate = new MoveAnimate(from_y, to_y, speed_y, mass, css_param, options);
         } else {
             this.y_animate.change_start_and_end();
         }
@@ -419,6 +483,7 @@ class BaseFigure {
                         this.x_animate.from, this.x_animate.to,
                         0,0,
                         this.x_animate.speed, 0,
+                        this.x_animate.mass,
                         this.x_animate.css_param, this.x_animate.options
                     ))),
                     step: this.animate_figure,
@@ -436,6 +501,7 @@ class BaseFigure {
                         0 ,0,
                         this.y_animate.from, this.y_animate.to,
                         0, this.y_animate.speed,
+                        this.y_animate.mass,
                         this.y_animate.css_param, this.y_animate.options
                     ))),
                     step: this.animate_figure,
