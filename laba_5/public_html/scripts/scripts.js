@@ -41,6 +41,8 @@ let windows_w = window.innerWidth;
 let windows_h = window.innerHeight;
 let rect_exit = $("#rect_exit");
 
+let figures = [];
+
 // $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
 // rect_exit.css({
 //     "x": windows_w / 2 - parseFloat(rect_exit.css("width")) / 2,
@@ -51,8 +53,8 @@ console.log();
 
 window.addEventListener(`resize`, event => {
     console.log('----------------------', event)
-    windows_w = window.innerWidth;
-    windows_h = window.innerHeight;
+    windows_w = window.innerWidth - 40;
+    windows_h = window.innerHeight - 40;
 
     $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
     $("#rect_exit").css({
@@ -279,8 +281,8 @@ class BaseFigure {
     counter = 0;
     #max_left = Infinity;
     #max_right = -Infinity;
-    #max_up = -Infinity;
-    #max_down = Infinity;
+    #max_up = Infinity;
+    #max_down = -Infinity;
     x_animate = undefined;
     y_animate = undefined;
     destroy_process = false;
@@ -309,8 +311,8 @@ class BaseFigure {
                         points="0,0 6,0, -6,0, 0,0 0,6 0,-6"/>`;
         result = `<defs>${result}</defs>
                     <use id="${my_id}" xlink:href="#_${my_id}" x="${points[0].x}" y="${points[0].y}" />`;
-        //<use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
-        //                     <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
+        // result +=  `<use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
+        //                     <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />`;
 
         this.now_x = points[0].x;
         this.now_y = points[0].y;
@@ -322,29 +324,29 @@ class BaseFigure {
         this.#center_y /= points.length;
 
 
-        [this.#max_left, this.#max_right, this.#max_up, this.#max_down] = points.reduce(
+        [this.#max_left, this.#max_right, this.#max_down, this.#max_up,] = points.reduce(
             (arg, p) => ([arg[0] > p.x ? p.x : arg[0], arg[1] < p.x ? p.x : arg[1],
                 arg[2] < p.y ? p.y : arg[2], arg[3] > p.y ? p.y : arg[3]]),
-            [this.#max_left, this.#max_right, this.#max_up, this.#max_down]);
+            [this.#max_left, this.#max_right, this.#max_down, this.#max_up]);
 
         return result;
 
     }
 
     get max_left() {
-        return this.center_x + (this.#center_x - this.#max_left);
+        return this.center_x - (this.#center_x - this.#max_left);
     }
 
     get max_right() {
-        return this.center_x + (this.#center_x - this.#max_right);
+        return this.center_x - (this.#center_x - this.#max_right);
     }
 
     get max_up() {
-        return this.center_y + (this.#center_y - this.#max_up);
+        return this.center_y - (this.#center_y - this.#max_up);
     }
 
     get max_down() {
-        return this.center_y + (this.#center_y - this.#max_down);
+        return this.center_y - (this.#center_y - this.#max_down);
     }
 
     get points() {
@@ -404,7 +406,7 @@ class BaseFigure {
             (me.my_id !== f.my_id) &&
             //( a.y < b.y1 || a.y1 > b.y || a.x1 < b.x || a.x > b.x1 );
             me.max_down >= f.max_up && me.max_up <= f.max_down &&
-            me.max_right <= f.max_left && me.max_left >= f.max_right
+            me.max_right >= f.max_left && me.max_left <= f.max_right
         ));
 
         if (may_be_collision.length === 0) {
@@ -450,7 +452,9 @@ class BaseFigure {
             if (obj.prop === "x") {
                 let d_x = now - me.now_x;
                 me.now_x = now;
-                if (me.max_left <= 0 && d_x < 0) {
+                // console.log(me.max_right);
+                if (me.max_left <= 0) { // && d_x < 0
+                    console.log(me.max_left, me.max_right);
                     me.$my_obj.stop(true);
                 } else if (me.max_right >= windows_w && d_x > 0) {
                     me.$my_obj.stop(true);
@@ -462,17 +466,18 @@ class BaseFigure {
             if (obj.prop === "y") {
                 let d_y = now - me.now_y;
                 me.now_y = now;
-                if (me.max_up <= 0 && d_y < 0) {
-                    me.$my_obj.stop(true);
-                } else if (me.max_down >= windows_h && d_y > 0) {
-                    me.$my_obj.stop(true);
-                }
+                // if (me.max_up <= 0 && d_y < 0) {
+                //     me.$my_obj.stop(true);
+                // } else if (me.max_down >= windows_h && d_y > 0) {
+                //     me.$my_obj.stop(true);
+                // }
             }
         });
-
+        me.center_marker = document.getElementById("center_" + me.my_id); //$("#center_" + my_id);
+        me.up_left_marker = document.getElementById("left_up_" +me.my_id); //$("#left_up_" + my_id);
         // me.center_marker.style.x = me.center_x;
         // me.center_marker.style.y = me.center_y;
-        // me.up_left_marker.style.x = me.max_right;
+        // me.up_left_marker.style.x = me.max_left;
         // me.up_left_marker.style.y = me.max_down;
 
         setTimeout( () => {
@@ -566,14 +571,22 @@ class BaseFigure {
     }
 }
 
-let a1 = new BaseFigure([new Point(30, 30), new Point(40, 60), new Point(50, 10)], "id1")
+let a1 = new BaseFigure([new Point(30, 70), new Point(60, 60), new Point(150, 10)], "id1")
 // let b = new BaseFigure([new Point(30, 10), new Point(50, 10), new Point(90, 70)], "id2")
 let a3 = new BaseFigure([new Point(230, 30), new Point(240, 60), new Point(250, 10)], "id3")
-a1.animate(-100, 2000, -100, 1000, 120, -1);
-a3.animate(-100, 2000, -100, 1000, 0, -1);
+a1.animate(-1000, 2000, -1000, 1000, 120, -1);
+a3.animate(-1000, 2000, -1000, 1000, 0, -1);
 //
 // let p1 = new Point(10, 0);
 // let p2 = new Point(10, 10);
 // let p3 = new Point(0, 5);
 // let p4 = new Point(20, 5);
 // console.log(p1.intersection_lines(p2, p3, p4));
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function start(count_figures){
+    figures = (new Array(count_figures)).map((i, ind) => (new BaseFigure(new Array(getRandomInt(3, 10))).map(i), `figure_${ind}`) )
+}
