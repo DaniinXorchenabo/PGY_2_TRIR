@@ -278,22 +278,20 @@ class BaseFigure {
     #max_down = Infinity;
     x_animate = undefined;
     y_animate = undefined;
+    destroy_process = false;
 
-    static x_limit_center = 40;
-    static y_limit_center = 40;
+    static x_limit_center = 140;
+    static y_limit_center = 140;
     static all_figures = {};
     static all_figures_list = [];
-    // center_marker;
-    // up_left_marker;
 
-    #collision = 0;
 
     get center_x() {
         return this.now_x + (this.#center_x);
-    } /// - this.start_x
+    }
     get center_y() {
         return this.now_y + (this.#center_y);
-    } // - this.start_y
+    }
 
     create_figure(my_id,
                   points = [new Point(0, 0), new Point(10, 10)],
@@ -352,36 +350,11 @@ class BaseFigure {
         return this.dynamic_points;
     }
 
-    get change_animate() {
-        if (this.#collision === 1 || this.#collision === 2) {
-            this.#collision += 2;
-            return true;
-        } else if (this.#collision !== 0) {
-            this.#collision++;
-            if (this.#collision > 5) {
-                this.#collision = 0;
-            }
-        }
-        return false;
-    }
-
-    set flag_collision(flag) {
-        if (flag) {
-            this.#collision += 1;
-        } else {
-            if (this.#collision !== 0) {
-                this.#collision += 1;
-            } else {
-                this.#collision = 3;
-            }
-        }
-    }
-
     constructor(points, my_id) {
         BaseFigure.all_figures[my_id] = this;
         BaseFigure.all_figures_list.push(this);
-        jQuery.easing[my_id + "_x"] = this.speed_change_values_x;
-        jQuery.easing[my_id + "_y"] = this.speed_change_values_y;
+        // jQuery.easing[my_id + "_x"] = this.speed_change_values_x;
+        // jQuery.easing[my_id + "_y"] = this.speed_change_values_y;
         this.#points = points;
         this.dynamic_points = points.map(p => new Point(p.x, p.y));
         this.my_id = my_id;
@@ -396,71 +369,32 @@ class BaseFigure {
         console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
     }
 
-    is_point_into_figure(point) {
-        return false;
-    }
-
     static destroyed_animate(me) {
+        me.destroy_process = true;
         $("#" + me.my_id).stop(true).animate({
-                y: windows_h / 2 - me.#center_y,
                 x: windows_w / 2 - me.#center_x,
-                easing: "parabola"
+                y: windows_h / 2 - me.#center_y,
             },
             {
-                queue: false, duration: 1000, step: me.animate_figure,
-                always: () => {
-                    let [center_x, center_y] = me.#points.reduce((sum, p) => [sum[0] + p.x, sum[1] + p.y], [0, 0])
-                    center_x /= me.#points.length;
-                    center_y /= me.#points.length;
-                    console.log(me.center_x, me.center_y, "---", windows_w / 2, windows_h / 2, "#", center_x, center_y)
-                }
+                queue: false,
+                duration: 1000,
+                step: me.animate_figure,
+                easing: "parabola",
+                always: (() => {
+                    console.log('Destroy');
+                    me.destroy = true;
+                    me.$my_obj.stop().hide();
+
+                }),
             });
         console.log("Прервали анимацию!");
-    }
-
-    speed_change_values_x = (p, an, an1, an2, an3, me = this) => {
-        // Контролируем скорость анимации
-        if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
-            if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
-                BaseFigure.destroyed_animate(me);
-            }
-        }
-        return p;
-    }
-
-    speed_change_values_y = (p, an, an1, an2, an3, me = this) => {
-        // Контролируем скорость анимации
-        // console.log("y", this.now_y);
-
-        // =======! Ниже рабочий, но не нужный код !=======
-        // me.p_y = me.p_y? me.p_y: 0;
-        // if ( Math.abs(windows_h / 2 - this.now_y) <= BaseFigure.y_limit_center) {
-        //     if (Math.abs(windows_w / 2 - this.now_x) <= BaseFigure.x_limit_center) {
-        //         if (!me.freeze_p_y) {
-        //             me.freeze_p_y = me.p_y;
-        //         }
-        //         let arg = Math.abs(windows_w / 2 - this.now_x) / BaseFigure.x_limit_center // 1 ... 0
-        //         arg = (1 - arg) * (1 - me.freeze_p_y) // 0 ... (1 - me.freeze_p_y)
-        //         let res = Math.abs((Math.cos((Math.abs(windows_w / 2 - this.now_x) / BaseFigure.x_limit_center) * 1.57))) * 0.4;
-        //         me.p_y = me.freeze_p_y + arg;
-        //         return me.freeze_p_y + arg;
-        //     } else {
-        //         me.freeze_p_y = undefined;
-        //     }
-        // }
-        // return me.p_y;
-        if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
-            if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
-                BaseFigure.destroyed_animate(me);
-            }
-        }
-        return p;
     }
 
 
     collision_controller() {
         // console.log("--");
         // if (this.change_animate) { return true; }
+        if (!Collision.no_collision(this)) { return false; }
         let may_be_collision = BaseFigure.all_figures_list.filter((f, i, arr, me = this) => (
             (me.my_id !== f.my_id) &&
             //( a.y < b.y1 || a.y1 > b.y || a.x1 < b.x || a.x > b.x1 );
@@ -507,63 +441,56 @@ class BaseFigure {
 
 
     animate_figure = (now, obj, _, me = this) => {
-        /* Проверяем столкновения */
-        // let collision_figures = BaseFigure.all_figures.filter(function(other_f){
-        //     if (other_f.my_id === this.my_id){
-        //         return false;
-        //     }
-        //     return false;
-        //     // if (this.points.some(i => other_f.is_point_into_figure(i)) ){
-        //     //     // Обработка колизии
-        //     // }
-        //     // if (obj.elem.)
-        // });
+        setTimeout( () => {
+            if (obj.prop === "x") {
+                let d_x = now - me.now_x;
+                me.now_x = now;
+                if (me.max_left <= 0 && d_x < 0) {
+                    me.$my_obj.stop(true);
+                } else if (me.max_right >= windows_w && d_x > 0) {
+                    me.$my_obj.stop(true);
+                }
 
-
-        if (obj.prop === "x") {
-            let d_x = now - me.now_x;
-            me.now_x = now;
-            if (me.max_left <= 0 && d_x < 0) {
-                me.$my_obj.stop(true);
-            } else if (me.max_right >= windows_w && d_x > 0) {
-                me.$my_obj.stop(true);
             }
-
-        }
-        if (obj.prop === "y") {
-            let d_y = now - me.now_y;
-            me.now_y = now;
-            if (me.max_up <= 0 && d_y < 0) {
-                me.$my_obj.stop(true);
-            } else if (me.max_down >= windows_h && d_y > 0) {
-                me.$my_obj.stop(true);
+        });
+        setTimeout( () => {
+            if (obj.prop === "y") {
+                let d_y = now - me.now_y;
+                me.now_y = now;
+                if (me.max_up <= 0 && d_y < 0) {
+                    me.$my_obj.stop(true);
+                } else if (me.max_down >= windows_h && d_y > 0) {
+                    me.$my_obj.stop(true);
+                }
             }
-        }
+        });
 
         // me.center_marker.style.x = me.center_x;
         // me.center_marker.style.y = me.center_y;
         // me.up_left_marker.style.x = me.max_right;
         // me.up_left_marker.style.y = me.max_down;
 
-
-        if (Math.abs(windows_h / 2 - me.center_y) <= 1) {
-            if (Math.abs(windows_w / 2 - me.center_x) <= 1) {
-                console.log('Destroy');
-                me.$my_obj.stop().hide();
-                me.destroy = true;
-                // delete me;
+        setTimeout( () => {
+            if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
+                if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
+                    if (!me.destroy_process) {
+                        BaseFigure.destroyed_animate(me);
+                    }
+                    if (Math.abs(windows_h / 2 - me.center_y) <= 1) {
+                        if (Math.abs(windows_w / 2 - me.center_x) <= 1) {
+                            console.log('Destroy');
+                            me.$my_obj.stop().hide();
+                            me.destroy = true;
+                        }
+                    }
+                }
             }
-        }
+        });
 
 
-        if (me.collision_controller()) {
-            if (Collision.no_collision(this)) {
-                me.$my_obj.stop();
-            }
-
-        }
-        $output.html(obj.prop + ': ' + now + obj.unit);
-
+        setTimeout( () => {
+            me.collision_controller()
+        });
     }
 
     animate(from_x = -1000, to_x = 2000,
@@ -607,7 +534,8 @@ class BaseFigure {
                         this.x_animate.css_param, this.x_animate.options
                     ))),
                     step: this.animate_figure,
-                    easing: this.my_id + "_x",
+                    easing: "linear"
+                    // easing: this.my_id + "_x",
                 }
             );
         }
@@ -625,7 +553,8 @@ class BaseFigure {
                         this.y_animate.css_param, this.y_animate.options
                     ))),
                     step: this.animate_figure,
-                    easing: this.my_id + "_y",
+                    easing: "linear"
+                    // easing: this.my_id + "_y",
                 }
             );
         }
