@@ -36,16 +36,16 @@ document.documentElement.addEventListener("collision_figures", function (e) {
 
 
 let main_svg_id = "main_svg";
-let $output = $("#text_test")
+// let $output = $("#text_test")
 let windows_w = window.innerWidth;
 let windows_h = window.innerHeight;
 let rect_exit = $("#rect_exit");
 
-$("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
-rect_exit.css({
-    "x": windows_w / 2 - parseFloat(rect_exit.css("width")) / 2,
-    "y": windows_h / 2 - parseFloat(rect_exit.css("height")) / 2
-})
+// $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
+// rect_exit.css({
+//     "x": windows_w / 2 - parseFloat(rect_exit.css("width")) / 2,
+//     "y": windows_h / 2 - parseFloat(rect_exit.css("height")) / 2
+// })
 
 console.log();
 
@@ -55,11 +55,16 @@ window.addEventListener(`resize`, event => {
     windows_h = window.innerHeight;
 
     $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
-    rect_exit.css({
+    $("#rect_exit").css({
         "x": windows_w / 2 - parseFloat(rect_exit.css("width")) / 2,
         "y": windows_h / 2 - parseFloat(rect_exit.css("height")) / 2
     })
+
+    console.log(windows_w, windows_h);
 }, false);
+
+let resize_event = new Event("resize", {bubbles : true, cancelable : true})
+document.documentElement.dispatchEvent(resize_event);
 
 jQuery.easing["parabola"] = p => p ** 0.1
 
