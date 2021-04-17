@@ -190,7 +190,7 @@ class Collision {
 
         setTimeout(() => {
             Collision.delete_collision(obj_1, obj_2);
-        }, 1000);
+        }, 200);
 
 
         // setTimeout( () => {
@@ -335,8 +335,9 @@ class BaseFigure {
                         points="0,0 6,0, -6,0, 0,0 0,6 0,-6"/>`;
         result = `<defs>${result}</defs>
                     <use id="${my_id}" xlink:href="#_${my_id}" x="${points[0].x}" y="${points[0].y}" />`;
-        // result +=  `<use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
-        //                     <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />`;
+        result +=  `<use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
+                            <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
+                            <use id="right_down_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />`;
 
         this.now_x = points[0].x;
         this.now_y = points[0].y;
@@ -397,8 +398,9 @@ class BaseFigure {
         main.innerHTML += this.create_figure(my_id, points, color, border_color, border_size);
 
         this.my_obj = document.getElementById(my_id);
-        // this.center_marker = document.getElementById("center_" + my_id); //$("#center_" + my_id);
-        // this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
+        this.center_marker = document.getElementById("center_" + my_id); //$("#center_" + my_id);
+        this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
+        this.right_down_marker = document.getElementById("right_down_" + my_id);
         this.$my_obj = $("#" + this.my_id);
         console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
     }
@@ -434,7 +436,9 @@ class BaseFigure {
         if (!Collision.no_collision(this)) {
             return false;
         }
+
         let may_be_collision = BaseFigure.all_figures_list.filter((f, i, arr, me = this) => (
+            !f.destroy &&
             (me.my_id !== f.my_id) &&
             //( a.y < b.y1 || a.y1 > b.y || a.x1 < b.x || a.x > b.x1 );
             me.max_down >= f.max_up && me.max_up <= f.max_down &&
@@ -481,58 +485,48 @@ class BaseFigure {
 
     animate_figure = (now, obj, _, me = this) => {
         if (me.destroy) { return false; }
-        setTimeout(() => {
+        // setTimeout(() => {
             if (obj.prop === "x") {
                 let d_x = now - me.now_x;
                 me.now_x = now;
                 // console.log(me.max_right);
-                if (me.max_left <= 0 && d_x < 0) { //
-                    // console.log(me.max_left, me.max_right);
+                if ((me.max_left <= 0 && d_x < 0) || (me.max_right >= windows_w && d_x > 0)) { //
                     if (!me.$my_obj){
                         me.$my_obj = $("#" + this.my_id);
                     }
+
                     this.x_animate.change_start_and_end();
                     me.$my_obj.stop(true);
 
 
-                } else if (me.max_right >= windows_w && d_x > 0) {
-                    if (!me.$my_obj){
-                        me.$my_obj = $("#" + this.my_id);
-                    }
-                    this.x_animate.change_start_and_end();
-                    me.$my_obj.stop(true);
                 }
 
             }
-        });
-        setTimeout(() => {
+        // });
+        // setTimeout(() => {
             if (obj.prop === "y") {
                 let d_y = now - me.now_y;
                 me.now_y = now;
-                if (me.max_up <= 0 && d_y < 0) {
+                if ((me.max_up <= 0 && d_y < 0) || (me.max_down >= windows_h && d_y > 0)) {
                     if (!me.$my_obj){
                         me.$my_obj = $("#" + this.my_id);
                     }
                     this.y_animate.change_start_and_end();
                     me.$my_obj.stop(true);
-                } else if (me.max_down >= windows_h && d_y > 0) {
-                    if (!me.$my_obj){
-                        me.$my_obj = $("#" + this.my_id);
-                    }
-                    this.y_animate.change_start_and_end();
-                    me.$my_obj.stop(true);
-
                 }
             }
-        });
-        // me.center_marker = document.getElementById("center_" + me.my_id); //$("#center_" + my_id);
-        // me.up_left_marker = document.getElementById("left_up_" + me.my_id); //$("#left_up_" + my_id);
-        // me.center_marker.style.x = me.center_x;
-        // me.center_marker.style.y = me.center_y;
-        // me.up_left_marker.style.x = me.max_left;
-        // me.up_left_marker.style.y = me.max_down;
+        // });
+        me.center_marker = document.getElementById("center_" + me.my_id); //$("#center_" + my_id);
+        me.up_left_marker = document.getElementById("left_up_" + me.my_id); //$("#left_up_" + my_id);
+        me.right_down_marker = document.getElementById("right_down_" + me.my_id);
+        me.center_marker.style.x = me.center_x;
+        me.center_marker.style.y = me.center_y;
+        me.up_left_marker.style.x = me.max_left;
+        me.up_left_marker.style.y = me.max_up;
+        me.right_down_marker.style.x = me.max_right;
+        me.right_down_marker.style.y = me.max_down;
 
-        setTimeout(() => {
+        // setTimeout(() => {
             if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
                 if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
                     if (!me.destroy_process) {
@@ -540,12 +534,12 @@ class BaseFigure {
                     }
                 }
             }
-        });
+        // });
 
 
-        setTimeout(() => {
+        // setTimeout(() => {
             me.collision_controller()
-        });
+        // });
     }
 
     animate(from_x = -1000, to_x = 2000,
@@ -642,20 +636,78 @@ function getRandomRGBColorString(min_alpha = 0) {
     return `rgba(${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${(1 - min_alpha) * Math.random() + min_alpha})`;
 }
 
+function generate_nice_figure(points){
+    points.sort((a, b) => a.x - b.x);
+    let test_p1 = points[points.length - 1];
+    let set_points = [];
+
+    for (let i = 0; points.length > i; i++) {
+        let test_point = points[i];
+        let result = true;
+        for (let j = i + 1; points.length > j; j++) {
+            if (test_point.x === points[j].x && test_point.y === points[j].y){
+                result = false;
+                break;
+            }
+        }
+        if (result) {
+            set_points.push(test_point);
+        }
+    }
+    let up_part = [points[0]];
+    let bottom_part = [];
+    let vector_x = points[points.length-1].x - points[0].x;
+    let vector_y = points[points.length-1].y - points[0].y;
+    for (let i = 1; points.length - 1 > i; i++) {
+        if ( (vector_x * (points[i].y - points[0].y)) - (vector_y * (points[i].x - points[0].x)) >= 0){
+            up_part.push(points[i]);
+        } else {
+            bottom_part.unshift(points[i]);
+        }
+    }
+    bottom_part.unshift(points[points.length-1]);
+    up_part = up_part.concat(bottom_part);
+    // up_part.push(points[points.length-1]);
+
+
+
+
+
+    //     if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
+        //         // console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f);
+        //         let [x_collision, y_collision] = me_first_point.intersection_point(me_second_point, first_point_f, second_point_f);
+        //         console.log("обнаружена колизия", x_collision, y_collision);
+        //
+        //         let d = new Collision(me, f, [x_collision, y_collision]);
+        //         // me.flag_collision = true;
+        //         return true;
+        //     }
+        //
+        //     first_point_f = second_point_f;
+        // }
+
+        // test_p1 = test_p2;
+
+    // }
+    console.log(up_part.map( p => p.str));
+
+    return up_part;
+}
+
 function start(count_figures) {
     figures = Array(count_figures).fill(0).map((e, i) => i + 1);
     figures.map(
         (i, ind) => {
             let points = Array(getRandomInt(3, 10)).fill(0).map((e, i) => i + 1);
             let min_a =  getRandomSign() * 0.05;
-            return new BaseFigure(points.map(i => new Point(getRandomInt(0, 150), getRandomInt(0, 150))),
+            return new BaseFigure(generate_nice_figure(points.map(i => new Point(getRandomInt(0, 150), getRandomInt(0, 150)))),
                 `figure_${ind}`,
                 getRandomRGBColorString(min_a + 0.05),
                 getRandomRGBColorString(Math.abs(min_a - 0.05)),
                 getRandomInt(1, 6))
         }
     );
-    console.log(BaseFigure.all_figures_list)
+    // console.log(BaseFigure.all_figures_list)
     BaseFigure.all_figures_list.map(i => $("#" + i.my_id).css(
         "x", windows_w / 2 - i.raw_center_x).css(
         "y", windows_h / 2 - i.raw_center_y
@@ -673,16 +725,26 @@ function start(count_figures) {
                 let sign_x = getRandomSign();
                 let sign_y = getRandomSign();
                 i.destroy = false;
-                console.log(i);
+                // console.log(i);
                 setTimeout( () => {
-                    console.log(i);
+                    // console.log(i);
                     i.animate(-sign_x * 5000, sign_x * 5000, -sign_y * 5000, sign_y * 5000,
                         getRandomInt(1, 250), getRandomInt(1, 250),  getRandomInt(1, 10));
-                    console.log(i);
+                    // console.log(i);
                 })
             })
         })}));
 }
 setTimeout( () => {
-start(4);
+start(15);
 });
+
+// console.log(generate_nice_figure(
+//     [
+//         new Point(0, 0),
+//         new Point(0, 10),
+//         new Point(10, 10),
+//         new Point(20, 20),
+//         new Point(0, 0)
+//     ]
+// ).map( p => p.str));
