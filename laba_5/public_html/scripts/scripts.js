@@ -42,6 +42,7 @@ let windows_w = window.innerWidth;
 let windows_h = window.innerHeight;
 let rect_exit = $("#rect_exit");
 
+
 let figures = [];
 
 // $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
@@ -52,22 +53,6 @@ let figures = [];
 
 console.log();
 
-window.addEventListener(`resize`, event => {
-    console.log('----------------------', event)
-    windows_w = window.innerWidth - 40;
-    windows_h = window.innerHeight - 40;
-
-    $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
-    $("#rect_exit").css({
-        "x": windows_w / 2 - parseFloat(rect_exit.css("width")) / 2,
-        "y": windows_h / 2 - parseFloat(rect_exit.css("height")) / 2
-    })
-
-    console.log(windows_w, windows_h);
-}, false);
-
-let resize_event = new Event("resize", {bubbles: true, cancelable: true})
-document.documentElement.dispatchEvent(resize_event);
 
 jQuery.easing["parabola"] = p => p ** 0.1
 
@@ -126,6 +111,41 @@ class Point {
     }
 }
 
+let exit_obj = {
+    up_left: new Point(0, 0),
+    up_right: new Point(0, 1),
+    down_left: new Point(1, 0),
+    down_right: new Point(1, 1),
+    // points: [exit_obj.up_left, exit_obj.up_right, exit_obj.down_right, exit_obj.down_left ]
+}
+
+
+window.addEventListener(`resize`, event => {
+    console.log('----------------------', event)
+    windows_w = window.innerWidth - 40;
+    windows_h = window.innerHeight - 40;
+
+    $("#" + main_svg_id).css("width", windows_w).css("height", windows_h);
+
+    let width_exit = parseFloat(rect_exit.css("width"));
+    let height_exit = parseFloat(rect_exit.css("height"))
+
+    exit_obj.up_left.set_coordinate(windows_w / 2 - width_exit / 2, windows_h / 2 - height_exit / 2);
+    exit_obj.up_right.set_coordinate(windows_w / 2 + width_exit / 2, windows_h / 2 - height_exit / 2);
+    exit_obj.down_left.set_coordinate(windows_w / 2 - width_exit / 2, windows_h / 2 + height_exit / 2);
+    exit_obj.down_right.set_coordinate(windows_w / 2 - width_exit / 2, windows_h / 2 + height_exit / 2);
+
+    $("#rect_exit").css({
+        "x": exit_obj.up_left.x,
+        "y": exit_obj.up_left.y
+    })
+
+
+    console.log(windows_w, windows_h);
+}, false);
+
+let resize_event = new Event("resize", {bubbles: true, cancelable: true})
+document.documentElement.dispatchEvent(resize_event);
 
 class MoveAnimate {
     speed = 1000;
@@ -182,15 +202,15 @@ class Collision {
 
         if (Collision.no_collision(obj_1) || Collision.no_collision(obj_2)) {
             this.change_animate(obj_1, obj_2);
-            obj_1.$my_obj.stop();
-            obj_2.$my_obj.stop();
-            console.log("остановили анимацию");
+            obj_1.$my_obj.stop(true);
+            obj_2.$my_obj.stop(true);
+            // console.log("остановили анимацию");
         }
         Collision.collision_objects.push([obj_1.my_id, obj_2.my_id, this]);
 
         setTimeout(() => {
             Collision.delete_collision(obj_1, obj_2);
-        }, 200);
+        }, 500);
 
 
         // setTimeout( () => {
@@ -219,10 +239,10 @@ class Collision {
 
     static delete_collision(obj_1, obj_2) {
         Collision.collision_objects.reduce((arr, p, ind) => {
-            console.log("=---Collis", arr, p, ind, obj_1.my_id, obj_2.my_id);
+            // console.log("=---Collis", arr, p, ind, obj_1.my_id, obj_2.my_id);
             if ((p[0] === obj_1.my_id || p[0] === obj_2.my_id) &&
                 (p[1] === obj_1.my_id || p[1] === obj_2.my_id)) {
-                console.log("-----УУУУДАЛЕНИЕ");
+                // console.log("-----УУУУДАЛЕНИЕ");
                 $(`#${p[2].element_collision_id}`).remove();
                 arr.push(ind)
             }
@@ -239,6 +259,10 @@ class Collision {
         let v1_y = obj_1.y_animate.speed;
         let v2_x = obj_2.x_animate.speed;
         let v2_y = obj_2.y_animate.speed;
+        v1_x = v1_x < 0 ? 0 : v1_x;
+        v1_y = v1_y < 0 ? 0 : v1_y;
+        v2_x = v2_x < 0 ? 0 : v2_x;
+        v2_y = v2_y < 0 ? 0 : v2_y;
 
         let flag_x = (obj_1.x_animate.to > obj_1.x_animate.from) === (obj_2.x_animate.to > obj_2.x_animate.from) ? 1 : -1;
         let flag_y = (obj_1.y_animate.to > obj_1.y_animate.from) === (obj_2.y_animate.to > obj_2.y_animate.from) ? 1 : -1;
@@ -255,12 +279,15 @@ class Collision {
                 obj.speed *= -1;
             }
         }
+        console.log([obj_1.x_animate, obj_1.y_animate, obj_2.x_animate, obj_2.y_animate].map(i => i.speed));
     }
 
 
     change_speed(m1, m2, v1, v2) {
         // console.log("speed", ((m1 - m2) * v1 - 2 * m2 * v2) / (m1 + m2));
-        return -(((m1 - m2) * v1 - 2 * m2 * v2) / (m1 + m2));
+        let res = -(((m1 - m2) * v1 - 2 * m2 * v2) / (m1 + m2));
+        // console.log(res, "mass:", m1, m2, "speed", v1, v2);
+        return res;
     }
 
 
@@ -308,19 +335,22 @@ class BaseFigure {
     get raw_center_y() {
         return this.#center_y;
     }
+
     get left_border() {
         return this.#max_left;
     }
+
     get right_border() {
         return this.#max_right;
     }
+
     get up_border() {
         return this.#max_up;
     }
+
     get bottom_border() {
         return this.#max_down;
     }
-
 
 
     create_figure(my_id,
@@ -335,7 +365,7 @@ class BaseFigure {
                         points="0,0 6,0, -6,0, 0,0 0,6 0,-6"/>`;
         result = `<defs>${result}</defs>
                     <use id="${my_id}" xlink:href="#_${my_id}" x="${points[0].x}" y="${points[0].y}" />`;
-        result +=  `<use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
+        result += `<use id="center_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
                             <use id="left_up_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />
                             <use id="right_down_${my_id}" xlink:href="#marker_${my_id}" x="0" y="0" />`;
 
@@ -422,7 +452,7 @@ class BaseFigure {
                     me.destroy = true;
                     BaseFigure.all_figures_list = BaseFigure.all_figures_list.filter((i) => !i.destroy);
                     delete BaseFigure.all_figures[me.my_id];
-                    me.$my_obj.stop().hide(2000, "linear", () => $("#" + me.my_id).remove())
+                    me.$my_obj.stop( true, false).hide(1000, "linear", () => $("#" + me.my_id).remove())
                     setTimeout((() => $("#" + me.my_id).remove()), 2050);
                 }),
             });
@@ -484,37 +514,40 @@ class BaseFigure {
 
 
     animate_figure = (now, obj, _, me = this) => {
-        if (me.destroy) { return false; }
+        if (me.destroy) {
+            return false;
+        }
         // setTimeout(() => {
-            if (obj.prop === "x") {
-                let d_x = now - me.now_x;
-                me.now_x = now;
-                // console.log(me.max_right);
-                if ((me.max_left <= 0 && d_x < 0) || (me.max_right >= windows_w && d_x > 0)) { //
-                    if (!me.$my_obj){
-                        me.$my_obj = $("#" + this.my_id);
-                    }
-
-                    this.x_animate.change_start_and_end();
-                    me.$my_obj.stop(true);
-
-
+        if (obj.prop === "x") {
+            let d_x = now - me.now_x;
+            me.now_x = now;
+            // console.log(me.max_right);
+            if ((me.max_left <= 0 && d_x < 0) || (me.max_right >= windows_w && d_x > 0)) { //
+                if (!me.$my_obj) {
+                    me.$my_obj = $("#" + this.my_id);
                 }
 
+                this.x_animate.change_start_and_end();
+                me.$my_obj.stop(true);
+                console.log("!!------", me.$my_obj.position().left, me.$my_obj.offset().left, me.max_left);
+
+
             }
+
+        }
         // });
         // setTimeout(() => {
-            if (obj.prop === "y") {
-                let d_y = now - me.now_y;
-                me.now_y = now;
-                if ((me.max_up <= 0 && d_y < 0) || (me.max_down >= windows_h && d_y > 0)) {
-                    if (!me.$my_obj){
-                        me.$my_obj = $("#" + this.my_id);
-                    }
-                    this.y_animate.change_start_and_end();
-                    me.$my_obj.stop(true);
+        if (obj.prop === "y") {
+            let d_y = now - me.now_y;
+            me.now_y = now;
+            if ((me.max_up <= 0 && d_y < 0) || (me.max_down >= windows_h && d_y > 0)) {
+                if (!me.$my_obj) {
+                    me.$my_obj = $("#" + this.my_id);
                 }
+                this.y_animate.change_start_and_end();
+                me.$my_obj.stop(true);
             }
+        }
         // });
         me.center_marker = document.getElementById("center_" + me.my_id); //$("#center_" + my_id);
         me.up_left_marker = document.getElementById("left_up_" + me.my_id); //$("#left_up_" + my_id);
@@ -526,19 +559,48 @@ class BaseFigure {
         me.right_down_marker.style.x = me.max_right;
         me.right_down_marker.style.y = me.max_down;
 
-        // setTimeout(() => {
-            if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
-                if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
-                    if (!me.destroy_process) {
-                        BaseFigure.destroyed_animate(me);
+        if (!me.destroy_process) {
+            if (me.max_down >= exit_obj.up_left.y && me.max_up <= exit_obj.down_left.y &&
+                me.max_right >= exit_obj.up_left.x && me.max_left <= exit_obj.up_right.x) {
+
+                let first_point_f;
+                let me_points = me.points;
+                // console.log(this.#points.map(p => p.str));
+                let f_points;
+                let me_first_point = me_points[me_points.length - 1];
+
+                for (let me_second_point of me_points) {
+                    f_points = [exit_obj.up_left, exit_obj.up_right, exit_obj.down_right, exit_obj.down_left];
+                    first_point_f = f_points[f_points.length - 1];
+                    for (let second_point_f of f_points) {
+                        if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
+                            BaseFigure.destroyed_animate(me);
+                            return
+                        }
+                        first_point_f = second_point_f;
                     }
+                    me_first_point = me_second_point;
+
                 }
+
             }
+        }
+
+        // setTimeout(() => {
+        //     if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
+        //         if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
+        //             if (!me.destroy_process) {
+        //                 BaseFigure.destroyed_animate(me);
+        //             }
+        //         }
+        //     }
         // });
 
 
         // setTimeout(() => {
-            me.collision_controller()
+        if (!me.destroy_process) {
+            me.collision_controller();
+        }
         // });
     }
 
@@ -562,7 +624,7 @@ class BaseFigure {
         this.$my_obj = obj;
         this.counter++;
 
-        if (this.destroy) {
+        if (this.destroy || this.destroy_process) {
             return false;
         }
         console.log(from_x, to_x, from_y, to_y, speed_x, speed_y);
@@ -571,7 +633,7 @@ class BaseFigure {
         speed_y = (speed_y === 0 ? 0.00001 : speed_y);
 
         if (to_x - from_x !== 0 && speed_x > 0) {
-            console.log("---------------");
+            // console.log("---------------");
             obj.animate(
                 {x: this.x_animate.to},
                 {
@@ -580,7 +642,7 @@ class BaseFigure {
                     always: (() => (this.animate(
                         this.x_animate.from, this.x_animate.to,
                         0, 0,
-                        this.x_animate.speed, -1,
+                        this.x_animate.speed, 0,
                         this.x_animate.mass,
                         this.x_animate.css_param, this.x_animate.options
                     ))),
@@ -599,7 +661,7 @@ class BaseFigure {
                     always: (() => (this.animate(
                         0, 0,
                         this.y_animate.from, this.y_animate.to,
-                        -1, this.y_animate.speed,
+                        0, this.y_animate.speed,
                         this.y_animate.mass,
                         this.y_animate.css_param, this.y_animate.options
                     ))),
@@ -612,11 +674,14 @@ class BaseFigure {
     }
 }
 
-// let a1 = new BaseFigure([new Point(30, 70), new Point(60, 60), new Point(150, 10)], "id1")
+
+// $(`#${start_content_id}`).css("display", "none");
+// $(`#${main_svg_id}`).css("display", "inline");
+// let a1 = new BaseFigure([new Point(70, 90), new Point(110, 80), new Point(210, 10)], "id1")
 // // let b = new BaseFigure([new Point(30, 10), new Point(50, 10), new Point(90, 70)], "id2")
-// let a3 = new BaseFigure([new Point(230, 30), new Point(240, 60), new Point(250, 10)], "id3")
-// a1.animate(-1000, 2000, -1000, 1000, 120, -1);
-// a3.animate(-1000, 2000, -1000, 1000, 0, -1);
+// let a3 = new BaseFigure([new Point(230, 100), new Point(240, 130), new Point(250, 90)], "id3")
+// a1.animate(-1000, 2000, -1000, 1000, 1, 100);
+// a3.animate(2000, -2000, -1000, 1000, 150, 1);
 //
 // let p1 = new Point(10, 0);
 // let p2 = new Point(10, 10);
@@ -636,7 +701,7 @@ function getRandomRGBColorString(min_alpha = 0) {
     return `rgba(${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${(1 - min_alpha) * Math.random() + min_alpha})`;
 }
 
-function generate_nice_figure(points){
+function generate_nice_figure(points) {
     points.sort((a, b) => a.x - b.x);
     let test_p1 = points[points.length - 1];
     let set_points = [];
@@ -645,7 +710,7 @@ function generate_nice_figure(points){
         let test_point = points[i];
         let result = true;
         for (let j = i + 1; points.length > j; j++) {
-            if (test_point.x === points[j].x && test_point.y === points[j].y){
+            if (test_point.x === points[j].x && test_point.y === points[j].y) {
                 result = false;
                 break;
             }
@@ -656,40 +721,37 @@ function generate_nice_figure(points){
     }
     let up_part = [points[0]];
     let bottom_part = [];
-    let vector_x = points[points.length-1].x - points[0].x;
-    let vector_y = points[points.length-1].y - points[0].y;
+    let vector_x = points[points.length - 1].x - points[0].x;
+    let vector_y = points[points.length - 1].y - points[0].y;
     for (let i = 1; points.length - 1 > i; i++) {
-        if ( (vector_x * (points[i].y - points[0].y)) - (vector_y * (points[i].x - points[0].x)) >= 0){
+        if ((vector_x * (points[i].y - points[0].y)) - (vector_y * (points[i].x - points[0].x)) >= 0) {
             up_part.push(points[i]);
         } else {
             bottom_part.unshift(points[i]);
         }
     }
-    bottom_part.unshift(points[points.length-1]);
+    bottom_part.unshift(points[points.length - 1]);
     up_part = up_part.concat(bottom_part);
     // up_part.push(points[points.length-1]);
 
 
-
-
-
     //     if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
-        //         // console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f);
-        //         let [x_collision, y_collision] = me_first_point.intersection_point(me_second_point, first_point_f, second_point_f);
-        //         console.log("обнаружена колизия", x_collision, y_collision);
-        //
-        //         let d = new Collision(me, f, [x_collision, y_collision]);
-        //         // me.flag_collision = true;
-        //         return true;
-        //     }
-        //
-        //     first_point_f = second_point_f;
-        // }
+    //         // console.log("обнаружена колизия", me_first_point, me_second_point, first_point_f, second_point_f);
+    //         let [x_collision, y_collision] = me_first_point.intersection_point(me_second_point, first_point_f, second_point_f);
+    //         console.log("обнаружена колизия", x_collision, y_collision);
+    //
+    //         let d = new Collision(me, f, [x_collision, y_collision]);
+    //         // me.flag_collision = true;
+    //         return true;
+    //     }
+    //
+    //     first_point_f = second_point_f;
+    // }
 
-        // test_p1 = test_p2;
+    // test_p1 = test_p2;
 
     // }
-    console.log(up_part.map( p => p.str));
+    console.log(up_part.map(p => p.str));
 
     return up_part;
 }
@@ -699,7 +761,7 @@ function start(count_figures) {
     figures.map(
         (i, ind) => {
             let points = Array(getRandomInt(3, 10)).fill(0).map((e, i) => i + 1);
-            let min_a =  getRandomSign() * 0.05;
+            let min_a = getRandomSign() * 0.05;
             return new BaseFigure(generate_nice_figure(points.map(i => new Point(getRandomInt(0, 150), getRandomInt(0, 150)))),
                 `figure_${ind}`,
                 getRandomRGBColorString(min_a + 0.05),
@@ -714,29 +776,32 @@ function start(count_figures) {
     ));
     $(`#${start_content_id}`).css("display", "none");
     $(`#${main_svg_id}`).css("display", "inline");
-    BaseFigure.all_figures_list.map(i => setTimeout( () => {$("#" + i.my_id).animate({
-            x: getRandomInt(0 - i.left_border + 10, windows_w - i.right_border - 10),
-            y: getRandomInt(0 - i.up_border + 10, windows_h - i.bottom_border - 10),
-        },
-        {
-            queue: false,
-            duration: 1000,
-            always: (() => {
-                let sign_x = getRandomSign();
-                let sign_y = getRandomSign();
-                i.destroy = false;
-                // console.log(i);
-                setTimeout( () => {
+    BaseFigure.all_figures_list.map(i => setTimeout(() => {
+        $("#" + i.my_id).animate({
+                x: getRandomInt(0 - i.left_border + 10, windows_w - i.right_border - 10),
+                y: getRandomInt(0 - i.up_border + 10, windows_h - i.bottom_border - 10),
+            },
+            {
+                queue: false,
+                duration: 1000,
+                always: (() => {
+                    let sign_x = getRandomSign();
+                    let sign_y = getRandomSign();
+                    i.destroy = false;
                     // console.log(i);
-                    i.animate(-sign_x * 5000, sign_x * 5000, -sign_y * 5000, sign_y * 5000,
-                        getRandomInt(1, 250), getRandomInt(1, 250),  getRandomInt(1, 10));
-                    // console.log(i);
+                    setTimeout(() => {
+                        // console.log(i);
+                        i.animate(-sign_x * 5000, sign_x * 5000, -sign_y * 5000, sign_y * 5000,
+                            getRandomInt(1, 250), getRandomInt(1, 250), getRandomInt(1, 10));
+                        // console.log(i);
+                    })
                 })
             })
-        })}));
+    }));
 }
-setTimeout( () => {
-start(15);
+
+setTimeout(() => {
+    start(20);
 });
 
 // console.log(generate_nice_figure(
@@ -748,3 +813,5 @@ start(15);
 //         new Point(0, 0)
 //     ]
 // ).map( p => p.str));
+
+// 7,133 98,116 101,141 128,16 123,9 110,33 90,34 61,11 41,97
