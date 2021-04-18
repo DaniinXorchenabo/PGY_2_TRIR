@@ -452,7 +452,7 @@ class BaseFigure {
                     me.destroy = true;
                     BaseFigure.all_figures_list = BaseFigure.all_figures_list.filter((i) => !i.destroy);
                     delete BaseFigure.all_figures[me.my_id];
-                    me.$my_obj.stop( true, false).hide(1000, "linear", () => $("#" + me.my_id).remove())
+                    me.$my_obj.stop(true, false).hide(1000, "linear", () => $("#" + me.my_id).remove())
                     setTimeout((() => $("#" + me.my_id).remove()), 2050);
                 }),
             });
@@ -512,6 +512,46 @@ class BaseFigure {
         });
     }
 
+    static all_collision_controller(){
+        let arr = BaseFigure.all_figures_list.filter(f => !f.destroy_process && !f.destroy);
+        for (let i = 0; arr.length > i; i++) {
+            let test_figure = arr[i];
+
+            let may_be_collision = []
+            for (let j = i + 1; arr.length > j; j++) {
+                let f = arr[j];
+                if (test_figure.max_down >= f.max_up && test_figure.max_up <= f.max_down &&
+                    test_figure.max_right >= f.max_left && test_figure.max_left <= f.max_right){
+                    may_be_collision.push(f);
+                }
+            }
+            if (may_be_collision.length > 0){
+                for (let f of may_be_collision) {
+                    let first_point_f;
+                    let me_points = test_figure.points;
+                    let f_points;
+                    let me_first_point = me_points[me_points.length - 1];
+
+                    for (let me_second_point of me_points) {
+                        f_points = f.points;
+                        first_point_f = f_points[f_points.length - 1];
+                        for (let second_point_f of f_points) {
+                            if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
+                                let [x_collision, y_collision] = me_first_point.intersection_point(me_second_point, first_point_f, second_point_f);
+                                console.log("обнаружена колизия", x_collision, y_collision);
+                                let d = new Collision(test_figure, f, [x_collision, y_collision]);
+                            }
+
+                            first_point_f = second_point_f;
+                        }
+                        me_first_point = me_second_point;
+
+                    }
+                }
+            }
+        }
+    }
+
 
     animate_figure = (now, obj, _, me = this) => {
         if (me.destroy) {
@@ -519,10 +559,10 @@ class BaseFigure {
         }
         // setTimeout(() => {
         if (obj.prop === "x") {
-            let d_x = now - me.now_x;
+            me.d_x = now - me.now_x;
             me.now_x = now;
             // console.log(me.max_right);
-            if ((me.max_left <= 0 && d_x < 0) || (me.max_right >= windows_w && d_x > 0)) { //
+            if ((me.max_left <= 0 && me.d_x < 0) || (me.max_right >= windows_w && me.d_x > 0)) { //
                 if (!me.$my_obj) {
                     me.$my_obj = $("#" + this.my_id);
                 }
@@ -538,9 +578,9 @@ class BaseFigure {
         // });
         // setTimeout(() => {
         if (obj.prop === "y") {
-            let d_y = now - me.now_y;
+            me.d_y = now - me.now_y;
             me.now_y = now;
-            if ((me.max_up <= 0 && d_y < 0) || (me.max_down >= windows_h && d_y > 0)) {
+            if ((me.max_up <= 0 && me.d_y < 0) || (me.max_down >= windows_h && me.d_y > 0)) {
                 if (!me.$my_obj) {
                     me.$my_obj = $("#" + this.my_id);
                 }
@@ -604,10 +644,73 @@ class BaseFigure {
         // });
     }
 
+    get_coordinates = (now, obj, _, me = this) => {
+        if (obj.prop === "x") {
+            me.d_x = now - me.now_x;
+            me.now_x = now;
+        }
+        if (obj.prop === "y") {
+            me.d_y = now - me.now_y;
+            me.now_y = now;
+        }
+    }
+
+    fixed_fps_renderer = (me = this) => {
+        if (me.destroy) {
+            return false;
+        }
+
+        if (!me.destroy_process) {
+            if (me.max_down >= exit_obj.up_left.y && me.max_up <= exit_obj.down_left.y &&
+                me.max_right >= exit_obj.up_left.x && me.max_left <= exit_obj.up_right.x) {
+
+                let first_point_f;
+                let me_points = me.points;
+                let f_points;
+                let me_first_point = me_points[me_points.length - 1];
+
+                for (let me_second_point of me_points) {
+                    f_points = [exit_obj.up_left, exit_obj.up_right, exit_obj.down_right, exit_obj.down_left];
+                    first_point_f = f_points[f_points.length - 1];
+                    for (let second_point_f of f_points) {
+                        if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
+                            BaseFigure.destroyed_animate(me);
+                            return
+                        }
+                        first_point_f = second_point_f;
+                    }
+                    me_first_point = me_second_point;
+
+                }
+
+            }
+        }
+
+        if ((me.max_left <= 0 && me.d_x < 0) || (me.max_right >= windows_w && me.d_x > 0)) { //
+            if (!me.$my_obj) {
+                me.$my_obj = $("#" + this.my_id);
+            }
+            this.x_animate.change_start_and_end();
+            me.$my_obj.stop(true);
+            return
+        }
+
+        if ((me.max_up <= 0 && me.d_y < 0) || (me.max_down >= windows_h && me.d_y > 0)) {
+            if (!me.$my_obj) {
+                me.$my_obj = $("#" + this.my_id);
+            }
+            this.y_animate.change_start_and_end();
+            me.$my_obj.stop(true);
+            return
+        }
+    }
+
     animate(from_x = -1000, to_x = 2000,
             from_y = -1000, to_y = 1000,
             speed_x = 200, speed_y = 200, mass = 1,
-            css_param = {}, options = {}, obj = $('#' + this.my_id)) {
+            css_param = {}, options = {},
+            setup_func = this.animate_figure,
+            obj = $('#' + this.my_id)) {
 
         if (!this.x_animate) {
             this.x_animate = new MoveAnimate(from_x, to_x, speed_x, mass, css_param, options);
@@ -646,7 +749,7 @@ class BaseFigure {
                         this.x_animate.mass,
                         this.x_animate.css_param, this.x_animate.options
                     ))),
-                    step: this.animate_figure,
+                    step: setup_func,
                     easing: "linear"
                     // easing: this.my_id + "_x",
                 }
@@ -665,13 +768,14 @@ class BaseFigure {
                         this.y_animate.mass,
                         this.y_animate.css_param, this.y_animate.options
                     ))),
-                    step: this.animate_figure,
+                    step: setup_func,
                     easing: "linear"
                     // easing: this.my_id + "_y",
                 }
             );
         }
     }
+
 }
 
 
@@ -756,26 +860,8 @@ function generate_nice_figure(points) {
     return up_part;
 }
 
-function start(count_figures) {
-    figures = Array(count_figures).fill(0).map((e, i) => i + 1);
-    figures.map(
-        (i, ind) => {
-            let points = Array(getRandomInt(3, 10)).fill(0).map((e, i) => i + 1);
-            let min_a = getRandomSign() * 0.05;
-            return new BaseFigure(generate_nice_figure(points.map(i => new Point(getRandomInt(0, 150), getRandomInt(0, 150)))),
-                `figure_${ind}`,
-                getRandomRGBColorString(min_a + 0.05),
-                getRandomRGBColorString(Math.abs(min_a - 0.05)),
-                getRandomInt(1, 6))
-        }
-    );
-    // console.log(BaseFigure.all_figures_list)
-    BaseFigure.all_figures_list.map(i => $("#" + i.my_id).css(
-        "x", windows_w / 2 - i.raw_center_x).css(
-        "y", windows_h / 2 - i.raw_center_y
-    ));
-    $(`#${start_content_id}`).css("display", "none");
-    $(`#${main_svg_id}`).css("display", "inline");
+function base_jq_animate(){
+
     BaseFigure.all_figures_list.map(i => setTimeout(() => {
         $("#" + i.my_id).animate({
                 x: getRandomInt(0 - i.left_border + 10, windows_w - i.right_border - 10),
@@ -798,6 +884,64 @@ function start(count_figures) {
                 })
             })
     }));
+
+}
+
+function fixed_fps_animate(update_interval = 20){
+    BaseFigure.all_figures_list.map(i => setTimeout(() => {
+        $("#" + i.my_id).animate({
+                x: getRandomInt(0 - i.left_border + 10, windows_w - i.right_border - 10),
+                y: getRandomInt(0 - i.up_border + 10, windows_h - i.bottom_border - 10),
+            },
+            {
+                queue: false,
+                duration: 1000,
+                always: (() => {
+                    let sign_x = getRandomSign();
+                    let sign_y = getRandomSign();
+                    i.destroy = false;
+                    // console.log(i);
+                    setTimeout(() => {
+                        // console.log(i);
+                        i.animate(-sign_x * 5000, sign_x * 5000, -sign_y * 5000, sign_y * 5000,
+                            getRandomInt(1, 250), getRandomInt(1, 250), getRandomInt(1, 10), i.get_coordinates);
+                        // console.log(i);
+                    })
+                })
+            })
+    }));
+
+    BaseFigure.all_figures_list.map(i => setInterval(() => {
+        i.fixed_fps_renderer();
+    }, update_interval))
+    setInterval(BaseFigure.all_collision_controller, update_interval);
+
+}
+
+function start(count_figures) {
+    figures = Array(count_figures).fill(0).map((e, i) => i + 1);
+    figures.map(
+        (i, ind) => {
+            let points = Array(getRandomInt(3, 10)).fill(0).map((e, i) => i + 1);
+            let min_a = getRandomSign() * 0.05;
+            return new BaseFigure(generate_nice_figure(points.map(i => new Point(getRandomInt(0, 150), getRandomInt(0, 150)))),
+                `figure_${ind}`,
+                getRandomRGBColorString(min_a + 0.05),
+                getRandomRGBColorString(Math.abs(min_a - 0.05)),
+                getRandomInt(1, 6))
+        }
+    );
+    // console.log(BaseFigure.all_figures_list)
+    BaseFigure.all_figures_list.map(i => $("#" + i.my_id).css(
+        "x", windows_w / 2 - i.raw_center_x).css(
+        "y", windows_h / 2 - i.raw_center_y
+    ));
+    $(`#${start_content_id}`).css("display", "none");
+    $(`#${main_svg_id}`).css("display", "inline");
+
+    // base_jq_animate();
+    fixed_fps_animate();
+
 }
 
 setTimeout(() => {
