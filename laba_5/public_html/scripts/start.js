@@ -68,11 +68,11 @@ function start(count_figures,
         (i, ind) => {
 
             let points = Array(getRandomInt(3, max_points_count)).fill(0).map((e, i) => i + 1);
-            let min_a = getRandomSign() * 0.05;
+            let min_a = getRandomSign() * 0.2;
             return new BaseFigure(generate_nice_figure(points.map(i => new Point(getRandomInt(0, max_size), getRandomInt(0, max_size)))),
                 `figure_${ind}`,
-                getRandomRGBColorString(min_a + 0.05),
-                getRandomRGBColorString(Math.abs(min_a - 0.05)),
+                getRandomRGBColorString(min_a + 0.2),
+                getRandomRGBColorString(Math.abs(min_a - 0.2)),
                 getRandomInt(1, 6));
         }
     );
