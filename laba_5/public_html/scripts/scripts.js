@@ -192,10 +192,13 @@ class Collision {
     obj_1;
     obj_2;
     element_collision_id = "";
+    mass = 1;
 
 
     constructor(obj_1, obj_2, collision_point = [0, 0]) {
-
+        if (!(obj_1.x_animate && obj_1.y_animate && obj_2.x_animate && obj_2.y_animate)){
+            return false;
+        }
         this.element_collision_id = `collision_${obj_1.my_id}_${Math.round(collision_point[0])}_${Math.round(collision_point[1])}_${Collision.collision_objects.length}`;
         this.obj_1 = obj_1;
         this.obj_2 = obj_2;
@@ -252,6 +255,9 @@ class Collision {
     }
 
     change_animate(obj_1, obj_2) {
+        if (!(obj_1.x_animate && obj_1.y_animate && obj_2.x_animate && obj_2.y_animate)){
+            return false;
+        }
         let m1 = obj_1.x_animate.mass;
         let m2 = obj_2.x_animate.mass;
 
@@ -453,6 +459,8 @@ class BaseFigure {
         this.up_left_marker = document.getElementById("left_up_" + my_id); //$("#left_up_" + my_id);
         this.right_down_marker = document.getElementById("right_down_" + my_id);
         this.$my_obj = $("#" + this.my_id);
+        // this.x_animate = new MoveAnimate(0 ,0 ,0);
+        // this.y_animate = new MoveAnimate(0, 0, 0);
         console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
     }
 
@@ -918,19 +926,22 @@ function fixed_fps_animate(update_interval = 20){
 }
 
 function start(count_figures) {
-    figures = Array(count_figures).fill(0).map((e, i) => i + 1);
+    console.log(count_figures);
+    figures = Array(parseInt(count_figures)).fill(0).map((e, i) => i + 1);
+    console.log(figures);
     figures.map(
         (i, ind) => {
+
             let points = Array(getRandomInt(3, 10)).fill(0).map((e, i) => i + 1);
             let min_a = getRandomSign() * 0.05;
             return new BaseFigure(generate_nice_figure(points.map(i => new Point(getRandomInt(0, 150), getRandomInt(0, 150)))),
                 `figure_${ind}`,
                 getRandomRGBColorString(min_a + 0.05),
                 getRandomRGBColorString(Math.abs(min_a - 0.05)),
-                getRandomInt(1, 6))
+                getRandomInt(1, 6));
         }
     );
-    // console.log(BaseFigure.all_figures_list)
+    console.log(BaseFigure.all_figures_list)
     BaseFigure.all_figures_list.map(i => $("#" + i.my_id).css(
         "x", windows_w / 2 - i.raw_center_x).css(
         "y", windows_h / 2 - i.raw_center_y
@@ -943,9 +954,9 @@ function start(count_figures) {
 
 }
 
-setTimeout(() => {
-    // start(20);
-});
+
+
+
 
 // console.log(generate_nice_figure(
 //     [

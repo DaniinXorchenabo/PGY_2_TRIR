@@ -20,7 +20,7 @@ function corrected_number(input_id){
         document.getElementById(input_id).title = "Вы ввели некоректное значение! Минимальное значение данного поля - " + document.getElementById(input_id).min;
         $(`#${input_id}`).addClass("bad_input");
     }
-    else if (document.getElementById(input_id).title.indexOf("Вы ввели некоректное значение") === -1){
+    else if (document.getElementById(input_id).title.indexOf("Вы ввели некоректное значение") !== -1){
         $(`#${input_id}`).removeClass("bad_input");
         document.getElementById(input_id).title  = document.getElementById(input_id).placeholder
     }
@@ -39,6 +39,35 @@ function correcting_number(input_id){
         }
     }
 }
+
+let form = document.getElementById("start_tools_form");
+form.addEventListener("submit", function(event) {
+
+    let $data = {};
+    let correct_data = true;
+// переберём все элементы input, textarea и select формы с id="myForm "
+    $('#start_tools_form').find ('input').each(function() {
+        // добавим новое свойство к объекту $data
+        // имя свойства – значение атрибута name элемента
+        // значение свойства – значение свойство value элемента
+        console.log('!===___!1', this.title, $(this).val(), this.name);
+        if (this.title.indexOf("Вы ввели некоректное значение") !== -1){
+            correct_data = false;
+        }
+        $data[this.name] = $(this).val();
+    });
+
+    if (correct_data){
+        event.preventDefault();
+        console.log($data["count"])
+        setTimeout(() => {
+            start($data["count"]); // $data["count"]
+        });
+
+    }
+    event.preventDefault();
+    return false;
+});
 
 
 
