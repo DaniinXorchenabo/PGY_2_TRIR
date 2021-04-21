@@ -1,7 +1,3 @@
-function test() {
-    $('#c1').animate({'cx': 80})
-    console.log('0----------------w---')
-}
 
 let count_figures = 0
 
