@@ -130,14 +130,14 @@ window.addEventListener(`resize`, event => {
     let width_exit = parseFloat(rect_exit.css("width"));
     let height_exit = parseFloat(rect_exit.css("height"))
 
-    exit_obj.up_left.set_coordinate(windows_w / 2 - width_exit / 2, windows_h / 2 - height_exit / 2);
-    exit_obj.up_right.set_coordinate(windows_w / 2 + width_exit / 2, windows_h / 2 - height_exit / 2);
-    exit_obj.down_left.set_coordinate(windows_w / 2 - width_exit / 2, windows_h / 2 + height_exit / 2);
-    exit_obj.down_right.set_coordinate(windows_w / 2 - width_exit / 2, windows_h / 2 + height_exit / 2);
+    exit_obj.up_left.set_coordinate(windows_w / 2 - width_exit / 2 - 20, windows_h / 2 - height_exit / 2 - 20);
+    exit_obj.up_right.set_coordinate(windows_w / 2 + width_exit / 2 + 20, windows_h / 2 - height_exit / 2 - 20);
+    exit_obj.down_left.set_coordinate(windows_w / 2 - width_exit / 2 - 20, windows_h / 2 + height_exit / 2 + 20);
+    exit_obj.down_right.set_coordinate(windows_w / 2 + width_exit / 2 + 20, windows_h / 2 + height_exit / 2 + 20);
 
     $("#rect_exit").css({
-        "x": exit_obj.up_left.x,
-        "y": exit_obj.up_left.y
+        "x": windows_w / 2 - width_exit / 2,
+        "y": windows_h / 2 - height_exit / 2
     })
 
 
@@ -267,11 +267,31 @@ class Collision {
         let flag_x = (obj_1.x_animate.to > obj_1.x_animate.from) === (obj_2.x_animate.to > obj_2.x_animate.from) ? 1 : -1;
         let flag_y = (obj_1.y_animate.to > obj_1.y_animate.from) === (obj_2.y_animate.to > obj_2.y_animate.from) ? 1 : -1;
 
-        obj_1.x_animate.speed = this.change_speed(m1, m2, v1_x, flag_x * v2_x);
-        obj_1.y_animate.speed = this.change_speed(m1, m2, v1_y, flag_y * v2_y);
-        obj_2.x_animate.speed = this.change_speed(m2, m1, v2_x, flag_x * v1_x);
-        obj_2.y_animate.speed = this.change_speed(m2, m1, v2_y, flag_y * v1_y);
+        if (v1_x !== 0 && v2_x !== 0) {
+            if ((obj_1.x_animate.to < obj_1.x_animate.from) && (obj_2.x_animate.to > obj_2.x_animate.from) && (obj_1.center_x < obj_2.center_x)) {
 
+            }
+            else if ((obj_2.x_animate.to < obj_2.x_animate.from) && (obj_1.x_animate.to > obj_1.x_animate.from) && (obj_1.center_x > obj_2.center_x)) {
+
+            }
+            else {
+                obj_1.x_animate.speed = this.change_speed(m1, m2, v1_x, flag_x * v2_x);
+                obj_2.x_animate.speed = this.change_speed(m2, m1, v2_x, flag_x * v1_x);
+            }
+        }
+
+        if (v1_y !== 0 && v2_y !== 0) {
+            if ((obj_1.y_animate.to < obj_1.y_animate.from) && (obj_2.y_animate.to > obj_2.y_animate.from) && (obj_1.center_y < obj_2.center_y)) {
+
+            }
+            else if ((obj_2.y_animate.to < obj_2.y_animate.from) && (obj_1.y_animate.to > obj_1.y_animate.from) && (obj_1.center_y > obj_2.center_y)) {
+
+            } else {
+                obj_1.y_animate.speed = this.change_speed(m1, m2, v1_y, flag_y * v2_y);
+                obj_2.y_animate.speed = this.change_speed(m2, m1, v2_y, flag_y * v1_y);
+
+            }
+        }
 
         for (let obj of [obj_1.x_animate, obj_1.y_animate, obj_2.x_animate, obj_2.y_animate]) {
             if (obj.speed < 0) {
@@ -279,6 +299,7 @@ class Collision {
                 obj.speed *= -1;
             }
         }
+
         console.log([obj_1.x_animate, obj_1.y_animate, obj_2.x_animate, obj_2.y_animate].map(i => i.speed));
     }
 
@@ -443,9 +464,9 @@ class BaseFigure {
             },
             {
                 queue: false,
-                duration: 1000,
+                duration: Math.sqrt(((windows_w / 2 - me.#center_x - me.now_x) / me.x_animate.speed) ** 2 + ((windows_h / 2 - me.#center_y - me.now_y) / me.y_animate.speed) ** 2) * 1000,
                 step: me.animate_figure,
-                easing: "parabola",
+                easing: "linear",
                 always: (() => {
 
                     console.log('Destroy');
@@ -538,7 +559,7 @@ class BaseFigure {
                         for (let second_point_f of f_points) {
                             if (me_first_point.intersection_lines(me_second_point, first_point_f, second_point_f)) {
                                 let [x_collision, y_collision] = me_first_point.intersection_point(me_second_point, first_point_f, second_point_f);
-                                console.log("обнаружена колизия", x_collision, y_collision);
+                                // console.log("обнаружена колизия", x_collision, y_collision);
                                 let d = new Collision(test_figure, f, [x_collision, y_collision]);
                             }
 
@@ -557,7 +578,6 @@ class BaseFigure {
         if (me.destroy) {
             return false;
         }
-        // setTimeout(() => {
         if (obj.prop === "x") {
             me.d_x = now - me.now_x;
             me.now_x = now;
@@ -566,17 +586,12 @@ class BaseFigure {
                 if (!me.$my_obj) {
                     me.$my_obj = $("#" + this.my_id);
                 }
-
                 this.x_animate.change_start_and_end();
                 me.$my_obj.stop(true);
-                console.log("!!------", me.$my_obj.position().left, me.$my_obj.offset().left, me.max_left);
-
-
             }
 
         }
-        // });
-        // setTimeout(() => {
+
         if (obj.prop === "y") {
             me.d_y = now - me.now_y;
             me.now_y = now;
@@ -588,16 +603,15 @@ class BaseFigure {
                 me.$my_obj.stop(true);
             }
         }
-        // });
-        me.center_marker = document.getElementById("center_" + me.my_id); //$("#center_" + my_id);
-        me.up_left_marker = document.getElementById("left_up_" + me.my_id); //$("#left_up_" + my_id);
-        me.right_down_marker = document.getElementById("right_down_" + me.my_id);
-        me.center_marker.style.x = me.center_x;
-        me.center_marker.style.y = me.center_y;
-        me.up_left_marker.style.x = me.max_left;
-        me.up_left_marker.style.y = me.max_up;
-        me.right_down_marker.style.x = me.max_right;
-        me.right_down_marker.style.y = me.max_down;
+        // me.center_marker = document.getElementById("center_" + me.my_id); //$("#center_" + my_id);
+        // me.up_left_marker = document.getElementById("left_up_" + me.my_id); //$("#left_up_" + my_id);
+        // me.right_down_marker = document.getElementById("right_down_" + me.my_id);
+        // me.center_marker.style.x = me.center_x;
+        // me.center_marker.style.y = me.center_y;
+        // me.up_left_marker.style.x = me.max_left;
+        // me.up_left_marker.style.y = me.max_up;
+        // me.right_down_marker.style.x = me.max_right;
+        // me.right_down_marker.style.y = me.max_down;
 
         if (!me.destroy_process) {
             if (me.max_down >= exit_obj.up_left.y && me.max_up <= exit_obj.down_left.y &&
@@ -605,7 +619,6 @@ class BaseFigure {
 
                 let first_point_f;
                 let me_points = me.points;
-                // console.log(this.#points.map(p => p.str));
                 let f_points;
                 let me_first_point = me_points[me_points.length - 1];
 
@@ -626,22 +639,9 @@ class BaseFigure {
             }
         }
 
-        // setTimeout(() => {
-        //     if (Math.abs(windows_h / 2 - me.center_y) <= BaseFigure.y_limit_center) {
-        //         if (Math.abs(windows_w / 2 - me.center_x) <= BaseFigure.x_limit_center) {
-        //             if (!me.destroy_process) {
-        //                 BaseFigure.destroyed_animate(me);
-        //             }
-        //         }
-        //     }
-        // });
-
-
-        // setTimeout(() => {
         if (!me.destroy_process) {
             me.collision_controller();
         }
-        // });
     }
 
     get_coordinates = (now, obj, _, me = this) => {
@@ -905,7 +905,6 @@ function fixed_fps_animate(update_interval = 20){
                         // console.log(i);
                         i.animate(-sign_x * 5000, sign_x * 5000, -sign_y * 5000, sign_y * 5000,
                             getRandomInt(1, 250), getRandomInt(1, 250), getRandomInt(1, 10), i.get_coordinates);
-                        // console.log(i);
                     })
                 })
             })
@@ -945,7 +944,7 @@ function start(count_figures) {
 }
 
 setTimeout(() => {
-    start(20);
+    // start(20);
 });
 
 // console.log(generate_nice_figure(
