@@ -227,7 +227,7 @@ class BaseFigure {
         });
     }
 
-    static all_collision_controller(){
+    static all_collision_controller() {
         let arr = BaseFigure.all_figures_list.filter(f => !f.destroy_process && !f.destroy);
         for (let i = 0; arr.length > i; i++) {
             let test_figure = arr[i];
@@ -236,11 +236,11 @@ class BaseFigure {
             for (let j = i + 1; arr.length > j; j++) {
                 let f = arr[j];
                 if (test_figure.max_down >= f.max_up && test_figure.max_up <= f.max_down &&
-                    test_figure.max_right >= f.max_left && test_figure.max_left <= f.max_right){
+                    test_figure.max_right >= f.max_left && test_figure.max_left <= f.max_right) {
                     may_be_collision.push(f);
                 }
             }
-            if (may_be_collision.length > 0){
+            if (may_be_collision.length > 0) {
                 for (let f of may_be_collision) {
                     let first_point_f;
                     let me_points = test_figure.points;

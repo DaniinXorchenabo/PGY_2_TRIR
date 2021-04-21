@@ -7,7 +7,7 @@ class Collision {
 
 
     constructor(obj_1, obj_2, collision_point = [0, 0]) {
-        if (!(obj_1.x_animate && obj_1.y_animate && obj_2.x_animate && obj_2.y_animate)){
+        if (!(obj_1.x_animate && obj_1.y_animate && obj_2.x_animate && obj_2.y_animate)) {
             return false;
         }
         this.element_collision_id = `collision_${obj_1.my_id}_${Math.round(collision_point[0])}_${Math.round(collision_point[1])}_${Collision.collision_objects.length}`;
@@ -66,7 +66,7 @@ class Collision {
     }
 
     change_animate(obj_1, obj_2) {
-        if (!(obj_1.x_animate && obj_1.y_animate && obj_2.x_animate && obj_2.y_animate)){
+        if (!(obj_1.x_animate && obj_1.y_animate && obj_2.x_animate && obj_2.y_animate)) {
             return false;
         }
         let m1 = obj_1.x_animate.mass;
@@ -87,11 +87,9 @@ class Collision {
         if (v1_x !== 0 && v2_x !== 0) {
             if ((obj_1.x_animate.to < obj_1.x_animate.from) && (obj_2.x_animate.to > obj_2.x_animate.from) && (obj_1.center_x < obj_2.center_x)) {
 
-            }
-            else if ((obj_2.x_animate.to < obj_2.x_animate.from) && (obj_1.x_animate.to > obj_1.x_animate.from) && (obj_1.center_x > obj_2.center_x)) {
+            } else if ((obj_2.x_animate.to < obj_2.x_animate.from) && (obj_1.x_animate.to > obj_1.x_animate.from) && (obj_1.center_x > obj_2.center_x)) {
 
-            }
-            else {
+            } else {
                 obj_1.x_animate.speed = this.change_speed(m1, m2, v1_x, flag_x * v2_x);
                 obj_2.x_animate.speed = this.change_speed(m2, m1, v2_x, flag_x * v1_x);
             }
@@ -100,8 +98,7 @@ class Collision {
         if (v1_y !== 0 && v2_y !== 0) {
             if ((obj_1.y_animate.to < obj_1.y_animate.from) && (obj_2.y_animate.to > obj_2.y_animate.from) && (obj_1.center_y < obj_2.center_y)) {
 
-            }
-            else if ((obj_2.y_animate.to < obj_2.y_animate.from) && (obj_1.y_animate.to > obj_1.y_animate.from) && (obj_1.center_y > obj_2.center_y)) {
+            } else if ((obj_2.y_animate.to < obj_2.y_animate.from) && (obj_1.y_animate.to > obj_1.y_animate.from) && (obj_1.center_y > obj_2.center_y)) {
 
             } else {
                 obj_1.y_animate.speed = this.change_speed(m1, m2, v1_y, flag_y * v2_y);

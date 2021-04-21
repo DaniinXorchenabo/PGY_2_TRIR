@@ -1,5 +1,4 @@
-
-function base_jq_animate(max_start_speed=150, max_mass=10){
+function base_jq_animate(max_start_speed = 150, max_mass = 10) {
 
     BaseFigure.all_figures_list.map(i => setTimeout(() => {
         $("#" + i.my_id).animate({
@@ -26,7 +25,7 @@ function base_jq_animate(max_start_speed=150, max_mass=10){
 
 }
 
-function fixed_fps_animate(max_start_speed=150, max_mass=6, update_interval = 20){
+function fixed_fps_animate(max_start_speed = 150, max_mass = 6, update_interval = 20) {
     BaseFigure.all_figures_list.map(i => setTimeout(() => {
         $("#" + i.my_id).animate({
                 x: getRandomInt(0 - i.left_border + 10, windows_w - i.right_border - 10),
@@ -57,10 +56,10 @@ function fixed_fps_animate(max_start_speed=150, max_mass=6, update_interval = 20
 }
 
 function start(count_figures,
-               max_size=100,
+               max_size = 100,
                max_points_count = 10,
                max_start_speed,
-               max_mass=6) {
+               max_mass = 6) {
     console.log(count_figures);
     figures = Array(parseInt(count_figures)).fill(0).map((e, i) => i + 1);
     console.log(figures);

@@ -1,4 +1,3 @@
-
 // $(`#${start_content_id}`).css("display", "none");
 // $(`#${main_svg_id}`).css("display", "inline");
 // let a1 = new BaseFigure([new Point(70, 90), new Point(110, 80), new Point(210, 10)], "id1")
