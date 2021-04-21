@@ -3,6 +3,19 @@ function test() {
     console.log('0----------------w---')
 }
 
+let count_figures = 0
+
+let delete_event = new Event("destroy_figure", {bubbles: true, cancelable: true})
+
+document.documentElement.addEventListener("destroy_figure", function (e) {
+
+    let content = document.getElementById(`count_obj_now`)
+    content.innerHTML = content.innerHTML.split('-')[0] + "- " + BaseFigure.all_figures_list.length;
+    content = document.getElementById(`count_del_obj`)
+    content.innerHTML = content.innerHTML.split('-')[0] + "- " + (count_figures - BaseFigure.all_figures_list.length);
+
+});
+
 
 document.documentElement.addEventListener("collision_figures", function (e) {
     console.log(e.detail);
@@ -462,6 +475,11 @@ class BaseFigure {
         // this.x_animate = new MoveAnimate(0 ,0 ,0);
         // this.y_animate = new MoveAnimate(0, 0, 0);
         console.log(this.max_left, this.max_right, this.max_up, this.max_down, this.$my_obj)
+        count_figures += 1;
+        let content = document.getElementById(`count_all_obj`);
+        content.innerHTML = content.innerHTML.split('-')[0] + "- " + count_figures;
+        document.documentElement.dispatchEvent(delete_event);
+
     }
 
     static destroyed_animate(me) {
@@ -482,7 +500,10 @@ class BaseFigure {
                     BaseFigure.all_figures_list = BaseFigure.all_figures_list.filter((i) => !i.destroy);
                     delete BaseFigure.all_figures[me.my_id];
                     me.$my_obj.stop(true, false).hide(1000, "linear", () => $("#" + me.my_id).remove())
-                    setTimeout((() => $("#" + me.my_id).remove()), 2050);
+                    setTimeout((() => {
+                        $("#" + me.my_id).remove();
+                        document.documentElement.dispatchEvent(delete_event);
+                    }), 2050);
                 }),
             });
         console.log("Прервали анимацию!");
