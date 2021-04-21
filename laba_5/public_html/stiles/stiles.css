@@ -6,3 +6,56 @@ svg{
 		display: none;
 	
 }
+
+#start_form{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: stretch;
+	align-content: space-around;
+	width: 100%;
+	height: 90%;
+}
+
+.input_box{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: space-evenly;
+	align-items: stretch;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.input{
+	border-left: 0px none rgba(255,255,255,0.00);
+	border-right: 0px none rgba(255,255,255,0.00);
+	border-bottom: 2px solid hsla(0,29%,13%,1.00);
+	border-top: 0px none rgba(255,255,255,0.00);
+	border-radius: 5px;
+	background-color: hsla(0,0%,91%,1.00);
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-bottom: 2px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 0px;
+}
+
+input[type^=submit]{
+	background-color: hsla(104,100%,95%,1.00);
+	border-left: 2px solid hsla(0,0%,44%,1.00);
+	border-right: 3px solid hsla(0,0%,44%,1.00);
+	border-bottom: 3px solid hsla(0,0%,44%,1.00);
+	border-top: 2px solid hsla(0,0%,44%,1.00);
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 10px;
+}
+
+.bad_input{
+	background-color: hsla(359,100%,85%,1.00);
+}
