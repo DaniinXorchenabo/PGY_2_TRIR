@@ -59,3 +59,7 @@ input[type^=submit] {
 .bad_input {
     background-color: hsla(359, 100%, 85%, 1.00);
 }
+
+p {
+    margin-top: -15px;
+}
