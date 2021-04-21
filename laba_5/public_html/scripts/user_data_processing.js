@@ -61,7 +61,9 @@ form.addEventListener("submit", function(event) {
         event.preventDefault();
         console.log($data["count"])
         setTimeout(() => {
-            start($data["count"]); // $data["count"]
+            start($data["count"], $data["max_size"],
+                $data["max_points"], $data["max_start_speed"],
+                $data["max_mass"]); // $data["count"]
         });
 
     }

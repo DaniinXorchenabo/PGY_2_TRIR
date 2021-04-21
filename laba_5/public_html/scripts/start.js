@@ -56,7 +56,11 @@ function fixed_fps_animate(max_start_speed=150, max_mass=6, update_interval = 20
 
 }
 
-function start(count_figures, max_size=300, max_points_count = 10, max_start_speed, max_mass=6) {
+function start(count_figures,
+               max_size=100,
+               max_points_count = 10,
+               max_start_speed,
+               max_mass=6) {
     console.log(count_figures);
     figures = Array(parseInt(count_figures)).fill(0).map((e, i) => i + 1);
     console.log(figures);
