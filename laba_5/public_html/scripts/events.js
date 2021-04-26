@@ -49,10 +49,10 @@ window.addEventListener(`resize`, event => {
     let width_exit = parseFloat(rect_exit.css("width"));
     let height_exit = parseFloat(rect_exit.css("height"))
 
-    exit_obj.up_left.set_coordinate(windows_w / 2 - width_exit / 2 - 20, windows_h / 2 - height_exit / 2 - 20);
-    exit_obj.up_right.set_coordinate(windows_w / 2 + width_exit / 2 + 20, windows_h / 2 - height_exit / 2 - 20);
-    exit_obj.down_left.set_coordinate(windows_w / 2 - width_exit / 2 - 20, windows_h / 2 + height_exit / 2 + 20);
-    exit_obj.down_right.set_coordinate(windows_w / 2 + width_exit / 2 + 20, windows_h / 2 + height_exit / 2 + 20);
+    exit_obj.up_left.set_coordinate(windows_w / 2 - width_exit / 2 - 0, windows_h / 2 - height_exit / 2 - 0);
+    exit_obj.up_right.set_coordinate(windows_w / 2 + width_exit / 2 + 0, windows_h / 2 - height_exit / 2 - 0);
+    exit_obj.down_left.set_coordinate(windows_w / 2 - width_exit / 2 - 0, windows_h / 2 + height_exit / 2 + 0);
+    exit_obj.down_right.set_coordinate(windows_w / 2 + width_exit / 2 + 0, windows_h / 2 + height_exit / 2 + 0);
 
     $("#rect_exit").css({
         "x": windows_w / 2 - width_exit / 2,
