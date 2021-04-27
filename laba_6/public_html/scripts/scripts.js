@@ -3,7 +3,16 @@ function post_processing_form(data){
         console.log("Все хорошо!");
         window.location.replace('end_form.html');
     } else {
-        console.log("Кто-то накосячил")
+        console.log("Кто-то накосячил");
+        [...Object.keys(data["data"])].map( i => {
+            return $("#" + i + "_error").html(data["data"][i]['text_error']);
+        }).map( i => {
+            if (i.html() === ""){
+                i.removeClass('error')
+            } else {
+                i.addClass('error');
+            }
+        });
     }
 }
 

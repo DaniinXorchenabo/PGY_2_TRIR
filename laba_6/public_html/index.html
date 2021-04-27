@@ -2,30 +2,36 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script defer src="jquery/jQuery_v3.6.0.js"></script>
-        <script defer src="scripts/scripts.js"></script>
+    <script defer src="jquery/jQuery_v3.6.0.js"></script>
+    <script defer src="scripts/scripts.js"></script>
+    <link rel="stylesheet" href="stiles/sriles.css">
 
-    </head>
-    <body>
-    <h1>Форма заказа одежды на сайте</h1>
-    <form>
+</head>
+<body>
+<h1>Форма заказа одежды на сайте</h1>
+
+<form>
+    <div class="input_box">
         <p>Введите своё имя</p>
         <input name="name" id="name" placeholder="Имя">
-        <p id="name_error"></p>
-
+        <div id="name_error"></div>
+    </div>
+    <div class="input_box">
         <p>Введите свою фамилию</p>
         <input name="surname" id="surname" placeholder="Фамилия">
-        <p id="surname_error"></p>
-
+        <div id="surname_error"></div>
+    </div>
+    <div class="input_box">
         <p>Введите свою электронную почту</p>
         <input name="email" id="email" placeholder="E-mail">
-        <p id="email_error"></p>
-
+        <div id="email_error"></div>
+    </div>
+    <div class="input_box">
         <p>Выберите тип одежды:</p>
         <select name="type_dress" id="type_dress" placeholder="Тип одежды">
             <option value="Шляпа">Шляпа</option>
@@ -33,20 +39,25 @@
             <option value="Футболка">Футболка</option>
             <option value="Кофта">Кофта</option>
         </select>
-        <p id="type_dress_error"></p>
-
+        <div id="type_dress_error"></div>
+    </div>
+    <div class="input_box">
         <p>Выберите цвет одежды (основной):</p>
-        <input type="color" name="color" id="color"  placeholder="Основной цвет">
-        <p id="color_error"></p>
-
+        <input type="color" name="color" id="color" placeholder="Основной цвет">
+        <div id="color_error"></div>
+    </div>
+    <div class="input_box">
         <p>Выберите второй цвет одежды (Дополнительный):</p>
         <input type="color" name="color2" id="color2" placeholder="Дополнительный цвет">
-        <p id="color2_error"></p>
-
-        <input type="submit" value="Заказать" id="submit" />
-    </form>
-    <div id="messages">
-        тут пусто(
+        <div id="color2_error"></div>
     </div>
-    </body>
+
+    <div class="input_box">
+        <input type="submit" value="Заказать" id="submit"/>
+    </div>
+</form>
+<div id="messages">
+    тут пусто(
+</div>
+</body>
 </html>
