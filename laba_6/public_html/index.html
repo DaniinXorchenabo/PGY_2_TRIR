@@ -12,6 +12,29 @@
 
     </head>
     <body>
-        <div>TODO write content</div>
+    <h1>Форма заказа одежды на сайте</h1>
+    <form>
+        <p>Введите своё имя</p>
+        <input name="name" id="name">
+        <p>Введите свою фамилию</p>
+        <input name="surname" id="surname">
+        <p>Введите свою электронную почту</p>
+        <input name="email" id="email">
+        <p>Выберите тип одежды:</p>
+        <select name="type_dress" id="type_dress">
+            <option value="Шляпа">Шляпа</option>
+            <option value="Штаны">Штаны</option>
+            <option value="Футболка">Футболка</option>
+            <option value="Кофта">Кофта</option>
+        </select>
+        <p>Выберите цвет одежды:</p>
+        <input type="color" name="color" id="color">
+        <p>Выберите второй цвет одежды:</p>
+        <input type="color" name="color2" id="color2">
+        <input type="submit" value="Заказать" id="submit" />
+    </form>
+    <div id="messages">
+        тут пусто(
+    </div>
     </body>
 </html>
