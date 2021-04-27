@@ -17,29 +17,78 @@ function send_mail($message){
 }
 
 
-$msg_box = ""; // в этой переменной будем хранить сообщения формы
-$errors = array(); // контейнер для ошибок
+//$msg_box = ""; // в этой переменной будем хранить сообщения формы
+$answer = "yes"; // контейнер для ошибок
 // проверяем корректность полей
-if($_POST['user_name'] == "")    $errors[] = "Поле 'Ваше имя' не заполнено!";
-if($_POST['user_email'] == "")   $errors[] = "Поле 'Ваш e-mail' не заполнено!";
-if($_POST['text_comment'] == "") $errors[] = "Поле 'Текст сообщения' не заполнено!";
+$data = array(
+    "name" =>  array(
+        "error" => "no",
+        "val" => "--",
+        "text_error" => ""
+    ),
+    "surname" =>  array(
+        "error" => "no",
+        "val" => "--",
+        "text_error" => ""
+    ),
+    "email" =>  array(
+        "error" => "no",
+        "val" => "--",
+        "text_error" => ""
+    ),
+    "type_dress" =>  array(
+        "error" => "no",
+        "val" => "--",
+        "text_error" => ""
+    ),
+    "color" =>  array(
+        "error" => "no",
+        "val" => "--",
+        "text_error" => ""
+    ),
+    "color2" =>  array(
+        "error" => "no",
+        "val" => "--",
+        "text_error" => ""
+    ),
+);
 
-if(empty($errors)){
-    // собираем данные из формы
-    $message  = "Имя пользователя: " . $_POST['name'] . "<br/>";
-    $message .= "E-mail пользователя: " . $_POST['email'] . "<br/>";
-//    send_mail($message); // отправим письмо
-    // выведем сообщение об успехе
-    $msg_box = "<span style='color: green;'>Сообщение успешно отправлено!</span>";
-    $msg_box .= '<p> Текст сообщения: ' .$message . "</p>";
-} else {
-    // если были ошибки, то выводим их
-    $msg_box = "";
-    foreach ($errors as $one_error) {
-        $msg_box .= "<span style='color: red;'>$one_error</span><br/>";
+foreach ($data as $key => $val) {
+    if (!( $_POST[$key]["val"] != "") ){
+        $data[$key]["error"] = "yes";
+        $data[$key]["text_error"] = "Это поле обязательно для заполнения";
+    }
+    $data[$key]["val"] = $_POST[$key]["val"];
+}
+
+if ($data["email"]["error"] == "no" &&
+    !(preg_match("/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/",
+        $_POST["email"]["val"]))){
+    $data["email"]["error"] = "yes";
+    $data["email"]["text_error"] = "Вы ввели некорректный E-mail, Введите другой";
+}
+
+foreach (array("color", "color2") as $key) {
+    if ($data[$key]["error"] == "no" && !(preg_match("/^#[0-9A-Fa-f]{6}$/",
+            $_POST[$key]["val"]))){
+        $data[$key]["error"] = "yes";
+        $data[$key]["text_error"] = "Вы ввели некорректный цвет, Введите другой. Цвет должен быть введён как хештег (#) за которым идет шестизначная последовательность цифр или заглавных англицских букв (от A по F) Если сложно - выбирайте формат HEX  для цвета";
     }
 }
 
+foreach (array("name", "surname") as $key) {
+    if ($data[$key]["error"] == "no" && !(preg_match("/^[А-Я][a-я]*$/",
+            $_POST[$key]["val"]))){
+        $data[$key]["error"] = "yes";
+        $data[$key]["text_error"] = 'Вы ввели поле ${$_POST[$key]["field_name"]} некорректно. Данное поле может содержать только первую заглавную и остальные - прописные буквы русского алфовита';
+    }
+}
+foreach ($data as $key => $val) {
+    if ($val["error"] == "yes"){
+        $answer = "no";
+    }
+}
 echo json_encode(array(
-    'result' => $msg_box
+    "answer" => $answer,
+    "data" => $data
 ));

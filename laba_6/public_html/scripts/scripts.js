@@ -1,8 +1,16 @@
+function post_processing_form(data){
+    if (data["answer"] === "yes"){
+        console.log("Все хорошо!");
+        window.location.replace('end_form.html');
+    } else {
+        console.log("Кто-то накосячил")
+    }
+}
+
 $(document).ready(function(){
     $('#submit').click(function(event){
         // собираем данные с формы
         event.preventDefault();
-        console.log("-----------");
         let data = {
             name: "",
             surname: "",
@@ -12,7 +20,7 @@ $(document).ready(function(){
             color2: "",
         };
         [...Object.keys(data)].map( i => {
-            data[i] = $('#' + i).val();
+            data[i] = { val: $('#' + i).val(), field_name: $('#' + i).attr('placeholder')} ;
         });
         console.log(data);
         // отправляем данные
@@ -23,7 +31,9 @@ $(document).ready(function(){
             data: data,
             // после получения ответа сервера
             success: function(data){
-                $('#messages').html(data.result); // выводим ответ сервера
+                console.log(data)
+                post_processing_form(data)
+                // $('#messages').html(data.result); // выводим ответ сервера
             }
         });
 
