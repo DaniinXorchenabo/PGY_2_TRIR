@@ -80,7 +80,7 @@ foreach (array("name", "surname") as $key) {
     if ($data[$key]["error"] == "no" && !(preg_match("/^[А-Я][a-я]*$/",
             $_POST[$key]["val"]))){
         $data[$key]["error"] = "yes";
-        $data[$key]["text_error"] = 'Вы ввели поле ${$_POST[$key]["field_name"]} некорректно. Данное поле может содержать только первую заглавную и остальные - прописные буквы русского алфовита';
+        $data[$key]["text_error"] = "Вы ввели поле " . $_POST[$key]["field_name"] . " некорректно. Данное поле может содержать только первую заглавную и остальные - прописные буквы русского алфовита";
     }
 }
 foreach ($data as $key => $val) {
