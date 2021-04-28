@@ -1,5 +1,8 @@
 function post_processing_form(data, redirect){
-    if (data["answer"] === "yes"){
+    if (false && data["location"] && data["location"] !== ""){
+        window.location.replace(data["location"]);
+    }
+    if (false && data["answer"] === "yes"){
         console.log("Все хорошо!");
         window.location.replace(redirect);
     } else {
@@ -34,6 +37,7 @@ function base_ajax(data_keys, server_url, redirect){
             post_processing_form(data, redirect)
         }
     });
+    console.log("yeeee");
 }
 
 
@@ -71,15 +75,21 @@ function base_ajax(data_keys, server_url, redirect){
 //     });
 // });
 
-$('#check_login').click(function(event){
-    // собираем данные с формы
-    event.preventDefault();
-    base_ajax(["login", "password"], "processing/login.php", "page/game_screen.php")
-})
+// $('#check_login').click(function(event){
+//
+//     // собираем данные с формы
+//     event.preventDefault();
+//     base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
+// })
 
 $('#check_registration').click(function(event){
     // собираем данные с формы
+    console.log("регистрация")
     event.preventDefault();
     base_ajax(["login", "password", "return_password"],
-        "processing/registration.php", "page/game_screen.php")
+        "/processing/registration.php", "../pages/game_screen.php")
+    base_ajax(["login", "password", "return_password"],
+        "/processing/registration.php", "../pages/game_screen.php")
+    console.log('Отправил')
 })
+console.log("----")

@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
+    header('Location: /pages/game_screen.php');
+//$new_location = "/pages/game_screen.php";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +13,7 @@
     <title>Title</title>
     <script defer src="../jquery/jQuery_v3.6.0.js"></script>
     <script defer src="../scripts/scripts.js"></script>
+    <link rel="stylesheet" href="../stiles/stiles.css">
 </head>
 <body>
 <h1>Регистрация</h1>
