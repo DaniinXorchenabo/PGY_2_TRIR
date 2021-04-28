@@ -2,11 +2,11 @@
 
 function save_data7($data){
     $json_str = json_encode($data, JSON_UNESCAPED_UNICODE);
-    file_put_contents('data/users7.txt', $json_str);
+    file_put_contents('../data/users7.txt', $json_str);
 }
 
 function get_user_data7(){
-    $file = file_get_contents('data/users7.txt', FILE_USE_INCLUDE_PATH) ;
+    $file = file_get_contents('../data/users7.txt', FILE_USE_INCLUDE_PATH) ;
     if ($file){
         return json_decode($file, true);
 

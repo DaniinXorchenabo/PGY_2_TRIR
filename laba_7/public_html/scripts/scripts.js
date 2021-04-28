@@ -1,9 +1,14 @@
-function post_processing_form(data, redirect){
-    if (false && data["location"] && data["location"] !== ""){
-        window.location.replace(data["location"]);
-    }
-    if (false && data["answer"] === "yes"){
+function post_processing_form(data, redirect, server_url){
+
+    if (data["answer"] === "yes"){
         console.log("Все хорошо!");
+
+        // var body = "name=" + user.name + "&age="+user.age;
+        // request.open("POST", server_url);
+        // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // request.onreadystatechange = () => {};
+        // request.send(body);
+
         window.location.replace(redirect);
     } else {
         console.log("Кто-то накосячил");
@@ -16,6 +21,9 @@ function post_processing_form(data, redirect){
                 i.addClass('error');
             }
         });
+    }
+    if ( data["location"] && data["location"] !== ""){
+        window.location.replace(data["location"]);
     }
 }
 
@@ -34,7 +42,7 @@ function base_ajax(data_keys, server_url, redirect){
         // после получения ответа сервера
         success: function(data){
             console.log(data)
-            post_processing_form(data, redirect)
+            post_processing_form(data, redirect, server_url)
         }
     });
     console.log("yeeee");
@@ -75,12 +83,13 @@ function base_ajax(data_keys, server_url, redirect){
 //     });
 // });
 
-// $('#check_login').click(function(event){
-//
-//     // собираем данные с формы
-//     event.preventDefault();
-//     base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
-// })
+$('#check_login').click(function(event){
+
+    // собираем данные с формы
+    event.preventDefault();
+    base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
+    base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
+})
 
 $('#check_registration').click(function(event){
     // собираем данные с формы

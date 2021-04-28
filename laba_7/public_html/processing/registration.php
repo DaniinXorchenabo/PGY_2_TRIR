@@ -26,17 +26,18 @@ $answer = "no";
 if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
     $new_location = "../pages/game_screen.php";
     $answer = "yes";
-    //    header('Location: /pages/game_screen.php');
+//    header('Location: /pages/game_screen.php');
+
 } else {
     if (isset($_POST["login"]) && isset($_POST["password"]) && isset($_POST["return_password"])) {
         // обработка формы
-        if (($_POST["password"]["val"]) == ($_POST["return_password"]["val"])) {
+        if ($_POST["password"]["val"] == $_POST["return_password"]["val"]) {
             if (add_user7($_POST["login"]["val"], array("password" => $_POST["password"]["val"]))) {
                 $_SESSION['is_login'] = "yes";
                 $_SESSION["user_login"] = $_POST["login"]["val"];
                 $answer = "yes";
                 $new_location = "../pages/game_screen.php";
-//            header('Location: /personal_page.php');
+//                header('Location: /pages/game_screen.php');
             } else {
                 $_SESSION['is_login'] = "no";
                 $data['login']['error'] = "yes";
@@ -67,6 +68,14 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
     }
 }
 
+function save_data77($data){
+    $json_str = json_encode($data, JSON_UNESCAPED_UNICODE);
+    file_put_contents('../data/users7.txt', $json_str);
+}
+
+//save_data77($data);
+//save_data7($data);
+//add_user7($_POST["login"]["val"], array("password" => $_POST["password"]["val"]));
 echo json_encode(array(
 //    "session" => $_SESSION,
     "location" => $new_location,
