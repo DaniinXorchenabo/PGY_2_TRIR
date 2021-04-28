@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // функция отправки письма
 function send_mail($message)
 {
@@ -17,9 +17,9 @@ function send_mail($message)
     mail($mail_to, $subject, $message, $headers);
 }
 
-function add_purchases_in_file($data)
+function add_purchases_in_file($login, $data)
 {
-    $file_data = "\n\nЕщё один заказ!\n";
+    $file_data = "\n\nЕщё один заказ от " . $login . "!\n";
     foreach ($data as $key => $val) {
         $file_data .= $_POST[$key]["field_name"] . ": " . $_POST[$key]["val"] . "\n";
     }
@@ -101,7 +101,7 @@ foreach ($data as $key => $val) {
 }
 
 if ($answer == "yes" ){
-    add_purchases_in_file($data);
+    add_purchases_in_file($_SESSION["user_login"], $data);
 }
 
 echo json_encode(array(

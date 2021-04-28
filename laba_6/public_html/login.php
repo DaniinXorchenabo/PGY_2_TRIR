@@ -2,6 +2,7 @@
 
 
 include "templates/login.php";
+include_once "data/save_users.php";
 session_start();
 
 $error_registration = false;
@@ -13,9 +14,11 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
 
 if (isset($_POST["login"]) && isset($_POST["password"])) {
     // обработка формы
-    if (true) {
+    if (check_user($_POST["login"], $_POST["password"])) {
         $_SESSION['is_login'] = "yes";
+        $_SESSION["user_login"] = $_POST["login"];
         header('Location: /personal_page.php');
+
     } else {
         $_SESSION['is_login'] = "no";
         $error_registration = true;

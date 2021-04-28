@@ -1,7 +1,7 @@
 <?php
 //session_start();
 
-function registration_create($login_exists, $some_errors)
+function registration_create($login_exists, $some_errors, $different_passwords)
 {
     $res = '<h1 >Регистрация</h1 >';
     if ($login_exists) {
@@ -9,6 +9,11 @@ function registration_create($login_exists, $some_errors)
     } elseif ($some_errors){
         $res = $res . '<p>Возникла непредвиденная ошибка при регистрации... попробуйте еще раз</p>';
     }
+
+    if ($different_passwords){
+        $res = $res . '<p>Пароли должны совпадать! Но они не совпадают...</p>';
+    }
+
     return $res . '<form action="registration.php" method="POST"><input name="login" required>
                     <input name="password" required>
                     <input name="return_password" required>

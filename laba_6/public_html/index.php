@@ -1,9 +1,18 @@
+<?php
+session_start();
+if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")){
+    header('Location: /registration.php');
+}
+
+?>
+
 <!-- Дьячков Даниил Александрович, 6 вариант, 6 лаба -->
 
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>TODO supply a title</title>
+    <title>title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,9 +22,15 @@
 
 </head>
 <body>
+
 <h1>Форма заказа одежды на сайте</h1>
 
+
 <form>
+    <div class="input_box">
+        <p>Вы вошли как <?php echo $_SESSION['user_login']; ?></p>
+        <a href="logout.php">Выйти из аккаунта </a>
+    </div>
     <div class="input_box">
         <p>Введите своё имя</p>
         <input name="name" id="name" placeholder="Имя">
@@ -56,8 +71,8 @@
         <input type="submit" value="Заказать" id="submit"/>
     </div>
 </form>
-<div id="messages">
-    тут пусто(
-</div>
+<!--<div id="messages">-->
+<!--    тут пусто(-->
+<!--</div>-->
 </body>
 </html>
