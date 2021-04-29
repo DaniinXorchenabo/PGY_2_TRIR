@@ -13,7 +13,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
     <title>Title</title>
 </head>
 <body>
-    <h1>Играаааааааааааааааааааааа</h1>
-    <a href="../processing/logout.php">Выйти из аккаунта </a>
+<h1>Играаааааааааааааааааааааа</h1>
+<a href="../processing/logout.php">Выйти из аккаунта </a>
 </body>
 </html>

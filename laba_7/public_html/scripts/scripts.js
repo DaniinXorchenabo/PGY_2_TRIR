@@ -1,6 +1,6 @@
-function post_processing_form(data, redirect, server_url){
+function post_processing_form(data, redirect, server_url) {
 
-    if (data["answer"] === "yes"){
+    if (data["answer"] === "yes") {
         console.log("Все хорошо!");
 
         // var body = "name=" + user.name + "&age="+user.age;
@@ -12,27 +12,29 @@ function post_processing_form(data, redirect, server_url){
         window.location.replace(redirect);
     } else {
         console.log("Кто-то накосячил");
-        [...Object.keys(data["data"])].map( i => {
+        [...Object.keys(data["data"])].map(i => {
             return $("#" + i + "_error").html(data["data"][i]['text_error']);
-        }).map( i => {
-            if (i.html() === ""){
+        }).map(i => {
+            if (i.html() === "") {
                 i.removeClass('error')
             } else {
                 i.addClass('error');
             }
         });
     }
-    if ( data["location"] && data["location"] !== ""){
+    if (data["location"] && data["location"] !== "") {
         window.location.replace(data["location"]);
     }
 }
 
 
-function base_ajax(data_keys, server_url, redirect){
+function base_ajax(data_keys, server_url, redirect) {
     let data = {};
-    data_keys.map( i => { data[i] = ""; });
-    [...Object.keys(data)].map( i => {
-        data[i] = { val: $('#' + i).val(), field_name: $('#' + i).attr('placeholder')} ;
+    data_keys.map(i => {
+        data[i] = "";
+    });
+    [...Object.keys(data)].map(i => {
+        data[i] = {val: $('#' + i).val(), field_name: $('#' + i).attr('placeholder')};
     });
     $.ajax({
         url: server_url, // куда отправляем
@@ -40,7 +42,7 @@ function base_ajax(data_keys, server_url, redirect){
         dataType: "json", // тип передачи данных
         data: data,
         // после получения ответа сервера
-        success: function(data){
+        success: function (data) {
             console.log(data)
             post_processing_form(data, redirect, server_url)
         }
@@ -83,7 +85,7 @@ function base_ajax(data_keys, server_url, redirect){
 //     });
 // });
 
-$('#check_login').click(function(event){
+$('#check_login').click(function (event) {
 
     // собираем данные с формы
     event.preventDefault();
@@ -91,7 +93,7 @@ $('#check_login').click(function(event){
     base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
 })
 
-$('#check_registration').click(function(event){
+$('#check_registration').click(function (event) {
     // собираем данные с формы
     console.log("регистрация")
     event.preventDefault();

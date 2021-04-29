@@ -68,7 +68,8 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
     }
 }
 
-function save_data77($data){
+function save_data77($data)
+{
     $json_str = json_encode($data, JSON_UNESCAPED_UNICODE);
     file_put_contents('../data/users7.txt', $json_str);
 }
