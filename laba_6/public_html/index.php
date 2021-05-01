@@ -28,6 +28,15 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")){
 
 <form>
     <div class="input_box">
+        <text>Форма заказа одежды. Форма. Формка. Формочка.</text>
+        <text>Что за дивные вещи тут можно заказать!</text>
+        <text>Пчти все, что угодно, и даже больше!</text>
+        <text>И шляпы! И не шляпы! богатый выбор!</text>
+        <text>ОООООчень богатый, если учесть</text>
+        <text>что деньги за посещения этой страницы </text>
+        <text>(576 рублей за одну перезагрузку) вам никто не вернёт!</text>
+    </div>
+    <div class="input_box">
         <p>Вы вошли как <?php echo $_SESSION['user_login']; ?></p>
         <a href="logout.php">Выйти из аккаунта </a>
     </div>
