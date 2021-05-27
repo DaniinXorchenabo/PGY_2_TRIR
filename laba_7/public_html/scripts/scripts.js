@@ -8,7 +8,6 @@ function post_processing_form(data, redirect, server_url) {
         // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         // request.onreadystatechange = () => {};
         // request.send(body);
-
         window.location.replace(redirect);
     } else {
         console.log("Кто-то накосячил");
