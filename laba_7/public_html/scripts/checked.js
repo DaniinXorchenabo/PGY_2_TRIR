@@ -14,14 +14,16 @@ $(`[type=submit]`).bind("click.send_data", (event) => {
         "count_x": base_cell.count_x,
         "count_y": base_cell.count_y,
         "r": base_circle.r,
-        "data": circles
+        "data": circles,
+        "good_count": 3,
     };
     console.log(data);
     $.ajax({
         url: "/processing/checked.php", // куда отправляем
         type: "post", // метод передачи
         dataType: "json", // тип передачи данных
-        data:JSON.stringify(data),
+        data: data,
+        // data:JSON.stringify(data),
         // после получения ответа сервера
         success: function(data){
             console.log(data)
