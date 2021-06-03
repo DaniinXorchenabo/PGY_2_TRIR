@@ -1,5 +1,5 @@
 let counter = 0;
-const base_cell = {"width": 100, "height": 100};
+const base_cell = {"width": 100, "height": 100, "count_x": 5, "count_y": 5};
 const base_circle = {"r": 100};
 
 function get_html_cell(pos_x, pos_y, size) {
@@ -28,7 +28,9 @@ function create_all_svg_border(width = 4, height = 4, size = 70) {
     $("#base_circle").css({"r": radius});
     base_cell.width = size;
     base_cell.height = size;
-    base_circle.r = radius
+    base_cell.count_x = width;
+    base_cell.count_y = height;
+    base_circle.r = radius;
 
     const $svg_element = $("#game_screen");
     // $svg_element.append(create_border(width, height, size));
@@ -130,22 +132,22 @@ class Circle {
         const b_y = y - (base_cell.height / 2 - base_circle.r) / 2 - base_circle.r;
         const cell_x = Math.round(b_x / base_cell.width) * base_cell.width;
         const cell_y = Math.round(b_y / base_cell.height) * base_cell.height;
-        let a_x = cell_x + (base_cell.width / 2 - base_circle.r) + base_circle.r;
-        let a_y = cell_y + (base_cell.height / 2 - base_circle.r) + base_circle.r;
-        // a_x = cell_x;
-        // a_y = cell_y;
-        // $me.animate({"x": a_x, "y": a_y}, {
-        //     "duration": 50, "always": () => {
-        //         this.update_events();
-        //         $me.attr("x", a_x);
-        //         $me.attr("y", a_y);
-        //         $me.attr("style", "");
-        //
-        //     }
-        // }
-        $me.attr("x", a_x);
-        $me.attr("y", a_y);
-        // $(`#game_screen .cell`).
+        if (cell_x <= base_cell.width * base_cell.count_x && cell_y <= base_cell.height * base_cell.count_y){
+            const a_x = cell_x + (base_cell.width / 2 - base_circle.r) + base_circle.r;
+            const a_y = cell_y + (base_cell.height / 2 - base_circle.r) + base_circle.r;
+            // $me.animate({"x": a_x, "y": a_y}, {
+            //     "duration": 50, "always": () => {
+            //         this.update_events();
+            //         $me.attr("x", a_x);
+            //         $me.attr("y", a_y);
+            //         $me.attr("style", "");
+            //
+            //     }
+            // }
+            $me.attr("x", a_x);
+            $me.attr("y", a_y);
+        }
+
     }
 
 }
