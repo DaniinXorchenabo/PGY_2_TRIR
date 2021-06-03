@@ -15,6 +15,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
     <script defer src="../scripts/scripts.js"></script>
 
     <script defer src="../scripts/create_border.js"></script>
+    <script defer src="../scripts/mouse_processing.js"></script>
     <link rel="stylesheet" href="../stiles/stiles.css">
 </head>
 <body>

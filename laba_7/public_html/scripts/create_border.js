@@ -1,3 +1,82 @@
+let counter = 0;
+
+class Circle{
+    static objects = {};
+    press_mouse = false;
+    my_id = undefined;
+    last_mouse_coord = {"x": 0, "y": 0}
+    current_coord = {"x": 0, "y": 0}
+    // $me = undefined;
+
+    constructor(x, y){
+        let main = document.getElementById("game_screen");
+        main.innerHTML += this.create_circle(x, y);
+        console.log('4086340959');
+        // this.press_mouse = true;
+        Circle.objects[this.my_id] = this;
+        // Circle.mouse_down()
+        this.update_events(true);
+    }
+
+    update_events(is_first=false){
+        const data = $(`#${this.my_id}`).on(`mousemove.c_${this.my_id}`, Circle.move_mouse).on(
+            `mousedown.c_${this.my_id}`, Circle.mouse_down).on(
+            `mouseup.c_${this.my_id}`, Circle.mouse_up);
+        if (is_first){
+            data.trigger(`mousedown.c_${this.my_id}`, ["secret_trololo"]);
+        }
+    }
+
+    create_circle(x, y){
+        counter++;
+        this.my_id = `circle_${counter}`;
+        return `<use id="circle_${counter}" xlink:href="#base_circle" 
+                 x="${x}" y="${y}" class="play_circle"></use>`
+    }
+
+    static mouse_down(event, is_first_event){
+        console.log('++++++++', event.which, is_first_event);
+        if (event.which === 1 || is_first_event === "secret_trololo") {
+            const target = Circle.objects[event.target.id];
+            console.log("Мышь внутри фигуры", event.target.id)
+
+            target.press_mouse = true;
+            target.last_mouse_coord.x = event.pageX;
+            target.last_mouse_coord.y = event.pageY;
+        }
+    }
+    static move_mouse(event){
+        const target = Circle.objects[event.target.id];
+
+        if (target.press_mouse){
+            if (!target.last_mouse_coord.x || !target.last_mouse_coord.y){
+                target.last_mouse_coord.x = event.pageX;
+                target.last_mouse_coord.y = event.pageY;
+            }
+            // console.log("Мышь двигается фигуры", event.target.id, target.press_mouse);
+            const $target = $(`#${target.my_id}`);
+            // console.log(event.pageX - target.last_mouse_coord.x, $target.attr("x") + event.pageX - target.last_mouse_coord.x, parseFloat($target.attr("x")));
+            $target.attr("x", parseFloat($target.attr("x")) + event.pageX - target.last_mouse_coord.x)
+            $target.attr("y", parseFloat($target.attr("y")) + event.pageY - target.last_mouse_coord.y)
+            // console.log(parseFloat($target.attr("x")));
+            target.last_mouse_coord.x = event.pageX;
+            target.last_mouse_coord.y = event.pageY;
+        }
+    }
+    static mouse_up(event){
+        console.log("")
+        if (event.which === 1 || event.which === undefined) {
+            const target = Circle.objects[event.target.id];
+            console.log("Мышь вышла из фигуры", event.target.id)
+            target.press_mouse = false;
+            target.last_mouse_coord.x = undefined;
+            target.last_mouse_coord.y = undefined;
+        }
+    }
+}
+
+
+
 function get_html_cell(pos_x, pos_y, size){
     return `<use id="cell_${pos_x}_${pos_y}" xlink:href="#base_rect" x="${pos_x}"
                  y="${pos_y}" width="${size}" height="${size}" cx="${pos_x + size/2}" cy="${pos_y + size/2}"></use>`;
