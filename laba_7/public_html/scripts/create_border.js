@@ -122,16 +122,36 @@ class Circle {
         }
     }
 
+    get coords_as_cell(){
+        const $me = $(`#` + this.my_id)
+        return [this.x_as_cell($me), this.y_as_cell($me)];
+    }
+
+    x_as_cell($me){
+        const x = $me.attr('x');
+        const b_x = x - (base_cell.width / 2 - base_circle.r) / 2 - base_circle.r;
+        return Math.round(b_x / base_cell.width) * base_cell.width;
+    }
+
+    y_as_cell($me){
+        const y = $me.attr('y');
+        const b_y = y - (base_cell.height / 2 - base_circle.r) / 2 - base_circle.r;
+        return Math.round(b_y / base_cell.height) * base_cell.height;
+    }
+
     position_correction() {
         const $me = $(`#` + this.my_id)
-        const x = $me.attr('x');
-        const y = $me.attr('y');
-        // const b_x = x - (base_cell.width / 2 - base_circle.r) / 2;
-        // const b_y = y - (base_cell.height / 2 - base_circle.r) / 2;
-        const b_x = x - (base_cell.width / 2 - base_circle.r) / 2 - base_circle.r;
-        const b_y = y - (base_cell.height / 2 - base_circle.r) / 2 - base_circle.r;
-        const cell_x = Math.round(b_x / base_cell.width) * base_cell.width;
-        const cell_y = Math.round(b_y / base_cell.height) * base_cell.height;
+        // const x = $me.attr('x');
+        // const y = $me.attr('y');
+        // // const b_x = x - (base_cell.width / 2 - base_circle.r) / 2;
+        // // const b_y = y - (base_cell.height / 2 - base_circle.r) / 2;
+        // const b_x = x - (base_cell.width / 2 - base_circle.r) / 2 - base_circle.r;
+        // const b_y = y - (base_cell.height / 2 - base_circle.r) / 2 - base_circle.r;
+        // const cell_x = Math.round(b_x / base_cell.width) * base_cell.width;
+        // const cell_y = Math.round(b_y / base_cell.height) * base_cell.height;
+        const cell_x = this.x_as_cell($me);
+        const cell_y = this.y_as_cell($me);
+
         if (cell_x <= base_cell.width * base_cell.count_x && cell_y <= base_cell.height * base_cell.count_y){
             const a_x = cell_x + (base_cell.width / 2 - base_circle.r) + base_circle.r;
             const a_y = cell_y + (base_cell.height / 2 - base_circle.r) + base_circle.r;

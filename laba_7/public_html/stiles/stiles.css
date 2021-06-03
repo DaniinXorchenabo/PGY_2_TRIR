@@ -48,3 +48,6 @@ input[type^=submit] {
 h1 {
     text-align: center;
 }
+svg{
+    border: 2px solid #1B331C;
+}
