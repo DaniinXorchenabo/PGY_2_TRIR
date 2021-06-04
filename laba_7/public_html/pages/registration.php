@@ -27,13 +27,13 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
 
     <div class="input_box">
         <p>Придумайте и введите свой пароль</p>
-        <input name="password" required id="password" placeholder="Пароль">
+        <input name="password" required id="password" placeholder="Пароль" type="password">
         <div id="password_error"></div>
     </div>
 
     <div class="input_box">
         <p>Введите свой пароль еще раз</p>
-        <input name="return_password" required id="return_password" placeholder="Повторение пароля">
+        <input name="return_password" required id="return_password" placeholder="Повторение пароля" type="password">
         <div id="return_password_error"></div>
     </div>
 

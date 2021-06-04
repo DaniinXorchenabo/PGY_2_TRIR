@@ -27,7 +27,7 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
 
     <div class="input_box">
         <p>Введите свой пароль</p>
-        <input name="password" required id="password" placeholder="Пароль">
+        <input name="password" required id="password" placeholder="Пароль" type="password">
         <div id="password_error"></div>
     </div>
 

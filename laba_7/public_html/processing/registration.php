@@ -68,12 +68,6 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
     }
 }
 
-function save_data77($data)
-{
-    $json_str = json_encode($data, JSON_UNESCAPED_UNICODE);
-    file_put_contents('../data/users7.txt', $json_str);
-}
-
 //save_data77($data);
 //save_data7($data);
 //add_user7($_POST["login"]["val"], array("password" => $_POST["password"]["val"]));

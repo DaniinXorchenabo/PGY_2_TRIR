@@ -180,6 +180,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
             <p><span class="timer"></span></p>
         </div>
         <button type="submit">Проверить</button>
+        <p>Вы вошли как <?php echo $_SESSION['user_login']; ?></p>
         <a href="../processing/logout.php">Выйти из аккаунта </a>
     </div>
 </main>

@@ -13,7 +13,7 @@ function create_events_processing() {
         if (event.which === 1) {
             console.log("--", event);
             const obj = Circle.objects[`circle_${counter}`]
-            if (obj.get_pos_x() == -100 && obj.get_pos_y() == -100){
+            if (obj.get_pos_x() === -100 && obj.get_pos_y() === -100){
                 obj.set_position($create_circle_button.attr("x"), $create_circle_button.attr("y"))
 
             } else {

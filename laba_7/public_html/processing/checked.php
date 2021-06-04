@@ -1,5 +1,6 @@
 <?php
 
+include_once "../data/save_users7.php";
 session_start();
 
 function bad_data_answer($filtered_coords){
@@ -38,7 +39,7 @@ foreach ($data as $circle_id => $coords) {
 // Убираем кружочки, которые за полем
 $filtered_coords = array();
 foreach ($only_coord as $ind => $coords) {
-   if ($coords[0] % $_POST["width"] == 0 && $coords[0] < $_POST["width"] * $_POST["count_x"] && $coords[1] % $_POST["height"] == 0 && $coords[1] < $_POST["height"] * $_POST["count_y"] ){
+   if ($coords[0] >= 0 && $coords[0] % $_POST["width"] == 0 && $coords[0] < $_POST["width"] * $_POST["count_x"] && $coords[1] >= 0 && $coords[1] % $_POST["height"] == 0 && $coords[1] < $_POST["height"] * $_POST["count_y"] ){
        array_push($filtered_coords, $coords);
    }
 }
@@ -72,6 +73,7 @@ if (count($filtered_coords) == $_POST['good_count']){
     }
 
     if ($is_one_line) {
+        add_result($_SESSION['user_login'], 1);
         echo json_encode(array(
             "type" => "answer",
             "answer" => "ok",
