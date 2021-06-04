@@ -36,8 +36,8 @@ function create_all_svg_border(width = 4, height = 4, size = 70) {
     // $svg_element.append(create_border(width, height, size));
     let main = document.getElementById("game_screen");
     main.innerHTML += create_border(width, height, size) + create_base_circle(20 + (width + 1) * size, (height - 1) * size + (size - 2 * radius) / 2 + radius, radius);  // (size - 2 * radius)/2
-    svg_size.width += 20 + (width + 1) * size;
-    svg_size.height += height * size;
+    svg_size.width += 20 + width + 100;
+    svg_size.height += 100;
     $svg_element.css(svg_size);
 }
 
@@ -84,13 +84,15 @@ class Circle {
             target.press_mouse = true;
             target.last_mouse_coord.x = event.pageX;
             target.last_mouse_coord.y = event.pageY;
+        } else {
+            Circle.objects[event.target.id].mouse_up(event);
         }
     }
 
     static move_mouse(event) {
         const target = Circle.objects[event.target.id];
-
-        if (target.press_mouse) {
+        // console.log(Object.assign(event));
+        if (target.press_mouse && event.which !== 0) {
             if (!target.last_mouse_coord.x || !target.last_mouse_coord.y) {
                 target.last_mouse_coord.x = event.pageX;
                 target.last_mouse_coord.y = event.pageY;
@@ -112,14 +114,14 @@ class Circle {
 
     static mouse_up(event) {
         console.log("")
-        if (event.which === 1 || event.which === undefined) {
+        // if (event.which === 1 || event.which === undefined) {
             const target = Circle.objects[event.target.id];
             console.log("Мышь вышла из фигуры", event.target.id)
             target.press_mouse = false;
             target.last_mouse_coord.x = undefined;
             target.last_mouse_coord.y = undefined;
             target.position_correction();
-        }
+        // }
     }
 
     get coords_as_cell(){

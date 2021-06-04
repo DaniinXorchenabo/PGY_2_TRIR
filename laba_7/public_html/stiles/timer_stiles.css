@@ -1,0 +1,13 @@
+.timer_box{
+	text-align: center;
+/*	background-color: #3F1AD5;*/
+	margin-top: 10px;
+	padding-left: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.timer{
+	text-align: center;	
+	font-size: xx-large;
+}

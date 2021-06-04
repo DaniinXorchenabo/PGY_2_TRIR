@@ -26,7 +26,17 @@ $(`[type=submit]`).bind("click.send_data", (event) => {
         // data:JSON.stringify(data),
         // после получения ответа сервера
         success: function(data){
-            console.log(data)
+            // data = JSON.parse(data);
+            console.log(data);
+            if(data['type'] === "answer"){
+                if (data['answer'] === "ok"){
+                    alert("Вы выиграли!")
+                    location.reload();
+                } else {
+                    alert("Вы проиграли...((((( Попробуйте еще раз!");
+                }
+            }
+
             // post_processing_form(data)
             // $('#messages').html(data.result); // выводим ответ сервера
         }

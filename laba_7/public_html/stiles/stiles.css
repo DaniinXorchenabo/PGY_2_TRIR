@@ -51,3 +51,11 @@ h1 {
 svg{
     border: 2px solid #1B331C;
 }
+
+.main_flexbox_parent{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
