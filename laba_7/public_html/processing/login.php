@@ -36,17 +36,17 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
         } else {
             $_SESSION['is_login'] = "no";
             $data['login']['error'] = "yes";
-            $data['login']['text_error'] = "Логин или пароль введены не верно!";
+            $data['login']['text_error'] = "Ваше имя не совпадает с вашим секретным ключом от вашей казармы! Вас ждет расстрел! (если не вспомните)";
         }
     } else {
         if ((isset($_POST["login"]) || isset($_POST["password"]))) {
             if (!(isset($_POST["login"]))) {
                 $data['login']['error'] = "yes";
-                $data['login']['text_error'] = "Это поле должно быть заполнено!";
+                $data['login']['text_error'] = "Милионы (и МЫ) не смогут запомнить вашего имени, если его у вас не будет! Его обяхательно ввести!";
             }
             if (!(isset($_POST["password"]))) {
                 $data['password']['error'] = "yes";
-                $data['password']['text_error'] = "Это поле должно быть заполнено!";
+                $data['password']['text_error'] = "Если на вашей казарме не будет ключа, то ваши солдаты разбегутся и захватят мир без вас :( Вам обязательно нужен этот ключ!";
             }
         }
     }

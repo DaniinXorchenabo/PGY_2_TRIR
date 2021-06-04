@@ -41,12 +41,12 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
             } else {
                 $_SESSION['is_login'] = "no";
                 $data['login']['error'] = "yes";
-                $data['login']['text_error'] = "Пользователь с таким логином уже существует!";
+                $data['login']['text_error'] = "Военный диктатор с таким именем уже начал тренировать свою армию! введите другое имя и поторапливайтесь! а то мир захватят без вас(";
             }
         } else {
             $_SESSION['is_login'] = "no";
             $data['return_password']['error'] = "yes";
-            $data['return_password']['text_error'] = "Пароли должны совпадать, но они не совпадают!";
+            $data['return_password']['text_error'] = "Нет нет, чтобы изготовить ключ от казармы, эти строчки должны совпадать!";
 //        $error_registration = true;
         }
 
@@ -54,15 +54,15 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
         if (isset($_POST["login"]) || isset($_POST["password"]) || isset($_POST["return_password"])) {
             if (!(isset($_POST["login"]))) {
                 $data['login']['error'] = "yes";
-                $data['login']['text_error'] = "Это поле должно быть заполнено!";
+                $data['login']['text_error'] = "Милионы (и МЫ) не смогут запомнить вашего имени, если его у вас не будет! Его обяхательно ввести!";
             }
             if (!(isset($_POST["password"]))) {
                 $data['password']['error'] = "yes";
-                $data['password']['text_error'] = "Это поле должно быть заполнено!";
+                $data['password']['text_error'] = "Если на вашей казарме не будет ключа, то ваши солдаты разбегутся и захватят мир без вас :( Вам обязательно нужен этот ключ (и его необходимо ввести дважды)!";
             }
             if (!(isset($_POST["return_password"]))) {
                 $data['return_password']['error'] = "yes";
-                $data['return_password']['text_error'] = "Это поле должно быть заполнено!";
+                $data['return_password']['text_error'] = "Если на вашей казарме не будет ключа, то ваши солдаты разбегутся и захватят мир без вас :( Вам обязательно нужен этот ключ (и его необходимо ввести дважды)!";
             }
         }
     }

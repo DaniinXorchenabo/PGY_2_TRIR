@@ -13,7 +13,9 @@ function bad_data_answer($filtered_coords){
     return json_encode(array(
         "type" => "answer",
         "answer" => "no",
-        "data" => $filtered_coords
+        "data" => $filtered_coords,
+        "level" => $_SESSION['current_result'],
+        "last_level" => $res
     ));
 }
 
@@ -91,6 +93,7 @@ if (count($filtered_coords) == $_POST['good_count']){
             "answer" => "ok",
             "data" => $filtered_coords,
             "axes" => $axes,
+            "level" => $_SESSION['current_result']
         ));
     } else {
         echo bad_data_answer($filtered_coords);

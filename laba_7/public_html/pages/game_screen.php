@@ -23,7 +23,17 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
     <link rel="stylesheet" href="../stiles/timer_stiles.css">
 </head>
 <body>
-<h1>Выставите 3 фишки в ряд (вертикально или горизонтально)</h1>
+<h1>Отлично! Теперь вы - начинающий военный диктатор!</h1>
+<div>
+<text>Но, чтобы приступить к захвату мира, сначала необходимо обучить ваше войско!</text>
+<text>Начнем с азов! А именно со строевой подготовки!</text><
+<text>Для начала вам необходимо всего-то построить войска в колонну или в ширенгу</text>
+<text>Смотри-ка! а вон и войска в своей казарме! такая синия в нижнем углу!</text>
+<text>Бери свою волшебную мышку м перетаскивай войска туда, куда они должны встать!</text>
+<text>Глупые войска! Сами не могут выстроиться в линию! Какой кошмар!</text>
+<text>Но будь осторожен! Времени у тебя осталось совсем чуть-чуть!</text>
+<text>Не уложишься во время - лишишся головы))))))</text>
+</div>
 <main class="main_flexbox_parent">
     <div class="flex_child">
         <svg id="game_screen"  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -179,9 +189,10 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
         <div class="timer_box">
             <p><span class="timer"></span></p>
         </div>
-        <button type="submit">Проверить</button>
-        <p>Вы вошли как <?php echo $_SESSION['user_login']; ?></p>
-        <a href="../processing/logout.php">Выйти из аккаунта </a>
+        <button id="submit" type="submit">Войско построено! Идём дальше!</button>
+        <p>Милионы будут помнить вас как <?php echo $_SESSION['user_login']; ?></p>
+        <a href="../processing/logout.php">НЕТ! Я слишком стар для этих ваших строевых, я на пенсию! </a>
+        <p>(кхм-кхм, военный диктатор на пенсии)</p>
     </div>
 </main>
 </body>
