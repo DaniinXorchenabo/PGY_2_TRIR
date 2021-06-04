@@ -17,7 +17,7 @@ function create_border(width, height, size) {
 }
 
 function create_base_circle(x, y, radius) {
-    return `<use id="creating_circle_button" xlink:href="#base_circle" 
+    return `<use id="creating_circle_button" xlink:href="#base_circle_button" 
                  x="${x}" y="${y}""></use>`
 }
 
@@ -71,8 +71,10 @@ class Circle {
     create_circle(x, y) {
         counter++;
         this.my_id = `circle_${counter}`;
-        return `<use id="circle_${counter}" xlink:href="#base_circle" 
-                 x="${x}" y="${y}" class="play_circle"></use>`
+        return `<use id="circle_${counter}" xlink:href="#${Circle.get_random_soldater()}" 
+                 x="${x}" y="${y}" class="play_circle"></use>`;
+        // return `<use id="circle_${counter}" xlink:href="#base_circle"
+        //          x="${x}" y="${y}" class="play_circle"></use>`
     }
 
     static mouse_down(event, is_first_event) {
@@ -170,6 +172,10 @@ class Circle {
             $me.attr("y", a_y);
         }
 
+    }
+
+    static get_random_soldater(){
+        return `soldier_${Math.round(Math.random() * 25 + 1)}`
     }
 
 }
