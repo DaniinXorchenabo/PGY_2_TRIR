@@ -7,6 +7,22 @@ const timer = [
     [0, 24, "Час"], // 1 час (максимальное число в разряде  часов - 24),
     [0, 365, "День"]
 ];
+let level = 0;
+
+$.ajax({
+    url: "/processing/get_level.php", // куда отправляем
+    type: "get", // метод передачи
+    dataType: "json", // тип передачи данных
+    success: data => {
+        console.log(data)
+        if (data && data['type'] === "level_settings"){
+            timer.map((el, ind) => {timer[ind][0] = data['timer_data'][ind] !== undefined? data['timer_data'][ind]: 0});
+            level = data['level'];
+        } else {
+            location.replace("/pages/registration.php")
+        }
+    }
+});
 
 function get_timer_str() {
     return timer.reduceRight(function (res, el) {
