@@ -4,6 +4,12 @@ include_once "../data/save_users7.php";
 session_start();
 
 function bad_data_answer($filtered_coords){
+    $res = 0;
+    if (isset($_SESSION['current_result'])){
+        $res = $_SESSION['current_result'];
+    }
+    add_result($_SESSION['user_login'], $res);
+    $_SESSION['current_result'] = 0;
     return json_encode(array(
         "type" => "answer",
         "answer" => "no",
@@ -73,7 +79,13 @@ if (count($filtered_coords) == $_POST['good_count']){
     }
 
     if ($is_one_line) {
-        add_result($_SESSION['user_login'], 1);
+        $res = 0;
+        if (isset($_SESSION['current_result'])){
+            $res = $_SESSION['current_result'];
+        }
+        $res += 1;
+        $_SESSION['current_result'] = $res;
+//        add_result($_SESSION['user_login'], $res);
         echo json_encode(array(
             "type" => "answer",
             "answer" => "ok",
