@@ -89,14 +89,16 @@ class Circle {
             target.last_mouse_coord.x = event.pageX;
             target.last_mouse_coord.y = event.pageY;
         } else {
-            Circle.objects[event.target.id].mouse_up(event);
+            if (event && event.target) {
+                Circle.mouse_up(event);
+            }
         }
     }
 
     static move_mouse(event) {
         const target = Circle.objects[event.target.id];
         // console.log(Object.assign(event));
-        if (target.press_mouse && event.which !== 0) {
+        if (target && target.press_mouse && event.which !== 0) {
             if (!target.last_mouse_coord.x || !target.last_mouse_coord.y) {
                 target.last_mouse_coord.x = event.pageX;
                 target.last_mouse_coord.y = event.pageY;
