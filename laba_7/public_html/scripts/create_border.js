@@ -51,12 +51,12 @@ class Circle {
 
     // $me = undefined;
 
-    constructor(x, y) {
+    constructor(x, y, on_mouse=false) {
         let main = document.getElementById("game_screen");
         main.innerHTML += this.create_circle(x, y);
-        console.log('4086340959');
+        console.log('Создан объект', this.my_id);
         Circle.objects[this.my_id] = this;
-        this.update_events(true);
+        this.update_events(on_mouse);
     }
 
     update_events(is_first = false) {
@@ -176,6 +176,18 @@ class Circle {
 
     static get_random_soldater(){
         return `soldier_${Math.round(Math.random() * 25 + 1)}`
+    }
+    set_position(x, y){
+        const $me = $(`#` + this.my_id);
+        $me.attr('x', x);
+        $me.attr("y", y);
+        this.update_events(true);
+    }
+    get_pos_x(){
+        return $(`#` + this.my_id).attr('x');
+    }
+    get_pos_y(){
+        return $(`#` + this.my_id).attr('y');
     }
 
 }
