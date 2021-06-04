@@ -62,7 +62,9 @@ class Circle {
     update_events(is_first = false) {
         const data = $(`#${this.my_id}`).on(`mousemove.c_${this.my_id}`, Circle.move_mouse).on(
             `mousedown.c_${this.my_id}`, Circle.mouse_down).on(
-            `mouseup.c_${this.my_id}`, Circle.mouse_up);
+            `mouseup.c_${this.my_id}`, Circle.mouse_up).on(
+            `mouseover.c_${this.my_id}`, Circle.mouse_down).on(
+            `mouseout.c_${this.my_id}`, Circle.move_mouse);
         if (is_first) {
             data.trigger(`mousedown.c_${this.my_id}`, ["secret_trololo"]);
         }

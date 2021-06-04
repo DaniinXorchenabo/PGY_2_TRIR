@@ -28,6 +28,7 @@ function create_events_processing() {
             }, 1200);
         }
     });
+    $("body").on(`mousemove.c_${this.my_id}`, Circle.move_mouse)
 }
 create_events_processing();
 new Circle(-100, -100);
