@@ -17,7 +17,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
 </head>
 <body>
 <h1>Вагша армия еще не готова к захвату мира!</h1>
-<h2>Вам приется начать все сначала!</h2>
+<h2>Вам просто необходимо начать все сначала!</h2>
 <h2>Ваш текущий уровень выучки бойцов: <span id="level"><?
         include_once "../data/save_users7.php";
         $data = get_current_game($_SESSION['user_login']);

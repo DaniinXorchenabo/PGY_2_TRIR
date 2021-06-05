@@ -31,7 +31,8 @@ $(`[type=submit]`).bind("click.send_data", (event) => {
             if(data['type'] === "answer"){
                 if (data['answer'] === "ok"){
                     // alert("Вы выиграли! Добро пожаловать на следующий уровень!")
-                    location.replace("/pages/win_page.php");
+                    location.reload();
+                    // location.replace("/pages/win_page.php");
                 } else {
                     // alert("Вы проиграли! Придется начинать строевую с нуля!");
                     location.replace("/pages/game_over.php");

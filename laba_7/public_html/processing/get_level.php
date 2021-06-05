@@ -6,25 +6,25 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
         $res = $_SESSION['current_result'];
     }
     $seconds = 70;
-    if ($seconds - $res * 5 < 40){
-        $seconds = 40;
-        if ($seconds - ($res - 6) * 3 < 20){
+    if ($seconds - $res * 20 < 40){
+        $seconds = 30;
+        if ($seconds - ($res - 2) * 3 < 20){
             $seconds = 20;
-            if ($seconds - ($res - 6 - 7) * 2 < 10){
+            if ($seconds - ($res - 2 - 7) * 2 < 10){
                 $seconds = 10;
-                if ($seconds - ($res - 6 - 7 - 5) * 2 < 5){
-                    $seconds = 5;
+                if ($seconds - ($res - 2 - 7 - 5) * 2 < 2){
+                    $seconds = 2;
                 }else {
-                    $seconds = $seconds - ($res - 6 - 7 - 5) * 2;
+                    $seconds = $seconds - ($res - 2 - 7 - 5) * 2;
                 }
             } else {
-                $seconds = $seconds - ($res - 6 - 7) * 2;
+                $seconds = $seconds - ($res - 2 - 7) * 2;
             }
         } else {
-            $seconds = $seconds - ($res - 6) * 3;
+            $seconds = $seconds - ($res - 2) * 3;
         }
     } else {
-        $seconds = $seconds - $res * 5;
+        $seconds = $seconds - $res * 20;
     }
     echo json_encode(array(
         "type" => "level_settings",

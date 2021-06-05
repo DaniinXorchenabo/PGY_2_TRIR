@@ -25,7 +25,7 @@ function create_events_processing() {
                 new Circle(-100, -100);
                 create_events_processing();
                 [...Object.keys(Circle.objects)].map(i => Circle.objects[i].update_events());
-            }, 1200);
+            }, 500);
         }
     });
     // $("body").on(`mousemove.c_${this.my_id}`, Circle.move_mouse)
