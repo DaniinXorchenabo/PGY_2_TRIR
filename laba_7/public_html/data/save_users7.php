@@ -90,3 +90,32 @@ function get_current_game($login){
     return $current_game_data;
 }
 
+function get_users_records_for_table($login){
+    $data = get_results();
+    $current_user = array();
+    if (array_key_exists($login, $data)) {
+        $current_user = $data[$login];
+    }
+    $id_arr = array();
+    foreach ($current_user as $ind => $game_data) {
+        $id_arr[$ind] = $game_data['raw_date'];
+    }
+    array_multisort($id_arr, SORT_DESC, SORT_NUMERIC, $current_user);
+    return $current_user;
+
+}
+
+function get_user_best_game_for_table($login){
+    $data = get_results();
+    $current_user = array();
+    if (array_key_exists($login, $data)) {
+        $current_user = $data[$login];
+    }
+    $id_arr = array();
+    foreach ($current_user as $ind => $game_data) {
+        $id_arr[$ind] = $game_data['result'];
+    }
+    array_multisort($id_arr, SORT_DESC, SORT_NUMERIC, $current_user);
+    return $current_user;
+
+}
