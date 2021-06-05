@@ -12,7 +12,11 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
             $seconds = 20;
             if ($seconds - ($res - 6 - 7) * 2 < 10){
                 $seconds = 10;
-                $seconds = $seconds - ($res - 6 - 7 - 5) * 2;
+                if ($seconds - ($res - 6 - 7 - 5) * 2 < 5){
+                    $seconds = 5;
+                }else {
+                    $seconds = $seconds - ($res - 6 - 7 - 5) * 2;
+                }
             } else {
                 $seconds = $seconds - ($res - 6 - 7) * 2;
             }
