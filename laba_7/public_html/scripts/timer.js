@@ -53,7 +53,7 @@ function timer_renderer() {
 
     if (!old_end_timer && end_timer) {
         setTimeout( () => {$(`#submit`).trigger('click');})
-        alert('Время вышло!');
+        // alert('Время вышло!');
         // BaseQuestion.finish_test();
     }
 }

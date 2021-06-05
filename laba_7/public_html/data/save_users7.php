@@ -74,3 +74,19 @@ function add_result($login, $result){
     $data[$login] = $current_user;
     save_results($data);
 }
+
+function get_current_game($login){
+    $data = get_results();
+    $current_user = array();
+    if (array_key_exists($login, $data)) {
+        $current_user = $data[$login];
+    }
+    $current_game_data = array();
+    foreach ($current_user as $ind => $game_data) {
+        if (!isset($current_game_data['raw_date']) or $current_game_data['raw_date'] < $game_data['raw_date']) {
+            $current_game_data = $game_data;
+        }
+    }
+    return $current_game_data;
+}
+
