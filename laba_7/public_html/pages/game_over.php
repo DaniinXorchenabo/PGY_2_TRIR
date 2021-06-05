@@ -11,6 +11,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
     <meta charset="UTF-8">
     <title>Title</title>
 <!--    <script defer src="../jquery/jQuery_v3.6.0.js"></script>-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 <!--    <script defer src="../scripts/scripts.js"></script>-->
     <link rel="stylesheet" href="../stiles/stiles.css">
 </head>

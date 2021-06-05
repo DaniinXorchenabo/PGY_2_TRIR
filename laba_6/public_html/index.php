@@ -17,6 +17,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script defer src="jquery/jQuery_v3.6.0.js"></script>
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script defer src="scripts/scripts.js"></script>
     <link rel="stylesheet" href="stiles/sriles.css">
 
