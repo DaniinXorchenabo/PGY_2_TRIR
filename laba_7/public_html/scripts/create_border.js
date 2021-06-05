@@ -3,6 +3,13 @@ const base_cell = {"width": 100, "height": 100, "count_x": 5, "count_y": 5};
 const base_circle = {"r": 100};
 
 function get_html_cell(pos_x, pos_y, size) {
+    // return `<g id="cell_${pos_x}_${pos_y}" class="cell" cx="${pos_x + size / 2}" cy="${pos_y + size / 2}"
+    //             x="${pos_x}" y="${pos_y}" width="${size}" height="${size}">
+    //         <rect  x="${pos_x}" y="${pos_y}" width="${size}" height="${size}"
+    //          stroke="#000" fill="#fff"/>
+    //          <image xlink:href="/images/game_board/background1/background1_${parseInt(pos_x/size)}_${parseInt(pos_y/size)}.png"
+    //           width="${size}" height="${size}" x="${pos_x}" y="${pos_y}"/>
+    //          </g>`
     return `<use id="cell_${pos_x}_${pos_y}" xlink:href="#base_rect" x="${pos_x}"
                  y="${pos_y}" width="${size}" height="${size}" cx="${pos_x + size / 2}" cy="${pos_y + size / 2}"
                  class="cell"></use>`;

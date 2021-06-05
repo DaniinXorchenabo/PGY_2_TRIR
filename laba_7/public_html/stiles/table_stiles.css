@@ -1,0 +1,37 @@
+table{
+/*	border: 1px solid #eee;*/
+	table-layout: fixed;
+	/*	width: 100%;*/
+	margin-bottom: 20px;
+	min-width: 200px;
+	max-width: 200%;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 0px solid #dddddd;
+}
+table td{
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-left: 20px;
+	padding-bottom: 10px;
+	border: 0px solid #eee;
+	text-align: left;
+}
+table tbody tr:nth-child(odd){
+	background: #fff;
+}
+table tbody tr:nth-child(even){
+	background: #F7F7F7;
+}
+.table_flex{
+/*	flex-grow: 1;*/
+	
+}
+.table_flex_parent{
+	justify-content:center ;
+}

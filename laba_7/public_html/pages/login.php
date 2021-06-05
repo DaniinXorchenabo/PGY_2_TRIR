@@ -15,8 +15,14 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes") {
     <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script defer src="../scripts/scripts.js"></script>
     <link rel="stylesheet" href="../stiles/stiles.css">
+    <link rel="stylesheet" href="../stiles/background_stiles.css">
 </head>
 <body>
+<img class="background_solder1" src="../images/background_solder1.svg">
+<img class="background_grass" src="../images/background_grass.svg">
+<img class="background_hill" src="../images/background_hill.svg">
+<img class="background_ellipse" src="../images/background_ellipse.svg">
+<img class="background_plane" src="../images/background_plane.svg">
 <h1>Кто это тут решил продолжить захват мира?</h1>
 <h3>Руки в руки, ноги в ноги, голову оставь тут и бегом строить своё войско!</h3>
 <form action="../processing/login.php" method="POST">

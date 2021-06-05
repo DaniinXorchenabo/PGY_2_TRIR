@@ -22,8 +22,14 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
 
     <link rel="stylesheet" href="../stiles/stiles.css">
     <link rel="stylesheet" href="../stiles/timer_stiles.css">
+    <link rel="stylesheet" href="../stiles/background_stiles.css">
 </head>
 <body>
+<img class="background_solder1" src="../images/background_solder1.svg">
+<img class="background_grass" src="../images/background_grass.svg">
+<img class="background_hill" src="../images/background_hill.svg">
+<img class="background_ellipse" src="../images/background_ellipse.svg">
+<img class="background_plane" src="../images/background_plane.svg">
 <h1>Отлично! Теперь вы - начинающий военный диктатор!</h1>
 <div>
     <text>Но, чтобы приступить к захвату мира, сначала необходимо обучить ваше войско!</text>

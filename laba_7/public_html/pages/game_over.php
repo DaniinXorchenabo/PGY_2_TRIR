@@ -14,8 +14,11 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 <!--    <script defer src="../scripts/scripts.js"></script>-->
     <link rel="stylesheet" href="../stiles/stiles.css">
+    <link rel="stylesheet" href="../stiles/background_stiles.css">
 </head>
 <body>
+
+
 <h1>Вагша армия еще не готова к захвату мира!</h1>
 <h2>Вам просто необходимо начать все сначала!</h2>
 <h2>Ваш текущий уровень выучки бойцов: <span id="level"><?
@@ -51,5 +54,10 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
 <!--        }-->
 <!--    });-->
 <!--</script>-->
+<img class="background_solder1" src="../images/background_solder1.svg">
+<img class="background_grass" src="../images/background_grass.svg">
+<img class="background_hill" src="../images/background_hill.svg">
+<img class="background_ellipse" src="../images/background_ellipse.svg">
+<img class="background_plane" src="../images/background_plane.svg">
 </body>
 </html>

@@ -16,11 +16,18 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
     <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script defer src="../scripts/scripts.js"></script>
     <link rel="stylesheet" href="../stiles/stiles.css">
+    <link rel="stylesheet" href="../stiles/background_stiles.css">
 </head>
 <body>
-<h1>Это ваш профиль, <?echo $_SESSION['user_login']; ?></h1>
-<table id="last_games"></table>
-<table id="best_games"></table>
+<h1>Это ваш профиль, <? echo $_SESSION['user_login']; ?></h1>
+<main class="main_flexbox_parent">
+    <div class="flex_child">
+        <table id="last_games"></table>
+    </div>
+    <div class="flex_child">
+        <table id="best_games"></table>
+    </div>
+</main>
 <script>
     const last_games = JSON.parse(`<? echo json_encode(get_users_records_for_table($_SESSION['user_login'])); ?>`);
     let last_game_table = last_games.map(el => `<tr><td>${el['date_str']}</td><td>${el['result']}</td><tr>`).reduce((table, el) => table + '\n' + el, "");

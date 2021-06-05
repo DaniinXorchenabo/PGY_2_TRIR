@@ -1,0 +1,39 @@
+.background_solder1{
+	position: fixed;
+/*	position: absolute;*/
+	height: 45%;
+	bottom: 0px;
+	left: 0px;
+	z-index: -6;
+}
+
+.background_grass{
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	width: 90%;
+	min-width: 500px;
+	z-index: -5;
+}
+.background_hill{
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	height: 60%;
+	z-index: -7;
+}
+.background_ellipse{
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	z-index: -9;
+	height: 90%;
+}
+.background_plane{
+	position: fixed;
+	top: 5%;
+	left: 65%;
+	width: 20%;
+	min-width: 200px;
+	z-index: -8;
+}
