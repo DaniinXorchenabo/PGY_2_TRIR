@@ -1,0 +1,9 @@
+body{
+    font-size: 20px;
+    color: black;
+    text-align: center;
+}
+
+table{
+    visibility: hidden;
+}
