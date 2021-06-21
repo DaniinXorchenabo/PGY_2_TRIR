@@ -22,6 +22,14 @@ table td{
 	padding-bottom: 10px;
 	border: 0px solid hsla(0,0%,93%,0.70);
 	text-align: left;
+		max-width: 140px;
+	  overflow-wrap: break-word;  /* не поддерживает IE, Firefox; является копией word-wrap */ 
+  word-wrap: break-word;
+  word-break: keep-all;  /* не поддерживает Opera12.14, значение keep-all не поддерживается IE, Chrome */ 
+  line-break: loose;  /* нет поддержки для русского языка */ 
+ -webkit-hyphens: none; ​-ms-hyphens: none; hyphens: none;  /* значение auto не поддерживается Chrome */ 
+	
+	
 }
 table tbody tr:nth-child(odd){
 	background-color: hsla(0,0%,100%,0.70);

@@ -19,7 +19,8 @@ function get_user_data7()
 
 }
 
-function get_results(){
+function get_results()
+{
     $file = file_get_contents('../data/results.txt', FILE_USE_INCLUDE_PATH);
     if ($file) {
         return json_decode($file, true);
@@ -29,6 +30,7 @@ function get_results(){
         return $file;
     }
 }
+
 function save_results($data)
 {
     $json_str = json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -62,20 +64,22 @@ function check_user7($login, $password)
 }
 
 
-function add_result($login, $result){
+function add_result($login, $result)
+{
     $data = get_results();
     $current_user = array();
     if (array_key_exists($login, $data)) {
         $current_user = $data[$login];
     }
-    $date_str = "Завершил игру " . date("d.m.y") . " в " .  date("H:i:s");
+    $date_str = "Завершил игру " . date("d.m.y") . " в " . date("H:i:s");
     $raw_date = date("y") * 10000000000 + date("m") * 100000000 + date("d") * 1000000 + date("H") * 10000 + date("i") * 100 + date("s");
     array_push($current_user, array("result" => $result, "date_str" => $date_str, "raw_date" => $raw_date));
     $data[$login] = $current_user;
     save_results($data);
 }
 
-function get_current_game($login){
+function get_current_game($login)
+{
     $data = get_results();
     $current_user = array();
     if (array_key_exists($login, $data)) {
@@ -90,7 +94,8 @@ function get_current_game($login){
     return $current_game_data;
 }
 
-function get_users_records_for_table($login){
+function get_users_records_for_table($login)
+{
     $data = get_results();
     $current_user = array();
     if (array_key_exists($login, $data)) {
@@ -105,7 +110,8 @@ function get_users_records_for_table($login){
 
 }
 
-function get_user_best_game_for_table($login){
+function get_user_best_game_for_table($login)
+{
     $data = get_results();
     $current_user = array();
     if (array_key_exists($login, $data)) {
@@ -118,4 +124,44 @@ function get_user_best_game_for_table($login){
     array_multisort($id_arr, SORT_DESC, SORT_NUMERIC, $current_user);
     return $current_user;
 
+}
+
+function get_all_best_games()
+{
+    $data_from_file = get_results();
+    $data = array();
+    $best_results = array();
+    foreach ($data_from_file as $login => $current_user_data) {
+        foreach ($current_user_data as $ind => $game_data) {
+            array_push($data, array(
+                "login" => $login,
+                "date_str" => $game_data['date_str'],
+                "result" => $game_data['result'],
+                "raw_date" => $game_data['raw_date']
+            ));
+            array_push($best_results, $game_data["result"]);
+        }
+    }
+    array_multisort($best_results, SORT_DESC, SORT_NUMERIC, $data);
+    return $data;
+}
+
+function get_last_games()
+{
+    $data_from_file = get_results();
+    $data = array();
+    $last_games = array();
+    foreach ($data_from_file as $login => $current_user_data) {
+        foreach ($current_user_data as $ind => $game_data) {
+            array_push($data, array(
+                "login" => $login,
+                "date_str" => $game_data['date_str'],
+                "result" => $game_data['result'],
+                "raw_date" => $game_data['raw_date']
+            ));
+            array_push($last_games, $game_data["raw_date"]);
+        }
+    }
+    array_multisort($last_games, SORT_DESC, SORT_NUMERIC, $data);
+    return $data;
 }
