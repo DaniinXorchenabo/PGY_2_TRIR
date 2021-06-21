@@ -20,33 +20,39 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
 
 
 <h1>Ваша армия еще не готова к захвату мира!</h1>
-<h2>Вам просто необходимо начать все сначала!</h2>
-<h2>Ваш текущий уровень выучки бойцов: <span id="level"><?
-        include_once "../data/save_users7.php";
-        $data = get_current_game($_SESSION['user_login']);
-        if (isset($data['result'])) {
-            echo $data['result'];
-        }
-        ?></span></h2>
-<h2 id="time_str"><?
-    if (isset($data['date_str'])) {
-        echo $data['date_str'] . " по единому времени захватников мира";
-    }
-    ?></h2>
-<p>
-    <button>
-        <a href="../pages/game_screen.php" class="no_stiles_a">
-            Начнём сначала! Надо торопиться, а то мир захватят без меня!
-        </a>
-    </button>
-</p>
-<p>
-    <button class="bad_button">
-        <a href="../pages/personal_page.php" class="no_stiles_a bad_button">
-            Хватит с меня этих салаг! Я на пенсию!
-        </a>
-    </button>
-</p>
+<div class="main_flexbox_parent">
+    <div class="input_box flex_child">
+        <h2>Вам просто необходимо начать все сначала!</h2>
+        <h2>Ваш текущий уровень выучки бойцов: <span id="level"><?
+                include_once "../data/save_users7.php";
+                $data = get_current_game($_SESSION['user_login']);
+                if (isset($data['result'])) {
+                    echo $data['result'];
+                }
+                ?></span></h2>
+        <h2 id="time_str">
+            <?
+            if (isset($data['date_str'])) {
+                echo $_SESSION['user_login'] . " " . $data['date_str'] . " по единому времени захватников мира";
+            }
+            ?></h2>
+        <p>
+            <button>
+                <a href="../pages/game_screen.php" class="no_stiles_a">
+                    Начнём сначала! Надо торопиться, а то мир захватят без меня!
+                </a>
+            </button>
+        </p>
+        <p>
+            <button class="bad_button">
+                <a href="../pages/personal_page.php" class="no_stiles_a bad_button">
+                    Хватит с меня этих салаг! Я на пенсию!
+                </a>
+            </button>
+        </p>
+    </div>
+</div>
+
 
 <!--<script>-->
 <!--    $.ajax({-->

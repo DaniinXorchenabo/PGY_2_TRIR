@@ -67,8 +67,6 @@ if (isset($_SESSION['current_result']) and $_SESSION['current_result'] != 0) {
     <div class="flex_child table_flex">
         <table id="best_games">
         </table>
-
-        <!--        --><? // echo json_encode(get_last_games()); ?>
     </div>
 </main>
 <script>
