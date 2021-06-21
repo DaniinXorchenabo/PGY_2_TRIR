@@ -71,13 +71,13 @@ if (isset($_SESSION['current_result']) and $_SESSION['current_result'] != 0){
 </main>
 <script>
     const last_games = JSON.parse(`<? echo json_encode(get_users_records_for_table($_SESSION['user_login'])); ?>`);
-    let last_game_table = last_games.map(el => `<tr><td>${el['date_str']}</td><td>${el['result']}</td><tr>`).reduce((table, el) => table + '\n' + el, "");
+    let last_game_table = last_games.map(el => `<tr><td>${el['date_str']}</td><td>${el['result']}</td></tr>`).reduce((table, el) => table + '\n' + el, "");
     last_game_table = `<tbody>\n` + last_game_table + '\n</tbody>';
     last_game_table = `<caption>Ваши последние результаты:</caption><thead><tr><th>Время</th><th>Уровень</th></tr></thead>\n` + last_game_table + '';
     document.getElementById("last_games").innerHTML = last_game_table;
 
     const best_games = JSON.parse(`<? echo json_encode(get_user_best_game_for_table($_SESSION['user_login'])); ?>`);
-    let best_game_table = best_games.map(el => `<tr><td>${el['date_str']}</td><td>${el['result']}</td><tr>`).reduce((table, el) => table + '\n' + el, "");
+    let best_game_table = best_games.map(el => `<tr><td>${el['date_str']}</td><td>${el['result']}</td></tr>`).reduce((table, el) => table + '\n' + el, "");
     best_game_table = `<tbody>\n` + best_game_table + '\n</tbody>';
     best_game_table = `<caption>Ваши лучшие результаты:</caption><thead><tr><th>Время</th><th>Уровень</th></tr></thead>\n` + best_game_table + '';
     document.getElementById("best_games").innerHTML = best_game_table;
