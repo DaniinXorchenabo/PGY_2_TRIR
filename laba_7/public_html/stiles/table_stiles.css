@@ -3,8 +3,8 @@ table{
 	table-layout: fixed;
 	/*	width: 100%;*/
 	margin-bottom: 20px;
-	min-width: 200px;
-	max-width: 200%;
+	min-width: 500px;
+/*	max-width: 200%;*/
 	margin-left: 10px;
 	margin-right: 10px;
 	border: 2px solid #7F853B;
@@ -31,6 +31,12 @@ table td{
 	
 	
 }
+/*
+tr{
+	width: 100px;
+}
+*/
+
 table tbody tr:nth-child(odd){
 	background-color: hsla(0,0%,100%,0.70);
 }
