@@ -36,7 +36,7 @@ if (isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes"){
                 $_SESSION['is_login'] = "yes";
                 $_SESSION["user_login"] = $_POST["login"]["val"];
                 $answer = "yes";
-                $new_location = "../pages/game_screen.php";
+                $new_location = "../pages/after_registration_page.php";
 //                header('Location: /pages/game_screen.php');
             } else {
                 $_SESSION['is_login'] = "no";

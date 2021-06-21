@@ -8,7 +8,8 @@ function post_processing_form(data, redirect, server_url) {
         // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         // request.onreadystatechange = () => {};
         // request.send(body);
-        window.location.replace(redirect);
+        console.log(data, redirect);
+        window.location.replace(data["location"] || redirect);
     } else {
         console.log("Кто-то накосячил");
         [...Object.keys(data["data"])].map(i => {
@@ -20,10 +21,11 @@ function post_processing_form(data, redirect, server_url) {
                 i.addClass('error');
             }
         });
+        if (data["location"] && data["location"] !== "") {
+            window.location.replace(data["location"]);
+        }
     }
-    if (data["location"] && data["location"] !== "") {
-        window.location.replace(data["location"]);
-    }
+
 }
 
 
@@ -88,7 +90,7 @@ $('#check_login').click(function (event) {
 
     // собираем данные с формы
     event.preventDefault();
-    base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
+    // base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
     base_ajax(["login", "password"], "../processing/login.php", "../pages/game_screen.php")
 })
 
@@ -96,8 +98,8 @@ $('#check_registration').click(function (event) {
     // собираем данные с формы
     console.log("регистрация")
     event.preventDefault();
-    base_ajax(["login", "password", "return_password"],
-        "/processing/registration.php", "../pages/game_screen.php")
+    // base_ajax(["login", "password", "return_password"],
+    //     "/processing/registration.php", "../pages/game_screen.php")
     base_ajax(["login", "password", "return_password"],
         "/processing/registration.php", "../pages/game_screen.php")
     console.log('Отправил')
