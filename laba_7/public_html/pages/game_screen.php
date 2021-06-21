@@ -62,7 +62,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
             <p>Милионы будут помнить вас как:</p>
             <p><?php echo $_SESSION['user_login']; ?></p>
             <p>НЕТ! Я слишком стар для этих ваших строевых!
-                <a href="../processing/logout.php">Я на пенсию!</a>
+                <a href="../pages/personal_page.php">Я на пенсию!</a>
             </p>
             <p>(кхм-кхм, военный диктатор на пенсии)</p>
         </div>

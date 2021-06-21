@@ -1,5 +1,5 @@
 table{
-/*	border: 1px solid #eee;*/
+	/*	border: 1px solid #eee;*/
 	table-layout: fixed;
 	/*	width: 100%;*/
 	margin-bottom: 20px;
@@ -7,27 +7,50 @@ table{
 	max-width: 200%;
 	margin-left: 10px;
 	margin-right: 10px;
+	border: 2px solid #7F853B;
 }
 table th {
 	font-weight: bold;
 	padding: 5px;
-	background: #efefef;
-	border: 0px solid #dddddd;
+	background-color: hsla(93,56%,54%,0.70);
+	border: 0px solid hsla(0,0%,87%,0.70);
 }
 table td{
 	padding-top: 10px;
 	padding-right: 30px;
 	padding-left: 20px;
 	padding-bottom: 10px;
-	border: 0px solid #eee;
+	border: 0px solid hsla(0,0%,93%,0.70);
 	text-align: left;
 }
 table tbody tr:nth-child(odd){
-	background: #fff;
+	background-color: hsla(0,0%,100%,0.70);
 }
 table tbody tr:nth-child(even){
-	background: #F7F7F7;
+	background-color: hsla(93,38%,73%,0.70);
 }
+
+table caption{
+	font-size: 22px;	
+	text-align: center;
+		margin-bottom: 10px;
+/*		background-color: hsla(0,0%,100%,0.70);*/
+		margin-top: 10px;
+	margin-bottom: 10px;
+		background: rgb(255,255,255);
+background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%);
+	border-radius: 16px;
+	padding-left: 10px;
+	padding-right: 10px;
+		padding-top: 10px;
+	padding-bottom: 10px;
+	-webkit-box-shadow: 10px 1px 10px;
+	box-shadow: 10px 10px 10px;
+	border-width: 1px;
+	border-style: 1px solid #433C32;
+
+}
+
 .table_flex{
 /*	flex-grow: 1;*/
 	

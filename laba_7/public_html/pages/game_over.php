@@ -42,7 +42,7 @@ if (!(isset($_SESSION['is_login']) && $_SESSION['is_login'] == "yes")) {
 </p>
 <p>
     <button class="bad_button">
-        <a href="../processing/logout.php" class="no_stiles_a bad_button">
+        <a href="../pages/personal_page.php" class="no_stiles_a bad_button">
             Хватит с меня этих салаг! Я на пенсию!
         </a>
     </button>
