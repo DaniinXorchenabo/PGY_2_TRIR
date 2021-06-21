@@ -31,7 +31,7 @@
 }
 .background_plane{
 	position: fixed;
-	top: 5%;
+	top: 10%;
 	left: 65%;
 	width: 20%;
 	min-width: 200px;

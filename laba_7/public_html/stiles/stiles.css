@@ -155,3 +155,32 @@ a:hover{
 	margin-right: 20%;
 	font-size: 16px;
 }
+.no_stiles_a{
+	text-align: center;
+	text-decoration: none;
+	
+	color: #433C32;
+	font-weight: 500;
+}
+.no_stiles_a:hover{
+	text-decoration: underline;
+	color: #000000;
+/*	transition: 1.5;*/
+	
+	
+}
+.bad_button{
+	background-color: #98372A;
+	border-left: 2px solid #982A2A;
+    border-right: 3px solid #982A2A;
+    border-bottom: 3px solid #982A2A;
+    border-top: 2px solid #982A2A;
+	color: #EEECE9;
+}
+.bad_button:hover{
+/*	text-decoration: underline;*/
+	color: #FFFFFF;
+/*	transition: 1.5;*/
+	
+	
+}
