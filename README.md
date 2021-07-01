@@ -1,1 +1,0 @@
-# TRIR_exam
