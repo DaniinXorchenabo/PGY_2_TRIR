@@ -1,0 +1,4 @@
+{"sur":"Petrok","name":"Petr","sec": "Petrovich","age":28,"sex":"Мужчина"}
+{"sur":"Vas","name":"Petr","sec": "Petrovich","age":47,"sex":"Мужчина"}
+{"sur":"Gas","name":"Petr","sec": "Vladimirovich","age":95,"sex":"Мужчина"}
+{"sur":"Kaska","name":"Serega","sec": "Petrovich","age":12,"sex":"Мужчина"}
