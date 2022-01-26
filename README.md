@@ -42,9 +42,17 @@ https://user-images.githubusercontent.com/45897837/129005441-1d5342a4-305c-45c6-
 cd laba_6
 run_server.BAT
 ```
-3. Перейдите по ссылке [localhost:8060](http://localhost:8060/index.html)
+3. Перейдите по ссылке [localhost:8050](http://localhost:8050/index.html)
 
 ### Demonstration
+
+https://user-images.githubusercontent.com/45897837/151148156-5b124583-5cd1-4ad2-8412-efc5f92f2bd7.mp4
+
+*speedrun по окнам программы*
+
+https://user-images.githubusercontent.com/45897837/151148560-2b13a6b0-838e-4385-83c6-6e39c07670f2.mp4
+
+*Демонстрация валидации данных*
 
 ## Лаба 5
 
